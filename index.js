@@ -2,17 +2,13 @@ const express = require('express')
 const app = express();
 
 const staticPath = __dirname+'/static';
-/**
+
 app.use('/',express.static(staticPath))
 
 app.get("/*",(req,res)=>
 {
-    //res.sendFile(staticPath+"/index.html");
-    res.json({mess:"Hello World"})
-})**/
-
-app.get('/',(req,res)=>{
-    res.json({mess:"Heya"})
+    res.sendFile(staticPath+"/index.html");
+    //res.json({mess:"Hello World"})
 })
 
 const port = process.env.PORT || 3000;
