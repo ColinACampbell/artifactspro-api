@@ -1,9 +1,20 @@
+require('./config/db')
 const express = require('express')
+const cors = require('cors');
 const app = express();
+const userRoute = require('./routes/user');
 
 const staticPath = __dirname+'/static';
 
+app.use(cors(
+    {
+        origin : 'http://localhost:4200',
+        credentials : true
+    }
+))
+app.use(express.json());
 app.use('/',express.static(staticPath))
+app.use('/api/user/',userRoute);
 
 app.get("/*",(req,res)=>
 {
