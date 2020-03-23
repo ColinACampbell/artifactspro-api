@@ -6,7 +6,8 @@ app.use('/',express.static(staticPath))
 
 app.get("/*",(req,res)=>
 {
-    res.sendFile(staticPath+"/index.html");
+    //res.sendFile(staticPath+"/index.html");
+    res.json({mess:"Hello World"})
 })
 
 app.listen(3000 || process.env.PORT,(err)=>{
