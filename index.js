@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors');
 const app = express();
 const userRoute = require('./routes/user');
+const session = require('express-session');
 
 const staticPath = __dirname+'/static';
 
@@ -12,6 +13,16 @@ app.use(cors(
         credentials : true
     }
 ))
+
+app.use(session({
+    secret : "Ohhh no no no no and no",
+    resave : true,
+    saveUninitialized : true,
+    cookie : {
+        maxAge : (10 * 10 * 399 * 30 * 34 + 3400) - 5
+    }
+}))
+
 app.use(express.json());
 app.use('/',express.static(staticPath))
 app.use('/api/user/',userRoute);

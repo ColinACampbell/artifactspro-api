@@ -1,10 +1,16 @@
 const { Client } = require('pg');
-const client = new Client({
-    host : "localhost",
-    database : "artifactspro",
-    user : "postgres",
-    password : "wedered.200"
-})
+const devCfg = require('./dev.json');
+const prodCfg = require('./prod.json');
+
+const prod = true
+
+let config;
+if (prod)
+	config = prodCfg
+else
+	config = devCfg
+
+const client = new Client(config.postgres)
 
 client.connect((err)=>{
     if (err) throw err;
