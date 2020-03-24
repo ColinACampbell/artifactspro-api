@@ -7,8 +7,6 @@ router.post('/signup/process-1',(req,res)=>{
     let email = req.body.email;
     let password = req.body.password;
 
-    console.log(req.body)
-
     password = crypto.createHash("sha256")
     .update(password)
     .digest("hex");
@@ -17,8 +15,6 @@ router.post('/signup/process-1',(req,res)=>{
         if (err) throw err;
         
         let rowCount = result.rowCount;
-        console.log(result.rows);
-
         let response = {};
         
         if (rowCount === 0)
@@ -30,7 +26,6 @@ router.post('/signup/process-1',(req,res)=>{
             (err,result)=>
             {
                 if (err) throw err;
-                console.log(result)
                 response.message = "success";
                 res.json(response)
             })
