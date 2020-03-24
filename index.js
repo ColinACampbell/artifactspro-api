@@ -1,4 +1,4 @@
-require('./config/db')
+const config = require('./config/config')
 const express = require('express')
 const cors = require('cors');
 const app = express();
@@ -6,10 +6,10 @@ const userRoute = require('./routes/user');
 const session = require('express-session');
 
 const staticPath = __dirname+'/static';
-
+console.log(config.host)
 app.use(cors(
     {
-        origin : 'http://localhost:4200',
+        origin : config.host,
         credentials : true
     }
 ))

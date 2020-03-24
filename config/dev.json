@@ -4,5 +4,6 @@
         "user" : "postgres",
         "password" : "wedered.200",
         "database" : "artifactspro"
-    }
+    },
+    "host" : "localhost:3000"
 }
