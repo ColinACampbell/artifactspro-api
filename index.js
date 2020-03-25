@@ -3,10 +3,12 @@ const express = require('express')
 const cors = require('cors');
 const app = express();
 const userRoute = require('./routes/user');
+const orgnanizationRoute = require('./routes/organization');
 const session = require('express-session');
 
 const staticPath = __dirname+'/static';
 console.log(config.host)
+
 app.use(cors(
     {
         origin : config.host,
@@ -26,6 +28,7 @@ app.use(session({
 app.use(express.json());
 app.use('/',express.static(staticPath))
 app.use('/api/user/',userRoute);
+app.use('/api/org/',orgnanizationRoute);
 
 app.get("/*",(req,res)=>
 {

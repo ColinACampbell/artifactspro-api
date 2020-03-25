@@ -5,5 +5,5 @@
         "password" : "wedered.200",
         "database" : "artifactspro"
     },
-    "host" : "localhost:3000"
+    "host" : "http://localhost:4200"
 }

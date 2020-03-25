@@ -17,17 +17,25 @@ router.post('/signup/process-1',(req,res)=>{
         let rowCount = result.rowCount;
         let response = {};
         
+        // check if email already exists in the browser
         if (rowCount === 0)
         {
-            // TODO : Fix issues with this
+            // insert user
             db.query(`INSERT INTO users
             ("password", last_name, first_name, email, is_verified)
-            VALUES($1, '', '', $2, '');`,[password,email],
+            VALUES($1, '', '', $2, $3);`,[password,email,'0'],
             (err,result)=>
             {
                 if (err) throw err;
-                response.message = "success";
-                res.json(response)
+
+                // fetch user information and store it in the browser using sesssions
+                db.query('SELECT * FROM users WHERE email = $1',[email],(err,result)=>{
+                    if (err) throw err;
+                    req.session.userInfo = result.rows[0];
+                    response.message = "success";
+                    res.json(response)
+                });
+
             })
         } else
         {
