@@ -45,15 +45,16 @@ router.post('/signup/process-1',(req,res)=>{
 
 router.post('/login',(req,res)=>{
     let email = req.body.email;
-    let passowrd = req.user.passowrd;
+    let password = req.user.password;
 
-    db.query('SELECT * FROM users WHERE email = $1 AND password = $2',[email,passowrd],
+    db.query('SELECT * FROM users WHERE email = $1 AND password = $2',[email,password],
     (err,result)=>{
         if (err) throw err;
         
         let rowCount = result.rowCount;
         let response = {};
-        if (rowCount === 0)
+        console.log(rowCount);
+        if (rowCount > 0)
         {
             req.session.userInfo = result.rows[0];
             db.query(`
@@ -68,7 +69,6 @@ router.post('/login',(req,res)=>{
             INNER JOIN organizations ON organizations.org_id = organization_members.org_id
             WHERE users.email = $1
             `,[email],(err,result)=>{
-                console.log9
                 req.session.orgInfo = result.rows[0];
                 response.message = "success";
                 res.json(response)
