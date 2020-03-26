@@ -3,10 +3,9 @@ const router = express.Router();
 const db = require('./../config/db')
 
 router.post('/signup/process-1',(req,res)=>{
-    
+
     let email = req.body.email;
-    let password = req.body.password;
-    password = req.user.password;
+    let password = req.user.password;
 
     db.query("SELECT * FROM users WHERE email = $1",[email],(err,result)=>{
         if (err) throw err;
@@ -45,7 +44,42 @@ router.post('/signup/process-1',(req,res)=>{
 
 
 router.post('/login',(req,res)=>{
+    let email = req.body.email;
+    let passowrd = req.user.passowrd;
 
+    db.query('SELECT * FROM users WHERE email = $1 AND password = $2',[email,passowrd],
+    (err,result)=>{
+        if (err) throw err;
+        
+        let rowCount = result.rowCount;
+        let response = {};
+        if (rowCount === 0)
+        {
+            req.session.userInfo = result.rows[0];
+            db.query(`
+            SELECT 
+            organizations.name, 
+            organizations.org_id, 
+            organizations.type,  
+            organizations.org_code,
+            organizations.org_key
+            FROM users 
+            INNER JOIN organization_members ON organization_members.user_id = users.user_id
+            INNER JOIN organizations ON organizations.org_id = organization_members.org_id
+            WHERE users.email = $1
+            `,[email],(err,result)=>{
+                console.log9
+                req.session.orgInfo = result.rows[0];
+                response.message = "success";
+                res.json(response)
+            })
+        } else
+        {
+            response.message = "failure";
+            res.json(response)
+        }
+        
+    })
 });
 
 module.exports = router;
