@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
 const db = require('./../config/db')
 
 router.post('/signup/process-1',(req,res)=>{
+    
     let email = req.body.email;
     let password = req.body.password;
-
-    password = crypto.createHash("sha256")
-    .update(password)
-    .digest("hex");
+    password = req.user.password;
 
     db.query("SELECT * FROM users WHERE email = $1",[email],(err,result)=>{
         if (err) throw err;
@@ -44,6 +41,11 @@ router.post('/signup/process-1',(req,res)=>{
         }
 
     })
+});
+
+
+router.post('/login',(req,res)=>{
+
 });
 
 module.exports = router;

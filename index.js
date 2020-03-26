@@ -5,9 +5,9 @@ const app = express();
 const userRoute = require('./routes/user');
 const orgnanizationRoute = require('./routes/organization');
 const session = require('express-session');
+const userMiddleware = require('./middleware/user');
 
 const staticPath = __dirname+'/static';
-console.log(config.host)
 
 app.use(cors(
     {
@@ -27,6 +27,8 @@ app.use(session({
 
 app.use(express.json());
 app.use('/',express.static(staticPath))
+
+app.use('/api/user/',userMiddleware.password) // middleware to hash password on user routes
 app.use('/api/user/',userRoute);
 app.use('/api/org/',orgnanizationRoute);
 
@@ -37,7 +39,6 @@ app.get("/*",(req,res)=>
 })
 
 const port = process.env.PORT || 3000;
-console.log(port);
 app.listen(port,(err)=>{
     if (err) throw err;
     console.log("Server Started");
