@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require('./../config/db')
 const crypto = require('crypto');
 
+
+// TODO : Write code to prevent user from being added to an organization twice
 router.post('/create',(req,res)=>{
 
     const userID = req.session.userInfo.user_id;
@@ -46,6 +48,14 @@ router.post('/create',(req,res)=>{
             res.json({message:"failure"})
         }
     });
+});
+
+router.get('/info',(req,res)=>{
+    let org_key = req.session.orgInfo.org_key
+    db.query('SELECT * FROM organizations WHERE org_key = $1',[org_key],
+    (err,result)=>{
+        res.json(result.rows[0])
+    })
 })
 
 module.exports = router;
