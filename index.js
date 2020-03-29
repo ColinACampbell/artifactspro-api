@@ -2,9 +2,11 @@ const config = require('./config/config')
 const express = require('express')
 const cors = require('cors');
 const app = express();
+const session = require('express-session');
+
 const userRoute = require('./routes/user');
 const orgnanizationRoute = require('./routes/organization');
-const session = require('express-session');
+const artifactsRoute = require('./routes/artifacts');
 const userMiddleware = require('./middleware/user');
 
 const staticPath = __dirname+'/static';
@@ -31,6 +33,7 @@ app.use('/',express.static(staticPath))
 app.use('/api/user/',userMiddleware.password) // middleware to hash password on user routes
 app.use('/api/user/',userRoute);
 app.use('/api/org/',orgnanizationRoute);
+app.use('/api/art/',artifactsRoute);
 
 app.get("/*",(req,res)=>
 {
