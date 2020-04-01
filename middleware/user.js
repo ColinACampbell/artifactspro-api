@@ -15,3 +15,15 @@ exports.password = (req,res,next) =>
     req.user = user;
     next();
 }
+
+exports.userInformation = (req,res,next) =>
+{
+    if (req.session.userInfo)
+        next(Error('No User Info'));
+
+    let userInfo = req.session.userInfo;
+    console.log("End Point")
+    console.log(req.session.userInfo);
+    req.userInfo = userInfo;
+    next();
+}
