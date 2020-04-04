@@ -43,7 +43,10 @@ router.post('/create',(req,res)=>{
 
 router.get('/:artID',(req,res)=>{
     let artID = req.params.artID;
-    db.query(`SELECT * FROM artifacts WHERE art_id = $1`,[artID],
+    let orgInfo = req.session.orgInfo;
+    let orgID = orgInfo.org_id;
+
+    db.query(`SELECT * FROM artifacts WHERE art_id = $1 AND org_id = $2`,[artID,orgID],
     (err,result)=>{
         let artifact = result.rows['0'];
         res.status(200).json(artifact);

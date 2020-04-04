@@ -7,6 +7,7 @@ const session = require('express-session');
 const userRoute = require('./routes/user');
 const orgnanizationRoute = require('./routes/organization');
 const artifactsRoute = require('./routes/artifacts');
+const documentsRoute = require('./routes/documents')
 const userMiddleware = require('./middleware/user');
 
 const staticPath = __dirname+'/static';
@@ -34,6 +35,7 @@ app.use('/api/user/',userMiddleware.password) // middleware to hash password on 
 app.use('/api/user/',userRoute);
 app.use('/api/org/',orgnanizationRoute);
 app.use('/api/art/',artifactsRoute);
+app.use('/api/docs/',documentsRoute); // TODO : Test these end points using postman
 
 app.get("/*",(req,res)=>
 {
