@@ -12,6 +12,7 @@ router.get('/',(req,res)=>{
 });
 
 router.post('/create',(req,res)=>{
+
     let orgInfo = req.session.orgInfo;
     let userInfo = req.session.userInfo;
     let userID = userInfo.user_id;
@@ -28,10 +29,25 @@ router.post('/create',(req,res)=>{
 
     `,[name,orgID,userID,dateCreated,description],
     (err,result)=>{
+        console.log(result);
         if (err) throw err
-        res.status(200).send({message:"ok"})
+
+        db.query(`SELECT art_id FROM artifacts WHERE org_id = 18  ORDER BY $1 DESC 
+        LIMIT 1`,[orgID],(err,result)=>{
+            if (err) throw err;
+            let artID = result.rows['0'].art_id;
+            res.status(200).json({message:'ok',art_id:artID})
+        })
     })
-    
+})
+
+router.get('/:artID',(req,res)=>{
+    let artID = req.params.artID;
+    db.query(`SELECT * FROM artifacts WHERE art_id = $1`,[artID],
+    (err,result)=>{
+        let artifact = result.rows['0'];
+        res.status(200).json(artifact);
+    })
 })
 
 module.exports = router;
