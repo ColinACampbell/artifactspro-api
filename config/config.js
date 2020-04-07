@@ -1,7 +1,7 @@
 const devCfg = require('./dev.json');
 const prodCfg = require('./prod.json');
 
-const prod = false;
+const prod = true;
 
 let config;
 if (prod)
