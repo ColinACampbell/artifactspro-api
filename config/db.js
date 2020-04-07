@@ -41,6 +41,6 @@ let setUp = async function()
 
 }
 
-setUp();
+//setUp();
 
 module.exports = client;

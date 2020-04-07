@@ -28,7 +28,7 @@ app.use(session({
     }
 }))
 
-app.use(express.json());
+app.use(express.json({limit:'50mb'}));
 app.use('/',express.static(staticPath))
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
 app.use('/api/user/',userMiddleware.password) // middleware to hash password on user routes
