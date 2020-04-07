@@ -17,15 +17,33 @@ router.get('/from-art/:artID',(req,res)=>{
 
 router.post('/upload/:artID',(req,res)=>{
 
-    console.log(req.body);
-
+    let artID = req.params.artID;
+    let userID = req.session.userInfo.user_id;
+    let dateModified = req.body.date_modified;
+    let dateUploaded = req.body.date_uploaded;
     let data = req.body.data;
-    let name = req.body.name;
+    let version = req.body.version;
     let comment = req.body.comment;
+    let fileType = req.body.file_type;
 
+    let base64Data = data.split(',')[1];
+
+    db.query(`INSERT INTO documents
+    ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type")
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8);
+    `,[version,comment,userID,base64Data,dateUploaded,dateModified,artID,fileType],
+    (err,result)=>{
+        if (err) throw err;
+        console.log(result)
+        res.status(200).json({message:'ok'});
+    })
+
+    /** 
     //fs.mkdirSync('temp');
-    fs.writeFileSync(`temp/${name}.pdf`,data);
+    let buffer = Buffer.from(data.split(',')[1],"base64");
+    fs.writeFileSync(`temp/${name}.pdf`,buffer);
     res.json({data,name,comment})
+    **/
     // TODO : Write code to add to database
 })
 
