@@ -53,7 +53,6 @@ router.post('/login',(req,res)=>{
         
         let rowCount = result.rowCount;
         let response = {};
-        console.log(rowCount);
         if (rowCount > 0)
         {
             req.session.userInfo = result.rows[0];

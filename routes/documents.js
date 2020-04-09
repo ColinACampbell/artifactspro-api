@@ -34,7 +34,6 @@ router.post('/upload/:artID',(req,res)=>{
     `,[version,comment,userID,base64Data,dateUploaded,dateModified,artID,fileType],
     (err,result)=>{
         if (err) throw err;
-        console.log(result)
         res.status(200).json({message:'ok'});
     })
 

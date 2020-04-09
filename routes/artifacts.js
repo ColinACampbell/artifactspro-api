@@ -29,7 +29,6 @@ router.post('/create',(req,res)=>{
 
     `,[name,orgID,userID,dateCreated,description],
     (err,result)=>{
-        console.log(result);
         if (err) throw err
 
         db.query(`SELECT art_id FROM artifacts WHERE org_id = 18  ORDER BY $1 DESC 
