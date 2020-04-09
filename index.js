@@ -38,12 +38,6 @@ app.use('/api/org/', orgnanizationRoute);
 app.use('/api/art/', artifactsRoute);
 app.use('/api/docs/', documentsRoute); // TODO : Test these end points using postman
 
-// TODO Work on this later
-app.get('/api/test/:id.docx', (req, res) => {
-    let id = req.params.id;
-    const path = __dirname + "/docs/preview/19/Doc 2.docx";
-    res.sendFile(path);
-})
 
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");

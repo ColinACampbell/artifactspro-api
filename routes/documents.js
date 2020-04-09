@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./../config/db');
-const fs = require('fs')
+const fs = require('fs');
+const path = require('path')
 
 const fileTypes = {
     'application/msword': 'doc',
@@ -49,13 +50,16 @@ router.post('/upload/:artID', (req, res) => {
         })
 })
 
-router.get("/preview/:docID", (req, res) => {
+router.get("/link/:artID/:docID", (req, res,next) => {
 
-
+    let code = 200
+    if (req.session.userInfo)
+        code = 401;
     // TODO : AUTH user
 
+    const artID = req.params.artID;
     const docID = req.params.docID;
-    const dir = `./docs/preview/${docID}`;
+    const dir = `./docs/preview/${artID}`;
 
     if (!fs.existsSync(dir))
         fs.mkdirSync(dir, { recursive: true });
@@ -65,11 +69,20 @@ router.get("/preview/:docID", (req, res) => {
 
             if (err) throw err;
             let doc = results.rows[0];
-            fs.writeFileSync(`${dir}/${doc.version}.${fileTypes[doc.type]}`, doc.data);
-            res.json(doc);
+            fs.writeFileSync(`${dir}/${docID}.${fileTypes[doc.type]}`, doc.data);
+            res.status(code).json({
+                download : `http://localhost:3000/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`
+            });
 
         })
+})
 
+// @ :doc = docID + file extension
+router.get('/preview/:artID/:docName', (req, res) => {
+    let doc = req.params.docName;
+    let artID = req.params.artID;
+    const link = path.join(__dirname,`../docs/preview/${artID}/${doc}`);
+    res.sendFile(link);
 })
 
 module.exports = router;
