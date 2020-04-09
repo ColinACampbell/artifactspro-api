@@ -10,41 +10,50 @@ const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
 const userMiddleware = require('./middleware/user');
 
-const staticPath = __dirname+'/static';
+const staticPath = __dirname + '/static';
 
 app.use(cors(
     {
-        origin : config.host,
-        credentials : true
+        origin: config.host,
+        credentials: true
     }
 ))
 
 app.use(session({
-    secret : "Ohhh no no no no and no",
-    resave : true,
-    saveUninitialized : true,
-    cookie : {
-        maxAge : (10 * 10 * 399 * 30 * 34 + 3400) - 5
+    secret: "Ohhh no no no no and no",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: (10 * 10 * 399 * 30 * 34 + 3400) - 5
     }
 }))
 
-app.use(express.json({limit:'50mb'}));
-app.use('/',express.static(staticPath))
-//app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
-app.use('/api/user/',userMiddleware.password) // middleware to hash password on user routes
-app.use('/api/user/',userRoute);
-app.use('/api/org/',orgnanizationRoute);
-app.use('/api/art/',artifactsRoute);
-app.use('/api/docs/',documentsRoute); // TODO : Test these end points using postman
 
-app.get("/*",(req,res)=>
-{
-    res.sendFile(staticPath+"/index.html");
+app.use(express.json({ limit: '50mb' }));
+app.use('/', express.static(staticPath))
+//app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
+app.use('/api/user/', userMiddleware.password) // middleware to hash password on user routes
+app.use('/api/user/', userRoute);
+app.use('/api/org/', orgnanizationRoute);
+app.use('/api/art/', artifactsRoute);
+app.use('/api/docs/', documentsRoute); // TODO : Test these end points using postman
+
+// TODO Work on this later
+app.get('/api/test/:id.docx', (req, res) => {
+    let id = req.params.id;
+    const path = __dirname + "/docs/preview/19/Doc 2.docx";
+    res.sendFile(path);
+})
+
+app.get("/*", (req, res) => {
+    res.sendFile(staticPath + "/index.html");
     //res.json({mess:"Hello World"})
 })
 
+
+
 const port = process.env.PORT || 3000;
-app.listen(port,(err)=>{
+app.listen(port, (err) => {
     if (err) throw err;
     console.log("Server Started");
 })

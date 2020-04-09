@@ -14,6 +14,7 @@ router.get('/',(req,res)=>{
 router.post('/create',(req,res)=>{
 
     let orgInfo = req.session.orgInfo;
+    console.log(req.session.orgInfo)
     let userInfo = req.session.userInfo;
     let userID = userInfo.user_id;
     let orgID = orgInfo.org_id;
@@ -31,7 +32,7 @@ router.post('/create',(req,res)=>{
     (err,result)=>{
         if (err) throw err
 
-        db.query(`SELECT art_id FROM artifacts WHERE org_id = 18  ORDER BY $1 DESC 
+        db.query(`SELECT art_id FROM artifacts WHERE org_id = $1  ORDER BY 1 DESC 
         LIMIT 1`,[orgID],(err,result)=>{
             if (err) throw err;
             let artID = result.rows['0'].art_id;
