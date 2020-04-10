@@ -3,11 +3,13 @@ const router = express.Router();
 const db = require('./../config/db');
 const fs = require('fs');
 const path = require('path')
+const config = require('./../config/config')
 
 const fileTypes = {
     'application/msword': 'doc',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
-    'image/jpeg': 'jpg'
+    'image/jpeg': 'jpg',
+    'image/png' : 'png'
 };
 
 // Get documents from artifact
@@ -50,28 +52,39 @@ router.post('/upload/:artID', (req, res) => {
         })
 })
 
-router.get("/link/:artID/:docID", (req, res,next) => {
+const unoconv = require('awesome-unoconv');
+router.post("/link/:artID/:docID", (req, res, next) => {
 
     let code = 200
-    if (req.session.userInfo)
+    if (!req.session.userInfo)
         code = 401;
     // TODO : AUTH user
 
     const artID = req.params.artID;
     const docID = req.params.docID;
-    const dir = `./docs/preview/${artID}`;
+    const dir = `./docs/preview/${artID}`; // the directory for which the doc will be in
 
     if (!fs.existsSync(dir))
         fs.mkdirSync(dir, { recursive: true });
 
+
+    // doc id will act as the file name with the extenstion so docid.file_ext
     db.query('SELECT * FROM documents WHERE doc_id = $1', [docID],
         (err, results) => {
 
             if (err) throw err;
+
             let doc = results.rows[0];
-            fs.writeFileSync(`${dir}/${docID}.${fileTypes[doc.type]}`, doc.data);
+
+            let filePath = `${dir}/${docID}.${fileTypes[doc.type]}`
+
+            if (!fs.existsSync(filePath))
+                fs.writeFileSync(filePath, doc.data);
+
+            let test = true;
+            let serverhost = test ? 'http://localhost:3000': config.host
             res.status(code).json({
-                download : `http://localhost:3000/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`
+                download: `${serverhost}/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`
             });
 
         })
@@ -81,7 +94,7 @@ router.get("/link/:artID/:docID", (req, res,next) => {
 router.get('/preview/:artID/:docName', (req, res) => {
     let doc = req.params.docName;
     let artID = req.params.artID;
-    const link = path.join(__dirname,`../docs/preview/${artID}/${doc}`);
+    const link = path.join(__dirname, `../docs/preview/${artID}/${doc}`);
     res.sendFile(link);
 })
 
