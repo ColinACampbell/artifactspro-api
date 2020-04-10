@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const db = require('./../config/db')
 
+// auth end point is to ensure that the user is logged in with cookies
+router.post('/auth',(req,res)=>{
+    console.log("Hello World")
+    let status = 200
+    if (!req.session.userInfo)
+        status = 401;
+
+    res.status(status).json({status});
+});
+
 router.post('/signup/process-1',(req,res)=>{
 
     let email = req.body.email;

@@ -81,7 +81,7 @@ router.post("/link/:artID/:docID", (req, res, next) => {
             if (!fs.existsSync(filePath))
                 fs.writeFileSync(filePath, doc.data);
 
-            let test = false;
+            let test = true;
             let serverhost = test ? 'http://localhost:3000': config.host
             res.status(code).json({
                 download: `${serverhost}/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`

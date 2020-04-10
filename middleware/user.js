@@ -6,7 +6,7 @@ exports.password = (req,res,next) =>
     if (!req.body.password) // if the password does not exists
         next();
 
-    password = req.body.password;   
+    password = req.body.password || '';   
 
     password = crypto.createHash("sha256")
     .update(password)
