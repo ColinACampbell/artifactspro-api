@@ -9,6 +9,7 @@ const orgnanizationRoute = require('./routes/organization');
 const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
 const userMiddleware = require('./middleware/user');
+const membersRoute = require('./routes/member')
 
 const staticPath = __dirname + '/static';
 
@@ -37,6 +38,7 @@ app.use('/api/user/', userRoute);
 app.use('/api/org/', orgnanizationRoute);
 app.use('/api/art/', artifactsRoute);
 app.use('/api/docs/', documentsRoute); // TODO : Test these end points using postman
+app.use('/api/members/',membersRoute)
 
 
 app.get("/*", (req, res) => {
@@ -48,4 +50,4 @@ const port = process.env.PORT || 3000;
 app.listen(port, (err) => {
     if (err) throw err;
     console.log("Server Started");
-})
+}) 
