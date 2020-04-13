@@ -6,12 +6,19 @@ exports.password = (req,res,next) =>
     if (!req.body.password) // if the password does not exists
         next();
 
-    password = req.body.password || '';   
+    password = req.body.password || '';  
+
+    //let email = req.body.email;
+
+
 
     password = crypto.createHash("sha256")
     .update(password)
     .digest("hex");
-    let user = {password}; // store it in an object
+
+    let accessCode = crypto.randomBytes(20).toString('hex');
+
+    let user = {password,accessCode}; // store it in an object
     req.user = user;
     next();
 }

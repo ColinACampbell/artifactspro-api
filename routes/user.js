@@ -4,7 +4,6 @@ const db = require('./../config/db')
 
 // auth end point is to ensure that the user is logged in with cookies
 router.post('/auth',(req,res)=>{
-    console.log("Hello World")
     let status = 200
     if (!req.session.userInfo)
         status = 401;
@@ -16,6 +15,7 @@ router.post('/signup/process-1',(req,res)=>{
 
     let email = req.body.email;
     let password = req.user.password;
+    let accessCode = req.user.accessCode;
 
     db.query("SELECT * FROM users WHERE email = $1",[email],(err,result)=>{
         if (err) throw err;
@@ -28,8 +28,8 @@ router.post('/signup/process-1',(req,res)=>{
         {
             // insert user
             db.query(`INSERT INTO users
-            ("password", last_name, first_name, email, is_verified)
-            VALUES($1, '', '', $2, $3);`,[password,email,'0'],
+            ("password", last_name, first_name, email, is_verified, access_code)
+            VALUES($1, '', '', $2, $3,$4);`,[password,email,'0',accessCode],
             (err,result)=>
             {
                 if (err) throw err;
