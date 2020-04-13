@@ -38,7 +38,7 @@ router.post('/create',(req,res)=>{
                     const orgID = result.rows[0].org_id;
 
                     // store user as a member of that organization
-                    db.query('INSERT INTO public.organization_members (user_id, org_id) VALUES($1, $2);',[userID,orgID],(err,result)=>{
+                    db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'owner'],(err,result)=>{
                         if (err) throw err;
                         res.json({message:"success"});
                     });

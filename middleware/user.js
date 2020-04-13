@@ -16,7 +16,7 @@ exports.password = (req,res,next) =>
     .update(password)
     .digest("hex");
 
-    let accessCode = crypto.randomBytes(20).toString('hex');
+    let accessCode = crypto.randomBytes(30).toString('hex');
 
     let user = {password,accessCode}; // store it in an object
     req.user = user;
