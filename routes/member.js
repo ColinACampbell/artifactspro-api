@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('./../config/db')
 
-
 router.get('/all',(req,res)=>{
     console.log(req.session)
     let orgID = req.session.orgInfo.org_id;
