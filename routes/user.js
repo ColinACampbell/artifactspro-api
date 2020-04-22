@@ -91,4 +91,21 @@ router.post('/login',(req,res)=>{
     })
 });
 
+router.get('/info',(req,res)=>{
+
+    console.log(req.session)
+
+    let first_name = req.session.userInfo.first_name;
+    let last_name = req.session.userInfo.last_name;
+    let email = req.session.userInfo.email
+    let is_verified = req.session.userInfo.is_verified;
+
+    res.json({
+        first_name,
+        last_name,
+        email,
+        is_verified
+    });
+});
+
 module.exports = router;

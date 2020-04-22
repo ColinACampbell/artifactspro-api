@@ -29,8 +29,7 @@ exports.userInformation = (req,res,next) =>
         next(Error('No User Info'));
 
     let userInfo = req.session.userInfo;
-    console.log("End Point")
-    console.log(req.session.userInfo);
+
     req.userInfo = userInfo;
     next();
 }

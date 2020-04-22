@@ -14,7 +14,6 @@ router.get('/',(req,res)=>{
 router.post('/create',(req,res)=>{
 
     let orgInfo = req.session.orgInfo;
-    console.log(req.session.orgInfo)
     let userInfo = req.session.userInfo;
     let userID = userInfo.user_id;
     let orgID = orgInfo.org_id;

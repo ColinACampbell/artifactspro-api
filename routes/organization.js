@@ -18,7 +18,6 @@ router.post('/create',(req,res)=>{
     .digest("hex");
 
     let accessCode = crypto.randomBytes(30).toString('hex');
-    console.log(accessCode);
 
     // check if the organiation key already exists
     db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
