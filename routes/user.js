@@ -110,19 +110,26 @@ router.post('/verify/:accesscode', (req, res) => {
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
 
-    console.log(first_name,last_name)
-
+    let message = ''
     // Make sure the code exists
     //console.log(accessCode)
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
     (err, result) => {
 
         if (err) throw err;
-        console.log(result.rowCount)
-        const row = result.rows[0];
+        
         if (result.rowCount === 0)
-            res.json({message:'code_not_exists'})
+            message = 'code_not_exists'
+        else 
+            message = 'ok'
 
+        
+        let row = result.rows[0]
+        if (row === undefined)
+        {
+            row = {user_id:undefined}
+        }
+        console.log(row)
         const userID = row.user_id;
 
         // if it does update the user name and last, name
@@ -133,7 +140,7 @@ router.post('/verify/:accesscode', (req, res) => {
             if (err) throw err;
             //console.log(result)
             res.json({
-                message: 'ok'
+                message
             })
         })
     })
