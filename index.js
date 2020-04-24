@@ -33,7 +33,8 @@ app.use(session({
 app.use(express.json({ limit: '50mb' }));
 app.use('/', express.static(staticPath))
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
-app.use('/api/user/', userMiddleware.password) // middleware to hash password on user routes
+app.use('/api/user/signup/process-1', userMiddleware.password); // middleware to hash password on user routes
+app.use('/api/user/login', userMiddleware.password); // middleware to hash password on user routes
 app.use('/api/user/', userRoute);
 app.use('/api/org/', orgnanizationRoute);
 app.use('/api/art/', artifactsRoute);

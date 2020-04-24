@@ -10,8 +10,6 @@ exports.password = (req,res,next) =>
 
     //let email = req.body.email;
 
-
-
     password = crypto.createHash("sha256")
     .update(password)
     .digest("hex");

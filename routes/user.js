@@ -3,48 +3,45 @@ const router = express.Router();
 const db = require('./../config/db')
 
 // auth end point is to ensure that the user is logged in with cookies
-router.post('/auth',(req,res)=>{
+router.post('/auth', (req, res) => {
     let status = 200
     if (!req.session.userInfo)
         status = 401;
 
-    res.status(status).json({status});
+    res.status(status).json({ status });
 });
 
-router.post('/signup/process-1',(req,res)=>{
+router.post('/signup/process-1', (req, res) => {
 
     let email = req.body.email;
     let password = req.user.password;
     let accessCode = req.user.accessCode;
 
-    db.query("SELECT * FROM users WHERE email = $1",[email],(err,result)=>{
+    db.query("SELECT * FROM users WHERE email = $1", [email], (err, result) => {
         if (err) throw err;
-        
+
         let rowCount = result.rowCount;
         let response = {};
-        
+
         // check if email already exists in the browser
-        if (rowCount === 0)
-        {
+        if (rowCount === 0) {
             // insert user
             db.query(`INSERT INTO users
             ("password", last_name, first_name, email, is_verified, access_code)
-            VALUES($1, '', '', $2, $3,$4);`,[password,email,'0',accessCode],
-            (err,result)=>
-            {
-                if (err) throw err;
-
-                // fetch user information and store it in the browser using sesssions
-                db.query('SELECT * FROM users WHERE email = $1',[email],(err,result)=>{
+            VALUES($1, '', '', $2, $3,$4);`, [password, email, '0', accessCode],
+                (err, result) => {
                     if (err) throw err;
-                    req.session.userInfo = result.rows[0];
-                    response.message = "success";
-                    res.json(response)
-                });
 
-            })
-        } else
-        {
+                    // fetch user information and store it in the browser using sesssions
+                    db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
+                        if (err) throw err;
+                        req.session.userInfo = result.rows[0];
+                        response.message = "success";
+                        res.json(response)
+                    });
+
+                })
+        } else {
             response.message = "failure";
             res.json(response)
         }
@@ -53,20 +50,19 @@ router.post('/signup/process-1',(req,res)=>{
 });
 
 
-router.post('/login',(req,res)=>{
+router.post('/login', (req, res) => {
     let email = req.body.email;
     let password = req.user.password;
 
-    db.query('SELECT * FROM users WHERE email = $1 AND password = $2',[email,password],
-    (err,result)=>{
-        if (err) throw err;
-        
-        let rowCount = result.rowCount;
-        let response = {};
-        if (rowCount > 0)
-        {
-            req.session.userInfo = result.rows[0];
-            db.query(`
+    db.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password],
+        (err, result) => {
+            if (err) throw err;
+
+            let rowCount = result.rowCount;
+            let response = {};
+            if (rowCount > 0) {
+                req.session.userInfo = result.rows[0];
+                db.query(`
             SELECT 
             organizations.name, 
             organizations.org_id, 
@@ -77,21 +73,20 @@ router.post('/login',(req,res)=>{
             INNER JOIN organization_members ON organization_members.user_id = users.user_id
             INNER JOIN organizations ON organizations.org_id = organization_members.org_id
             WHERE users.email = $1
-            `,[email],(err,result)=>{
-                req.session.orgInfo = result.rows[0];
-                response.message = "success";
+            `, [email], (err, result) => {
+                    req.session.orgInfo = result.rows[0];
+                    response.message = "success";
+                    res.json(response)
+                })
+            } else {
+                response.message = "failure";
                 res.json(response)
-            })
-        } else
-        {
-            response.message = "failure";
-            res.json(response)
-        }
-        
-    })
+            }
+
+        })
 });
 
-router.get('/info',(req,res)=>{
+router.get('/info', (req, res) => {
 
     console.log(req.session)
 
@@ -106,6 +101,43 @@ router.get('/info',(req,res)=>{
         email,
         is_verified
     });
+});
+
+router.post('/verify/:accesscode', (req, res) => {
+
+    console.log(req.body)
+    const accessCode = req.params.accesscode;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
+
+    console.log(first_name,last_name)
+
+    // Make sure the code exists
+    //console.log(accessCode)
+    db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
+    (err, result) => {
+
+        if (err) throw err;
+        console.log(result.rowCount)
+        const row = result.rows[0];
+        if (result.rowCount === 0)
+            res.json({message:'code_not_exists'})
+
+        const userID = row.user_id;
+
+        // if it does update the user name and last, name
+        db.query(`UPDATE users
+        SET last_name = $1, first_name = $2, is_verified = '1', access_code = ' '
+        WHERE user_id = $3;`,[first_name,last_name,userID],
+        (err,result)=>{
+            if (err) throw err;
+            //console.log(result)
+            res.json({
+                message: 'ok'
+            })
+        })
+    })
+        
 });
 
 module.exports = router;
