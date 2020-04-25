@@ -8,5 +8,10 @@
             "rejectUnauthorized" : false
         }
     },
+    "mail" : {
+        "service" : "gmail",
+        "user" : "app.artifactspro@gmail.com",
+        "password" : "(own)[boss]{123}"
+    },
     "host" : "https://artifactspro.herokuapp.com"
 }

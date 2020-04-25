@@ -5,5 +5,10 @@
         "password" : "wedered.200",
         "database" : "artifactspro"
     },
+    "mail" : {
+        "service" : "gmail",
+        "user" : "app.artifactspro@gmail.com",
+        "password" : "(own)[boss]{123}"
+    },
     "host" : "http://localhost:4200"
 }
