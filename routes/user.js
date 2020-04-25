@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./../config/db')
+const config = require('./../config/config')
+const mailTransporter = require('./../config/mail')
 
 // auth end point is to ensure that the user is logged in with cookies
 router.post('/auth', (req, res) => {
@@ -11,6 +13,8 @@ router.post('/auth', (req, res) => {
     res.status(status).json({ status });
 });
 
+
+// Sign up user and send of verification link
 router.post('/signup/process-1', (req, res) => {
 
     let email = req.body.email;
@@ -31,6 +35,22 @@ router.post('/signup/process-1', (req, res) => {
             VALUES($1, '', '', $2, $3,$4);`, [password, email, '0', accessCode],
                 (err, result) => {
                     if (err) throw err;
+
+                    // Send of verification mail to user
+                    var mailOptions = {
+                        from: 'app.artifactspro@gmail.com',
+                        to: email,
+                        subject: 'Verify Your Account !',
+                        text: `Please click on the link to verify your ArtifactsPro account ${config.host}/account/verify/${accessCode}`
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
 
                     // fetch user information and store it in the browser using sesssions
                     db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
@@ -114,37 +134,38 @@ router.post('/verify/:accesscode', (req, res) => {
     // Make sure the code exists
     //console.log(accessCode)
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
-    (err, result) => {
+        (err, result) => {
 
-        if (err) throw err;
-        
-        if (result.rowCount === 0)
-            message = 'code_not_exists'
-        else 
-            message = 'ok'
+            //req.session.userInfo = result.rows[0];
 
-        
-        let row = result.rows[0]
-        if (row === undefined)
-        {
-            row = {user_id:undefined}
-        }
-        console.log(row)
-        const userID = row.user_id;
-
-        // if it does update the user name and last, name
-        db.query(`UPDATE users
-        SET last_name = $1, first_name = $2, is_verified = '1', access_code = ' '
-        WHERE user_id = $3;`,[first_name,last_name,userID],
-        (err,result)=>{
             if (err) throw err;
-            //console.log(result)
-            res.json({
-                message
-            })
+
+            if (result.rowCount === 0)
+                message = 'code_not_exists'
+            else
+                message = 'ok'
+
+
+            let row = result.rows[0]
+            if (row === undefined) {
+                row = { user_id: undefined }
+            }
+            console.log(row)
+            const userID = row.user_id;
+
+            // if it does update the user name and last, name
+            db.query(`UPDATE users
+        SET last_name = $1, first_name = $2, is_verified = '1', access_code = ' '
+        WHERE user_id = $3;`, [first_name, last_name, userID],
+                (err, result) => {
+                    if (err) throw err;
+                    //console.log(result)
+                    res.json({
+                        message
+                    })
+                })
         })
-    })
-        
+
 });
 
 module.exports = router;

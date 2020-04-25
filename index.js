@@ -10,6 +10,7 @@ const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
 const userMiddleware = require('./middleware/user');
 const membersRoute = require('./routes/member')
+require('./config/mail')
 
 const staticPath = __dirname + '/static';
 
