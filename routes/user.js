@@ -43,8 +43,8 @@ router.post('/signup/process-1', (req, res) => {
                         subject: 'Verify Your Account !',
                         text: `Please click on the link to verify your ArtifactsPro account ${config.host}/account/verify/${accessCode}`
                     };
-
-                    transporter.sendMail(mailOptions, function (error, info) {
+                
+                    mailTransporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
