@@ -156,7 +156,7 @@ router.post('/verify/:accesscode', (req, res) => {
             // if it does update the user name and last, name
             db.query(`UPDATE users
         SET last_name = $1, first_name = $2, is_verified = '1', access_code = ' '
-        WHERE user_id = $3;`, [first_name, last_name, userID],
+        WHERE user_id = $3;`, [last_name, first_name, userID],
                 (err, result) => {
                     if (err) throw err;
                     //console.log(result)

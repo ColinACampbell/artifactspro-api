@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('./../config/db')
 
+// Get all artifacts from org id in sessions
 router.get('/',(req,res)=>{
     let orgID = req.session.orgInfo.org_id;
     db.query('SELECT * FROM artifacts where org_id = $1',[orgID],
@@ -11,6 +12,7 @@ router.get('/',(req,res)=>{
     })
 });
 
+// Create artifact
 router.post('/create',(req,res)=>{
 
     let orgInfo = req.session.orgInfo;
@@ -40,6 +42,7 @@ router.post('/create',(req,res)=>{
     })
 })
 
+// Get specific artifacts
 router.get('/:artID',(req,res)=>{
     let artID = req.params.artID;
     let orgInfo = req.session.orgInfo;
@@ -51,5 +54,19 @@ router.get('/:artID',(req,res)=>{
         res.status(200).json(artifact);
     })
 })
+
+// delete artifact from id
+router.delete('/delete/:artID',(req,res)=>{
+    const artifactID = req.params.artID;
+    // delete all documents first, this is to prevent constraint error
+    db.query('DELETE FROM documents WHERE art_id = $1',[artifactID],(err,result)=>{
+        if (err) throw err;
+        db.query('DELETE FROM artifacts WHERE art_id = $1',[artifactID],(err,result)=>{
+            if (err) throw err;
+            res.json({message:'done'})
+        })
+    })
+})
+
 
 module.exports = router;
