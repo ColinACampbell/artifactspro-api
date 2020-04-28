@@ -99,4 +99,13 @@ router.get('/preview/:artID/:docName', (req, res) => {
     res.sendFile(link);
 })
 
+
+router.delete('/delete/:docID',(req,res)=>{
+    const docID = req.params.docID;
+    db.query('DELETE FROM documents WHERE doc_id = $1',[docID],(err,result)=>{
+        if (err) throw err;
+        res.json({message:'done'})
+    })
+})
+
 module.exports = router;
