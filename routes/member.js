@@ -15,4 +15,10 @@ router.get('/all',(req,res)=>{
     })
 })
 
+
+// TODO Popolate this endpoint
+router.get('/invite/code',(req,res)=>{
+
+})
+
 module.exports = router;
