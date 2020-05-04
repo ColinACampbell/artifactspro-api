@@ -144,7 +144,6 @@ router.post('/verify/:accesscode', (req, res) => {
             else
                 message = 'ok'
 
-
             let row = result.rows[0]
             if (row === undefined) {
                 row = { user_id: undefined }
