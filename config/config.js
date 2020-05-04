@@ -9,4 +9,6 @@ if (prod)
 else
 	config = devCfg
 
+config.dev = !prod; // for in controller purposes
+
 module.exports = config;

@@ -61,4 +61,33 @@ router.get('/info',(req,res)=>{
     })
 })
 
+router.get('/info-from/access-code/:accessCode',(req,res)=>{
+    const accessCode = req.params.accessCode;
+    db.query('SELECT name FROM organizations WHERE org_code = $1',[accessCode],(err,result)=>{
+        if (err) throw err;
+        const org_name = result.rows[0].name;
+        res.json({org_name});
+    });
+})
+
+// Adds user to a group based on the code provided
+router.post('/invite-from-code/:code',(req,res)=>
+{
+    let code = req.params.code; 
+    let userID = req.session.userInfo.user_id; // this session was set from the signup process
+    db.query("SELECT * FROM organizations WHERE org_code = $1",[code],(err,result)=>{
+        if (err) throw err;
+
+        req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
+        const orgID = result.rows[0].org_id;
+
+        // store user as a member of that organization
+        db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'member'],(err,result)=>{
+            if (err) throw err;
+            res.json({message:"success"});
+        });
+        
+    })
+})
+
 module.exports = router;

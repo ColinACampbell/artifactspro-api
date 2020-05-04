@@ -69,7 +69,6 @@ router.post('/signup/process-1', (req, res) => {
     })
 });
 
-
 router.post('/login', (req, res) => {
     let email = req.body.email;
     let password = req.user.password;
@@ -108,7 +107,7 @@ router.post('/login', (req, res) => {
 
 router.get('/info', (req, res) => {
 
-    console.log(req.session)
+    //console.log(req.session)
 
     let first_name = req.session.userInfo.first_name;
     let last_name = req.session.userInfo.last_name;
@@ -125,7 +124,7 @@ router.get('/info', (req, res) => {
 
 router.post('/verify/:accesscode', (req, res) => {
 
-    console.log(req.body)
+    //console.log(req.body)
     const accessCode = req.params.accesscode;
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
@@ -150,7 +149,8 @@ router.post('/verify/:accesscode', (req, res) => {
             if (row === undefined) {
                 row = { user_id: undefined }
             }
-            console.log(row)
+            req.session.userInfo = row // used later for login
+            //console.log(row)
             const userID = row.user_id;
 
             // if it does update the user name and last, name
