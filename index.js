@@ -3,7 +3,6 @@ const express = require('express')
 const cors = require('cors');
 const app = express();
 const session = require('express-session');
-
 const userRoute = require('./routes/user');
 const orgnanizationRoute = require('./routes/organization');
 const artifactsRoute = require('./routes/artifacts');
