@@ -167,4 +167,11 @@ router.post('/verify/:accesscode', (req, res) => {
 
 });
 
+
+router.post('/logout',(req,res)=>{
+    req.session.userInfo = undefined;
+    req.session.orgInfo = undefined;
+    res.json({message:"ok"})
+})
+
 module.exports = router;
