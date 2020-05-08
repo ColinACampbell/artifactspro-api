@@ -11,7 +11,8 @@ const orgnanizationRoute = require('./routes/organization');
 const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
 const userMiddleware = require('./middleware/user');
-const membersRoute = require('./routes/member')
+const membersRoute = require('./routes/member');
+const workspaceRoute = require('./routes/workspace');
 //require('./config/mail')
 
 const server = http.createServer(app);
@@ -51,7 +52,8 @@ app.use('/api/user/', userRoute);
 app.use('/api/org/', orgnanizationRoute);
 app.use('/api/art/', artifactsRoute);
 app.use('/api/docs/', documentsRoute); // TODO : Test these end points using postman
-app.use('/api/members/',membersRoute)
+app.use('/api/members/',membersRoute);
+app.use('/api/workspace/',workspaceRoute);
 
 
 app.get("/*", (req, res) => {
