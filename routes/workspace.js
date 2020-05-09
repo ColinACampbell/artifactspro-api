@@ -36,7 +36,7 @@ router.post('/create',(req,res)=>{
             db.query("INSERT INTO work_space_members (user_id, work_space_id, role) VALUES($1, $2, 'admin');",
             [userID,workspaceID],(err,result)=>{
                 if (err) throw err;
-                res.json({message:'ok'})
+                res.json({message:'ok',work_space_id:workspaceID})
             });
         })
     });
