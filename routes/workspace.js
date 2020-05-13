@@ -48,4 +48,25 @@ router.post('/assign',(req,res)=>{
     // TODO : Inset data in the database to add user to a workspace
 });
 
+router.get('/:workspaceID',(req,res)=>{
+    // TODO : Verify that user has access to resource
+    let workspaceID = req.params.workspaceID;
+    console.log(workspaceID);
+    db.query('SELECT * FROM work_spaces WHERE work_space_id = $1',[workspaceID],
+    (err,result)=>{
+        if (err) throw err;
+        const row = result.rows[0];
+        console.log(row);
+        res.json(row);
+    })
+});
+
+// Little expirementing on this endpoint
+router.get('/:workspaceID/members',async (req,res)=>{
+    let workspaceID = req.params.workspaceID;
+    let result = await db.query("select * from work_space_members where work_space_members.work_space_id  = $1",[workspaceID])
+    let members = result.rows;
+    res.json(members);
+})
+
 module.exports = router;
