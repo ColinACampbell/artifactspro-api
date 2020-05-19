@@ -51,12 +51,10 @@ router.post('/assign',(req,res)=>{
 router.get('/:workspaceID',(req,res)=>{
     // TODO : Verify that user has access to resource
     let workspaceID = req.params.workspaceID;
-    console.log(workspaceID);
     db.query('SELECT * FROM work_spaces WHERE work_space_id = $1',[workspaceID],
     (err,result)=>{
         if (err) throw err;
         const row = result.rows[0];
-        console.log(row);
         res.json(row);
     })
 });
@@ -64,9 +62,22 @@ router.get('/:workspaceID',(req,res)=>{
 // Little expirementing on this endpoint
 router.get('/:workspaceID/members',async (req,res)=>{
     let workspaceID = req.params.workspaceID;
-    let result = await db.query("select * from work_space_members where work_space_members.work_space_id  = $1",[workspaceID])
+    let result = await db.query(`select first_name, last_name,email,role from work_space_members 
+    inner join users on users.user_id  = work_space_members.user_id 
+    WHERE
+    work_space_members.work_space_id  = $1`,[workspaceID])
     let members = result.rows;
     res.json(members);
+})
+
+// Get aritfacts that belong to the workspace
+router.get('/:workspaceID/artifacts',async (req,res)=>{
+    let workspaceID = req.params.workspaceID;
+    let result = await db.query(`select * from artifacts 
+    inner join work_spaces on artifacts.owner = work_spaces.work_space_id 
+    where work_spaces.work_space_id = $1`,[workspaceID]);
+    let artifacts = result.rows;
+    res.json(artifacts);
 })
 
 module.exports = router;

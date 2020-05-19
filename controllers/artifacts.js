@@ -9,6 +9,7 @@ exports.getAll = (req,res)=>{
     })
 }
 
+// TODO : Test this again
 exports.create = (req,res)=>{
 
     let orgInfo = req.session.orgInfo;
@@ -19,13 +20,14 @@ exports.create = (req,res)=>{
     let name = req.body.name;
     let dateCreated = req.body.date_created;
     let description = req.body.description;
+    let owner = req.body.owner || 0; // 0 for full ownership and not zero for group where owner >= 0
 
     db.query(`
     INSERT INTO artifacts
-    ("name", org_id, user_id, date_created, description)
-    VALUES($1, $2, $3, $4, $5);
+    ("name", org_id, user_id, date_created, description,owner)
+    VALUES($1, $2, $3, $4, $5,$6);
 
-    `,[name,orgID,userID,dateCreated,description],
+    `,[name,orgID,userID,dateCreated,description,owner],
     (err,result)=>{
         if (err) throw err
 
