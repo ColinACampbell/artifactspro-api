@@ -55,11 +55,11 @@ router.get('/:workspaceID',(req,res)=>{
     (err,result)=>{
         if (err) throw err;
         const row = result.rows[0];
-        res.json(row);
+        res.status(200).json(row);
     })
 });
 
-// Little expirementing on this endpoint
+// Little experimenting on this endpoint
 router.get('/:workspaceID/members',async (req,res)=>{
     let workspaceID = req.params.workspaceID;
     let result = await db.query(`select first_name, last_name,email,role from work_space_members 
@@ -67,7 +67,7 @@ router.get('/:workspaceID/members',async (req,res)=>{
     WHERE
     work_space_members.work_space_id  = $1`,[workspaceID])
     let members = result.rows;
-    res.json(members);
+    res.status(200).json(members);
 })
 
 // Get aritfacts that belong to the workspace
@@ -77,7 +77,15 @@ router.get('/:workspaceID/artifacts',async (req,res)=>{
     inner join work_spaces on artifacts.owner = work_spaces.work_space_id 
     where work_spaces.work_space_id = $1`,[workspaceID]);
     let artifacts = result.rows;
-    res.json(artifacts);
+    res.status(200).json(artifacts);
+})
+
+// Get Messages
+// TODO : Test this end point
+router.get('/:workspaceID/messages', async (req,res)=>{
+    let workspaceID = req.params.workspaceID;
+    let result = await db.query(`SELECT * FROM work_space_messages WHERE work_space_id = $1`,[workspaceID]);
+    console.log(result.rows);
 })
 
 module.exports = router;
