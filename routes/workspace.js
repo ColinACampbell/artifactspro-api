@@ -42,10 +42,32 @@ router.post('/create',(req,res)=>{
     });
 });
 
-router.post('/assign',(req,res)=>{
-    const userID = req.body.userID;
-    const workspaceID = req.body.workspaceID;
-    // TODO : Inset data in the database to add user to a workspace
+router.post('/:workspaceID/add', async (req,res)=>{
+    const email = req.body.email;
+    const workspaceID = req.params.workspaceID;
+    console.log(workspaceID,email);
+
+    // check it the member already exists
+    let members = await db.query(`select * from work_space_members 
+    inner join users ON users.user_id  = work_space_members.user_id 
+    where users.email = $1 and work_space_members.work_space_id = $2`,[email,workspaceID]);
+
+    if (members.rowCount > 0)
+        res.status(200).json({message:"user_exists"});
+    else 
+    {
+        // First get user id then add them using that id
+        let result = db.query('SELECT * FROM users WHERE email = $1',[email]);
+       
+        const userID = (await result).rows[0].user_id;
+
+        db.query(`INSERT INTO work_space_members
+        (user_id, work_space_id, "role")
+        VALUES($1, $2, 'member');;
+        `,[userID,workspaceID])
+
+        res.status(200).json({message:"success"});
+    }
 });
 
 router.get('/:workspaceID',(req,res)=>{
@@ -87,5 +109,19 @@ router.get('/:workspaceID/messages', async (req,res)=>{
     let result = await db.query(`SELECT * FROM work_space_messages WHERE work_space_id = $1`,[workspaceID]);
     console.log(result.rows);
 })
+
+// test out this endpoint
+router.get('/suggestion/email', async (req,res)=>{
+    console.log(req.session);
+
+    const orgID = req.session.orgInfo.org_id;
+    let email = req.query.email;
+    
+    let result = await db.query(`select  email from users 
+    inner join organization_members ON organization_members.user_id = users.user_id 
+    inner join organizations  on organizations.org_id  = organization_members.org_id 
+    where users.email like '%' || $1 || '%' and organizations.org_id = $2;`,[email,orgID]);
+    res.json(result.rows);
+});
 
 module.exports = router;
