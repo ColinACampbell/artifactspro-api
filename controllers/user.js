@@ -9,10 +9,7 @@ exports.auth = (req, res) => {
     let status = 401
     if (req.session.userInfo)
         status = 200
-    
-
-    console.log("From user auth");
-    
+        
     res.status(status).json({})
 }
 
