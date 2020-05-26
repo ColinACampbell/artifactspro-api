@@ -7,12 +7,16 @@ const cors = require('cors');
 const session = require('express-session');
 
 const userRoute = require('./routes/user');
-const orgnanizationRoute = require('./routes/organization');
+const organizationRoute = require('./routes/organization');
 const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
-const userMiddleware = require('./middleware/user');
 const membersRoute = require('./routes/member');
 const workspaceRoute = require('./routes/workspace');
+
+// Middlewares
+const userMiddleware = require('./middleware/user');
+const authMiddleware = require('./middleware/auth');
+
 //require('./config/mail')
 
 const server = http.createServer(app);
@@ -45,11 +49,16 @@ app.use(session({
 
 app.use(express.json({ limit: '50mb' }));
 app.use('/', express.static(staticPath))
+
+app.use('/api/art',authMiddleware);
+app.use('/api/members/',authMiddleware);
+app.use('/api/workspace/',authMiddleware);
+
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
 app.use('/api/user/signup/process-1', userMiddleware.password); // middleware to hash password on user routes
 app.use('/api/user/login', userMiddleware.password); // middleware to hash password on user routes
 app.use('/api/user/', userRoute);
-app.use('/api/org/', orgnanizationRoute);
+app.use('/api/org/', organizationRoute);
 app.use('/api/art/', artifactsRoute);
 app.use('/api/docs/', documentsRoute); // TODO : Test these end points using postman
 app.use('/api/members/',membersRoute);

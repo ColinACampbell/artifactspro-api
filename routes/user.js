@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('./../controllers/user')
 const router = express.Router();
+const authMiddleware = require('./../middleware/auth');
 
 // auth end point is to ensure that the user is logged in with cookies
 router.post('/auth',userController.auth);
@@ -10,6 +11,7 @@ router.post('/signup/process-1',userController.signup);
 
 router.post('/login', userController.login);
 
+router.use('/info',authMiddleware)
 router.get('/info',userController.info);
 
 router.post('/verify/:accesscode', userController.verifyUser);

@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const orgController = require('./../controllers/organization')
-
+const authController = require('./../middleware/auth');
 // TODO : Write code to prevent user from being added to an organization twice
 router.post('/create',orgController.createOrg);
 
+router.use('/info',authController);
 router.get('/info',orgController.info)
 
 router.get('/info-from/access-code/:accessCode',orgController.infoFromAccessCode)

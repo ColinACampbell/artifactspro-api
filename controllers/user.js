@@ -5,11 +5,15 @@ const mailTransporter = require('./../config/mail')
 // TODO : Test Everything here
 
 exports.auth = (req, res) => {
-    let status = 200
-    if (!req.session.userInfo)
-        status = 401;
+    
+    let status = 401
+    if (req.session.userInfo)
+        status = 200
+    
 
-    res.status(status).json({ status });
+    console.log("From user auth");
+    
+    res.status(status).json({})
 }
 
 exports.signup = (req, res) => {
@@ -118,6 +122,7 @@ exports.info = (req, res) => {
     });
 }
 
+
 exports.verifyUser = (req, res) => {
 
     //console.log(req.body)
@@ -126,8 +131,7 @@ exports.verifyUser = (req, res) => {
     const last_name = req.body.last_name;
 
     let message = ''
-    // Make sure the code exists
-    //console.log(accessCode)
+    
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
         (err, result) => {
 
