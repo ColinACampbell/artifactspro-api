@@ -110,6 +110,24 @@ router.get('/:workspaceID/messages', async (req,res)=>{
     console.log(result.rows);
 })
 
+
+// create a message
+router.post("/:workspaceID/message", (req,res)=>{
+
+    const { title, content, time } = req.body;
+    const userID = req.session.userInfo.user_id;
+    console.log(userID);
+    const workspaceID = req.params.workspaceID;
+    console.log(workspaceID);
+
+    db.query(`INSERT INTO work_space_messages
+    (message_title, message_content, user_id, work_space_id, "time")
+    VALUES($1, $2, $3, $4, $5);`,[title,content,userID,time])
+
+    res.status(201).json({});
+
+})
+
 // test out this endpoint
 router.get('/suggestion/email', async (req,res)=>{
     console.log(req.session);
