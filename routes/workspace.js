@@ -106,26 +106,28 @@ router.get('/:workspaceID/artifacts',async (req,res)=>{
 // TODO : Test this end point
 router.get('/:workspaceID/messages', async (req,res)=>{
     let workspaceID = req.params.workspaceID;
-    let result = await db.query(`SELECT * FROM work_space_messages WHERE work_space_id = $1`,[workspaceID]);
+    let result = await db.query(`SELECT * FROM work_space_messages WHERE work_space_id = $1 ORDER BY work_space_messages.work_space_msg_id DESC`,[workspaceID]);
     console.log(result.rows);
+    res.status(200).json(result.rows)
 })
 
 
 // create a message
 router.post("/:workspaceID/message", (req,res)=>{
 
-    const { title, content, time } = req.body;
+    const { title, content, time, date} = req.body;
     const userID = req.session.userInfo.user_id;
     console.log(userID);
     const workspaceID = req.params.workspaceID;
-    console.log(workspaceID);
 
     db.query(`INSERT INTO work_space_messages
-    (message_title, message_content, user_id, work_space_id, "time")
-    VALUES($1, $2, $3, $4, $5);`,[title,content,userID,time])
-
-    res.status(201).json({});
-
+    (message_title, message_content, user_id, work_space_id, "time", "date")
+    VALUES($1, $2, $3, $4, $5, $6);`,[title,content,userID,workspaceID,time,date])
+    .then((err,result)=>{
+        if (err) throw err;
+        console.log(result)
+        res.status(201).json({message:"ok"});
+    })
 })
 
 // test out this endpoint
