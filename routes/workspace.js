@@ -103,16 +103,24 @@ router.get('/:workspaceID/artifacts',async (req,res)=>{
 })
 
 // Get Messages
-// TODO : Test this end point
 router.get('/:workspaceID/messages', async (req,res)=>{
     let workspaceID = req.params.workspaceID;
-    let result = await db.query(`SELECT * FROM work_space_messages WHERE work_space_id = $1 ORDER BY work_space_messages.work_space_msg_id DESC`,[workspaceID]);
+    let result = await db.query(`SELECT 
+    
+    work_space_msg_id, message_title,message_content, work_space_messages.user_id, work_space_id, time, date, first_name, last_name, email  
+
+    FROM work_space_messages 
+    inner join users on users.user_id = work_space_messages.user_id 
+    WHERE work_space_id = $1 
+    
+    ORDER BY work_space_messages.work_space_msg_id DESC`,[workspaceID]);
     console.log(result.rows);
     res.status(200).json(result.rows)
 })
 
 
 // create a message
+// Getting a no body for the result... check this one out
 router.post("/:workspaceID/message", (req,res)=>{
 
     const { title, content, time, date} = req.body;
@@ -125,7 +133,7 @@ router.post("/:workspaceID/message", (req,res)=>{
     VALUES($1, $2, $3, $4, $5, $6);`,[title,content,userID,workspaceID,time,date])
     .then((err,result)=>{
         if (err) throw err;
-        console.log(result)
+    
         res.status(201).json({message:"ok"});
     })
 })

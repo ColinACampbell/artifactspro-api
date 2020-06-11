@@ -14,5 +14,4 @@ router.get('/:artID',artifactsController.getFromID)
 // delete artifact from id
 router.delete('/delete/:artID',artifactsController.deleteArtifactFromID)
 
-
 module.exports = router;

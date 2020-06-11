@@ -64,6 +64,15 @@ app.use('/api/docs/', documentsRoute); // TODO : Test these end points using pos
 app.use('/api/members/',membersRoute);
 app.use('/api/workspace/',workspaceRoute);
 
+app.get("/api/test-1",(req,res)=>{
+    let dict = {
+        "name" : "Colin Campbell",
+        "age" : 19,
+        "role" : "admin"
+    }
+    res.json(dict);
+})
+
 
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");
