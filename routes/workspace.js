@@ -30,7 +30,7 @@ router.post('/create',(req,res)=>{
         db.query("SELECT work_space_id FROM work_spaces where work_space_name = $1 and org_id = $2",
         [workspaceName,orgID],(err,result)=>{
             if (err) throw err;
-            console.log(result.rows[0].work_space_id)
+            //console.log(result.rows[0].work_space_id)
             let workspaceID = result.rows[0].work_space_id;
             // Then add the user a member (admin) of the workspace
             db.query("INSERT INTO work_space_members (user_id, work_space_id, role) VALUES($1, $2, 'admin');",
@@ -45,7 +45,7 @@ router.post('/create',(req,res)=>{
 router.post('/:workspaceID/add', async (req,res)=>{
     const email = req.body.email;
     const workspaceID = req.params.workspaceID;
-    console.log(workspaceID,email);
+    //console.log(workspaceID,email);
 
     // check it the member already exists
     let members = await db.query(`select * from work_space_members 
@@ -114,7 +114,7 @@ router.get('/:workspaceID/messages', async (req,res)=>{
     WHERE work_space_id = $1 
     
     ORDER BY work_space_messages.work_space_msg_id DESC`,[workspaceID]);
-    console.log(result.rows);
+    //console.log(result.rows);
     res.status(200).json(result.rows)
 })
 
@@ -125,7 +125,7 @@ router.post("/:workspaceID/message", (req,res)=>{
 
     const { title, content, time, date} = req.body;
     const userID = req.session.userInfo.user_id;
-    console.log(userID);
+    //console.log(userID);
     const workspaceID = req.params.workspaceID;
 
     db.query(`INSERT INTO work_space_messages
@@ -140,7 +140,7 @@ router.post("/:workspaceID/message", (req,res)=>{
 
 // test out this endpoint
 router.get('/suggestion/email', async (req,res)=>{
-    console.log(req.session);
+    //console.log(req.session);
 
     const orgID = req.session.orgInfo.org_id;
     let email = req.query.email;
