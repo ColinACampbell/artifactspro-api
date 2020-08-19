@@ -135,6 +135,8 @@ router.post("/:workspaceID/message", (req,res)=>{
         if (err) throw err;
     
         res.status(201).json({message:"ok"});
+    }).catch((err)=>{
+        console.log(err)
     })
 })
 
