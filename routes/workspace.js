@@ -154,4 +154,13 @@ router.get('/suggestion/email', async (req,res)=>{
     res.json(result.rows);
 });
 
+// todo : Work on this later
+router.post('/:workspaceID/artifact/add/:artifactID',(req,res)=>{
+
+    const workspaceID = req.params.workspaceID;
+    const artifactID = req.params.artifactID;
+
+    console.log({workspaceID,artifactID})
+})
+
 module.exports = router;
