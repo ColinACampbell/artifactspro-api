@@ -15,7 +15,7 @@ const workspaceRoute = require('./routes/workspace');
 
 // Middlewares
 const userMiddleware = require('./middleware/user');
-const authMiddleware = require('./middleware/auth');
+const authMiddleware = require('./middleware/authenticate');
 
 //require('./config/mail')
 
@@ -50,8 +50,11 @@ app.use(session({
 app.use(express.json({ limit: '50mb' }));
 app.use('/', express.static(staticPath))
 
+// TODO : Update client : jwt
 app.use('/api/art',authMiddleware);
+// TODO : Update client : jwt
 app.use('/api/members/',authMiddleware);
+// TODO : Update client jwt
 app.use('/api/workspace/',authMiddleware);
 
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
@@ -60,19 +63,9 @@ app.use('/api/user/login', userMiddleware.password); // middleware to hash passw
 app.use('/api/user/', userRoute);
 app.use('/api/org/', organizationRoute);
 app.use('/api/art/', artifactsRoute);
-app.use('/api/docs/', documentsRoute); // TODO : Test these end points using postman
+app.use('/api/docs/', documentsRoute);
 app.use('/api/members/',membersRoute);
 app.use('/api/workspace/',workspaceRoute);
-
-app.get("/api/test-1",(req,res)=>{
-    let dict = {
-        "name" : "Colin Campbell",
-        "age" : 19,
-        "role" : "admin"
-    }
-    res.json(dict);
-})
-
 
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");

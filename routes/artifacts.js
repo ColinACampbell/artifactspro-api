@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const artifactsController = require("./../controllers/artifacts")
+const authMiddleware = require('./../middleware/authenticate')
+
 
 // Get all artifacts from org id in sessions
+// TODO : Update client : jwt
 router.get('/',artifactsController.getAll);
 
 // Create artifact
