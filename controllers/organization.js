@@ -1,9 +1,11 @@
 const crypto = require('crypto');
 const db = require('./../config/db')
+const jwt = require("jsonwebtoken");
+const config = require('./../config/config')
 
 exports.createOrg = (req,res)=>{
 
-    const userID = req.session.userInfo.user_id;
+    const userID = req.authentication.userInfo.user_id;
     const orgName = req.body.name;
     const orgKey = req.body.orgKey;
     let orgPassKey = req.body.orgPassKey;
@@ -15,7 +17,7 @@ exports.createOrg = (req,res)=>{
 
     let accessCode = crypto.randomBytes(30).toString('hex');
 
-    // check if the organiation key already exists
+    // check if the organization key already exists
     db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
         if (err) throw err;
         let rowCount = result.rowCount;
@@ -25,17 +27,18 @@ exports.createOrg = (req,res)=>{
             // add organization to the database
             db.query("INSERT INTO public.organizations (user_id, name, type, org_key, org_code,access_key) VALUES ($1, $2, '', $3, $4,$5);",[userID,orgName,orgKey,orgPassKey,accessCode],(err,result)=>{
                 if (err) throw err;
-                // get organization info to store in sessions
+                // get organization info to store in authentication object in req object
                 db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
                     if (err) throw err;
 
-                    req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
+                    req.authentication.orgInfo = result.rows[0]; // store information about the organization so it can be used later
                     const orgID = result.rows[0].org_id;
 
                     // store user as a member of that organization
                     db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'owner'],(err,result)=>{
                         if (err) throw err;
-                        res.json({message:"success"});
+                        let token = jwt.sign(req.authentication,config.jwt.secret)
+                        res.status(201).json({token});
                     });
                     
                 })
@@ -44,13 +47,13 @@ exports.createOrg = (req,res)=>{
 
         } else
         {
-            res.json({message:"failure"})
+            res.status(409).json({})
         }
     });
 }
 
 exports.info = (req,res)=>{
-    let org_key = req.session.orgInfo.org_key
+    let org_key = req.authentication.orgInfo.org_key
     db.query('SELECT * FROM organizations WHERE org_key = $1',[org_key],
     (err,result)=>{
         res.json(result.rows[0])
@@ -66,10 +69,11 @@ exports.infoFromAccessCode = (req,res)=>{
     });
 }
 
+// Update client : Status Code
 exports.inviteFromAccessCode = (req,res)=>
 {
     let code = req.params.code; 
-    let userID = req.session.userInfo.user_id; // this session was set from the signup process
+    let userID = req.authentication.userInfo.user_id; // this session was set from the signup process
     db.query("SELECT * FROM organizations WHERE org_code = $1",[code],(err,result)=>{
         if (err) throw err;
 
@@ -79,7 +83,7 @@ exports.inviteFromAccessCode = (req,res)=>
         // store user as a member of that organization
         db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'member'],(err,result)=>{
             if (err) throw err;
-            res.json({message:"success"});
+            res.status(201).json({});
         });
         
     })

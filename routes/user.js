@@ -1,21 +1,24 @@
 const express = require('express');
 const userController = require('./../controllers/user')
 const router = express.Router();
-const authMiddleware = require('./../middleware/auth');
+const authMiddleware = require("./../middleware/authenticate")
 
-// auth end point is to ensure that the user is logged in with cookies
-router.post('/auth',userController.auth);
+// TODO : Update Client
+router.post('/auth',authMiddleware,userController.auth);
 
-// Sign up user and send of verification link
+// TODO : Update client
 router.post('/signup/process-1',userController.signup);
 
+// TODO : Update client
 router.post('/login', userController.login);
 
-router.use('/info',authMiddleware)
-router.get('/info',userController.info);
+// TODO : Update Client
+router.get('/info',authMiddleware,userController.info);
 
+// TODO : Update Client
 router.post('/verify/:accesscode', userController.verifyUser);
 
+// TODO : Update Client ( make the client remove the token from storage)
 router.post('/logout',userController.logout)
 
 module.exports = router;

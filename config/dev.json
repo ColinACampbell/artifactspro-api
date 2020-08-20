@@ -10,5 +10,8 @@
         "user" : "app.artifactspro@gmail.com",
         "password" : "(own)[boss]{123}"
     },
+    "jwt" : {
+        "secret" : "sweet"
+    },
     "host" : "http://localhost:4200"
 }

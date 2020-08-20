@@ -13,5 +13,8 @@
         "user" : "app.artifactspro@gmail.com",
         "password" : "(own)[boss]{123}"
     },
+    "jwt" : {
+        "secret" : "chicken_no09dles_3lut"
+    },
     "host" : "https://artifactspro.herokuapp.com"
 }

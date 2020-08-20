@@ -1,18 +1,20 @@
 const db = require('./../config/db')
 const config = require('./../config/config')
 const mailTransporter = require('./../config/mail')
+const jwt = require("jsonwebtoken");
 
 // TODO : Test Everything here
 
 exports.auth = (req, res) => {
     
     let status = 401
-    if (req.session.userInfo)
+    if (req.authentication.userInfo)
         status = 200
         
     res.status(status).json({})
 }
 
+// TODO : Update client
 exports.signup = (req, res) => {
 
     let email = req.body.email;
@@ -42,26 +44,31 @@ exports.signup = (req, res) => {
                         text: `Please click on the link to verify your ArtifactsPro account ${config.host}/account/verify/${accessCode}`
                     };
                 
+                    // TODO : Remove this when finished
+                    /**
                     mailTransporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
                             console.log('Email sent: ' + info.response);
                         }
-                    });
+                    });**/
 
                     // fetch user information and store it in the browser using sesssions
                     db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
                         if (err) throw err;
-                        req.session.userInfo = result.rows[0];
-                        response.message = "success";
-                        res.json(response)
+
+                        req.authentication = {};
+                        req.authentication.userInfo = result.rows[0];
+                        let token = jwt.sign(req.authentication,config.jwt.secret)
+
+                        res.status(201).json({token});
                     });
 
                 })
         } else {
             response.message = "failure";
-            res.json(response)
+            res.status(409).json({})
         }
 
     })
@@ -75,10 +82,13 @@ exports.login = (req, res) => {
         (err, result) => {
             if (err) throw err;
 
+            req.authentication = {}
+
             let rowCount = result.rowCount;
-            let response = {};
+
             if (rowCount > 0) {
-                req.session.userInfo = result.rows[0];
+                req.authentication.userInfo = result.rows[0];
+
                 db.query(`
             SELECT 
             organizations.name, 
@@ -91,13 +101,13 @@ exports.login = (req, res) => {
             INNER JOIN organizations ON organizations.org_id = organization_members.org_id
             WHERE users.email = $1
             `, [email], (err, result) => {
-                    req.session.orgInfo = result.rows[0];
-                    response.message = "success";
-                    res.json(response)
+                    req.authentication.orgInfo = result.rows[0];
+                    const token = jwt.sign(req.authentication,config.jwt.secret);
+                    res.status(200).json({token})
                 })
             } else {
-                response.message = "failure";
-                res.json(response)
+               
+                res.status(401).json({})
             }
 
         })
@@ -105,11 +115,10 @@ exports.login = (req, res) => {
 
 exports.info = (req, res) => {
 
-    //console.log(req.session)
-    let first_name = req.session.userInfo.first_name;
-    let last_name = req.session.userInfo.last_name;
-    let email = req.session.userInfo.email
-    let is_verified = req.session.userInfo.is_verified;
+    let first_name = req.authentication.userInfo.first_name;
+    let last_name = req.authentication.userInfo.last_name;
+    let email = req.authentication.userInfo.email
+    let is_verified = req.authentication.userInfo.is_verified;
 
     res.json({
         first_name,
@@ -119,7 +128,7 @@ exports.info = (req, res) => {
     });
 }
 
-
+// TODO : Test this with jwt and update client
 exports.verifyUser = (req, res) => {
 
     //console.log(req.body)
@@ -127,25 +136,25 @@ exports.verifyUser = (req, res) => {
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
 
-    let message = ''
+    let statusCode = ''
     
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
         (err, result) => {
 
-            //req.session.userInfo = result.rows[0];
+            req.authentication = {}
 
             if (err) throw err;
-
+                
             if (result.rowCount === 0)
-                message = 'code_not_exists'
+                statusCode = 401
             else
-                message = 'ok'
+                statusCode = 200
 
             let row = result.rows[0]
             if (row === undefined) {
                 row = { user_id: undefined }
             }
-            req.session.userInfo = row // used later for login
+            //req.authentication.userInfo = row // used later for login
             //console.log(row)
             const userID = row.user_id;
 
@@ -155,17 +164,13 @@ exports.verifyUser = (req, res) => {
         WHERE user_id = $3;`, [last_name, first_name, userID],
                 (err, result) => {
                     if (err) throw err;
-                    //console.log(result)
-                    res.json({
-                        message
-                    })
+                    res.status(statusCode).json({})
                 })
         })
-
 }
 
 exports.logout = (req,res)=>{
-    req.session.userInfo = undefined;
-    req.session.orgInfo = undefined;
-    res.json({message:"ok"})
+    req.authentication = {}
+    const token = jwt.sign(req.authentication,config.jwt.secret)
+    res.status.json({token})
 }
