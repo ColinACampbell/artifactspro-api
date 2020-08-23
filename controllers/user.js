@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 exports.auth = (req, res) => {
     
     let status = 401
-    if (req.authentication.userInfo)
+    if (req.session.userInfo)
         status = 200
         
     res.status(status).json({})
@@ -58,11 +58,9 @@ exports.signup = (req, res) => {
                     db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
                         if (err) throw err;
 
-                        req.authentication = {};
-                        req.authentication.userInfo = result.rows[0];
-                        let token = jwt.sign(req.authentication,config.jwt.secret)
+                        req.session.userInfo = result.rows[0];
 
-                        res.status(201).json({token});
+                        res.status(201).json({});
                     });
 
                 })
@@ -82,12 +80,10 @@ exports.login = (req, res) => {
         (err, result) => {
             if (err) throw err;
 
-            req.authentication = {}
-
             let rowCount = result.rowCount;
 
             if (rowCount > 0) {
-                req.authentication.userInfo = result.rows[0];
+                req.session.userInfo = result.rows[0];
 
                 db.query(`
             SELECT 
@@ -101,9 +97,8 @@ exports.login = (req, res) => {
             INNER JOIN organizations ON organizations.org_id = organization_members.org_id
             WHERE users.email = $1
             `, [email], (err, result) => {
-                    req.authentication.orgInfo = result.rows[0];
-                    const token = jwt.sign(req.authentication,config.jwt.secret);
-                    res.status(200).json({token})
+                    req.session.orgInfo = result.rows[0];
+                    res.status(200).json({})
                 })
             } else {
                
@@ -115,10 +110,10 @@ exports.login = (req, res) => {
 
 exports.info = (req, res) => {
 
-    let first_name = req.authentication.userInfo.first_name;
-    let last_name = req.authentication.userInfo.last_name;
-    let email = req.authentication.userInfo.email
-    let is_verified = req.authentication.userInfo.is_verified;
+    let first_name = req.session.userInfo.first_name;
+    let last_name = req.session.userInfo.last_name;
+    let email = req.session.userInfo.email
+    let is_verified = req.session.userInfo.is_verified;
 
     res.json({
         first_name,
@@ -141,8 +136,6 @@ exports.verifyUser = (req, res) => {
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
         (err, result) => {
 
-            req.authentication = {}
-
             if (err) throw err;
                 
             if (result.rowCount === 0)
@@ -154,7 +147,7 @@ exports.verifyUser = (req, res) => {
             if (row === undefined) {
                 row = { user_id: undefined }
             }
-            //req.authentication.userInfo = row // used later for login
+            //req.session.userInfo = row // used later for login
             //console.log(row)
             const userID = row.user_id;
 
@@ -170,7 +163,6 @@ exports.verifyUser = (req, res) => {
 }
 
 exports.logout = (req,res)=>{
-    req.authentication = {}
-    const token = jwt.sign(req.authentication,config.jwt.secret)
-    res.status.json({token})
+    req.session = {}
+    res.status(200).json({})
 }

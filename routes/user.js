@@ -1,13 +1,13 @@
 const express = require('express');
 const userController = require('./../controllers/user')
 const router = express.Router();
-const authMiddleware = require("./../middleware/authenticate")
+const authMiddleware = require("./../middleware/auth")
 
 // TODO : Update Client
 router.post('/auth',authMiddleware,userController.auth);
 
 // TODO : Update client
-router.post('/signup/process-1',userController.signup);
+router.post('/signup/process-1',authMiddleware,userController.signup);
 
 // TODO : Update client
 router.post('/login', userController.login);
