@@ -16,7 +16,7 @@ exports.createOrg = (req,res)=>{
     .digest("hex");
 
     let accessCode = crypto.randomBytes(30).toString('hex');
-
+ 
     // check if the organization key already exists
     db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
         if (err) throw err;
@@ -33,7 +33,7 @@ exports.createOrg = (req,res)=>{
 
                     req.authentication.orgInfo = result.rows[0]; // store information about the organization so it can be used later
                     const orgID = result.rows[0].org_id;
-
+ 
                     // store user as a member of that organization
                     db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'owner'],(err,result)=>{
                         if (err) throw err;
