@@ -4,8 +4,8 @@ const db = require('./../config/db');
 
 // Gets workspaces from user 
 router.get('/all',(req,res)=>{
-
-    const userID = req.authenticate.userInfo.user_id;
+    //console.log(req.session);
+    const userID = req.session.userInfo.user_id;
     db.query(`select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
     inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
     inner join users on users.user_id = work_space_members.user_id 
@@ -17,8 +17,8 @@ router.get('/all',(req,res)=>{
 });
 
 router.post('/create',(req,res)=>{
-    const userID = req.authenticate.userInfo.user_id;
-    const orgID = req.authenticate.orgInfo.org_id;
+    const userID = req.session.userInfo.user_id;
+    const orgID = req.session.orgInfo.org_id;
 
     let workspaceName = req.body.workspace_name;
     let dateCreated = req.body.date_created;
@@ -121,11 +121,10 @@ router.get('/:workspaceID/messages', async (req,res)=>{
 
 // create a message
 // Getting a no body for the result... check this one out
-// TODO : Update client : Status code
 router.post("/:workspaceID/message", (req,res)=>{
 
     const { title, content, time, date} = req.body;
-    const userID = req.authenticate.userInfo.user_id;
+    const userID = req.session.userInfo.user_id;
     //console.log(userID);
     const workspaceID = req.params.workspaceID;
 
@@ -135,7 +134,7 @@ router.post("/:workspaceID/message", (req,res)=>{
     .then((err,result)=>{
         if (err) throw err;
     
-        res.status(201).json({});
+        res.status(201).json({message:"ok"});
     }).catch((err)=>{
         console.log(err)
     })
@@ -143,8 +142,9 @@ router.post("/:workspaceID/message", (req,res)=>{
 
 // test out this endpoint
 router.get('/suggestion/email', async (req,res)=>{
+    //console.log(req.session);
 
-    const orgID = req.authenticate.orgInfo.org_id;
+    const orgID = req.session.orgInfo.org_id;
     let email = req.query.email;
     
     let result = await db.query(`select  email from users 

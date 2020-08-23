@@ -2,8 +2,8 @@ const db = require('./../config/db');
 const config = require('./../config/config')
 
 exports.getAll = (req,res)=>{
-
-    let orgID = req.authentication.orgInfo.org_id;
+    //console.log(req.session)
+    let orgID = req.session.orgInfo.org_id;
     db.query(`select role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
     where org_id  = $1`,[orgID],
@@ -15,9 +15,9 @@ exports.getAll = (req,res)=>{
 }
 
 exports.getInviteCode = (req,res)=>{
-    let orgID = req.authentication.orgInfo.org_id;
+    let orgID = req.session.orgInfo.org_id;
     db.query('SELECT * FROM organizations WHERE org_id = $1',[orgID],(err,result)=>{
-
+        //console.log(result.rows[0].org_code);
         let orgCode = result.rows[0].org_code;
         let orgName = result.rows[0].name;
         let serverhost = config.dev ? 'http://localhost:4200': config.host

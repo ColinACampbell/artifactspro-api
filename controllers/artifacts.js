@@ -1,7 +1,7 @@
 const db = require('./../config/db')
 
 exports.getAll = (req,res)=>{
-    let orgID = req.authentication.orgInfo.org_id;
+    let orgID = req.session.orgInfo.org_id;
     db.query('SELECT * FROM artifacts where org_id = $1',[orgID],
     (err,result)=>{
         if (err) throw err;
@@ -12,8 +12,8 @@ exports.getAll = (req,res)=>{
 // TODO : Test this again
 exports.create = (req,res)=>{
 
-    let orgInfo = req.authentication.orgInfo;
-    let userInfo = req.authentication.userInfo;
+    let orgInfo = req.session.orgInfo;
+    let userInfo = req.session.userInfo;
     let userID = userInfo.user_id;
     let orgID = orgInfo.org_id;
 
@@ -42,7 +42,7 @@ exports.create = (req,res)=>{
 
 exports.getFromID = (req,res)=>{
     let artID = req.params.artID;
-    let orgInfo = req.authentication.orgInfo;
+    let orgInfo = req.session.orgInfo;
     let orgID = orgInfo.org_id;
 
     db.query(`SELECT * FROM artifacts WHERE art_id = $1 AND org_id = $2`,[artID,orgID],
