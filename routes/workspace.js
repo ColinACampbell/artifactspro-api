@@ -53,7 +53,7 @@ router.post('/:workspaceID/add', async (req,res)=>{
     where users.email = $1 and work_space_members.work_space_id = $2`,[email,workspaceID]);
 
     if (members.rowCount > 0)
-        res.status(200).json({message:"user_exists"});
+        res.status(401).json({});
     else 
     {
         // First get user id then add them using that id
@@ -96,8 +96,9 @@ router.get('/:workspaceID/members',async (req,res)=>{
 router.get('/:workspaceID/artifacts',async (req,res)=>{
     let workspaceID = req.params.workspaceID;
     let result = await db.query(`select * from artifacts 
-    inner join work_spaces on artifacts.owner = work_spaces.work_space_id 
-    where work_spaces.work_space_id = $1`,[workspaceID]);
+    inner join work_space_artifacts on work_space_artifacts.art_id  = artifacts.art_id 
+    inner join work_spaces on work_spaces.work_space_id  = work_space_artifacts.work_space_id 
+    where work_space_artifacts.work_space_id = $1`,[workspaceID]);
     let artifacts = result.rows;
     res.status(200).json(artifacts);
 })
@@ -154,13 +155,37 @@ router.get('/suggestion/email', async (req,res)=>{
     res.json(result.rows);
 });
 
-// todo : Work on this later
-router.post('/:workspaceID/artifact/add/:artifactID',(req,res)=>{
+// TODO : Work on this later
+router.post('/:workspaceID/artifact/add',async (req,res)=>{
 
     const workspaceID = req.params.workspaceID;
-    const artifactID = req.params.artifactID;
+    const artifactIDs = req.body.artifactIDs; // array of the artifact id's
+    console.log(artifactIDs)
 
-    console.log({workspaceID,artifactID})
+    for (let i = 0; i < artifactIDs.length; i ++)
+    {
+        const artifactID = artifactIDs[i];
+        console.log(artifactID)
+
+        let result = await db.query(`SELECT * FROM 
+        work_space_artifacts where work_space_artifacts.art_id  = $1 
+        and work_space_artifacts.work_space_id  = $2`,[artifactID,workspaceID])
+
+
+        if (result.rowCount > 0)
+            continue;
+        
+        await db.query(`INSERT INTO work_space_artifacts
+        (work_space_id,art_id)
+        VALUES($1,$2);
+        `,[workspaceID,artifactID]).catch((err)=>{
+            if (err) throw err || res.status(500).json({})
+
+        })
+        
+    }
+    
+    res.status(200).json({})
 })
 
 module.exports = router;
