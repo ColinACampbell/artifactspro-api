@@ -42,7 +42,8 @@ router.post('/create',(req,res)=>{
     });
 });
 
-router.post('/:workspaceID/add', async (req,res)=>{
+// Add member 
+router.post('/:workspaceID/add-member', async (req,res)=>{
     const email = req.body.email;
     const workspaceID = req.params.workspaceID;
     //console.log(workspaceID,email);
@@ -53,7 +54,7 @@ router.post('/:workspaceID/add', async (req,res)=>{
     where users.email = $1 and work_space_members.work_space_id = $2`,[email,workspaceID]);
 
     if (members.rowCount > 0)
-        res.status(401).json({});
+        res.status(409).json({});
     else 
     {
         // First get user id then add them using that id
@@ -81,7 +82,7 @@ router.get('/:workspaceID',(req,res)=>{
     })
 });
 
-// Little experimenting on this endpoint
+// Get Members fom Workspace
 router.get('/:workspaceID/members',async (req,res)=>{
     let workspaceID = req.params.workspaceID;
     let result = await db.query(`select first_name, last_name,email,role from work_space_members 
@@ -92,7 +93,7 @@ router.get('/:workspaceID/members',async (req,res)=>{
     res.status(200).json(members);
 })
 
-// Get aritfacts that belong to the workspace
+// Get artifacts that belong to the workspace
 router.get('/:workspaceID/artifacts',async (req,res)=>{
     let workspaceID = req.params.workspaceID;
     let result = await db.query(`select * from artifacts 
@@ -101,6 +102,26 @@ router.get('/:workspaceID/artifacts',async (req,res)=>{
     where work_space_artifacts.work_space_id = $1`,[workspaceID]);
     let artifacts = result.rows;
     res.status(200).json(artifacts);
+})
+
+router.get("/:workspaceID/suggestion/artifacts",async (req,res)=>{
+
+    const workspaceID = req.params.workspaceID;
+    const artifactName = req.query.artifactName;
+
+    const userID = req.session.userInfo.user_id;
+    const orgID = req.session.orgInfo.org_id;
+
+    let query = `select artifacts."name" from artifacts 
+    inner join users on artifacts.user_id = users.user_id 
+    inner join work_space_members on work_space_members.user_id = users.user_id 
+    inner join work_spaces on work_spaces.work_space_id = work_space_members.work_space_id 
+    inner join organizations on organizations.org_id = work_spaces.org_id 
+    where users.user_id = $1 and work_spaces.work_space_id = $2
+    and artifacts."name" like '%' || $3 || '%' and organizations.org_id = $4`
+
+    let results = await db.query(query,[userID,workspaceID,artifactName,orgID])
+    res.status(200).json(results.rows)
 })
 
 // Get Messages
@@ -119,29 +140,29 @@ router.get('/:workspaceID/messages', async (req,res)=>{
     res.status(200).json(result.rows)
 })
 
-
-// create a message
+// Create a message
 // Getting a no body for the result... check this one out
-router.post("/:workspaceID/message", (req,res)=>{
+router.post("/:workspaceID/add/message", async (req,res)=>{
 
     const { title, content, time, date} = req.body;
     const userID = req.session.userInfo.user_id;
     //console.log(userID);
     const workspaceID = req.params.workspaceID;
 
-    db.query(`INSERT INTO work_space_messages
+    await db.query(`INSERT INTO work_space_messages
     (message_title, message_content, user_id, work_space_id, "time", "date")
     VALUES($1, $2, $3, $4, $5, $6);`,[title,content,userID,workspaceID,time,date])
     .then((err,result)=>{
         if (err) throw err;
-    
-        res.status(201).json({message:"ok"});
+        
     }).catch((err)=>{
         console.log(err)
     })
+
+    res.status(201).json({});
 })
 
-// test out this endpoint
+// suggest email to add 
 router.get('/suggestion/email', async (req,res)=>{
     //console.log(req.session);
 
@@ -155,36 +176,44 @@ router.get('/suggestion/email', async (req,res)=>{
     res.json(result.rows);
 });
 
-// TODO : Work on this later
+// Add Artifact to workspace
 router.post('/:workspaceID/artifact/add',async (req,res)=>{
 
     const workspaceID = req.params.workspaceID;
-    const artifactIDs = req.body.artifactIDs; // array of the artifact id's
-    console.log(artifactIDs)
+    const artifactName = req.body.artifactName; // array of the artifact id's
 
-    for (let i = 0; i < artifactIDs.length; i ++)
+    // select the id of the artifact
+    let artifacts = await db.query(`SELECT * FROM artifacts WHERE artifacts.name = $1`,[artifactName])
+
+    const emptyData = 0;
+    if (artifacts.rows.length === emptyData)
     {
-        const artifactID = artifactIDs[i];
-        console.log(artifactID)
+        res.status(422).json({}) // let user know that info not valid or found
+        return
+    }
 
-        let result = await db.query(`SELECT * FROM 
+    const artifactID = artifacts.rows[0].art_id;
+
+    // check if the artifact exists in the workspace
+    let result = await db.query(`SELECT * FROM 
         work_space_artifacts where work_space_artifacts.art_id  = $1 
         and work_space_artifacts.work_space_id  = $2`,[artifactID,workspaceID])
 
+    console.log(result.rowCount)
 
-        if (result.rowCount > 0)
-            continue;
-        
-        await db.query(`INSERT INTO work_space_artifacts
-        (work_space_id,art_id)
-        VALUES($1,$2);
-        `,[workspaceID,artifactID]).catch((err)=>{
-            if (err) throw err || res.status(500).json({})
-
-        })
-        
+    if (result.rowCount >= 1)
+    {
+        res.status(409).json({})            
+        return
     }
-    
+
+    // add the artifact to the workspace
+    await db.query(`INSERT INTO work_space_artifacts
+    (work_space_id,art_id) VALUES($1,$2);`,
+    [workspaceID,artifactID]).catch((err)=>{
+        if (err) throw err || res.status(500).json({})
+    })
+
     res.status(200).json({})
 })
 
