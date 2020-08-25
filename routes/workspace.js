@@ -199,8 +199,6 @@ router.post('/:workspaceID/artifact/add',async (req,res)=>{
         work_space_artifacts where work_space_artifacts.art_id  = $1 
         and work_space_artifacts.work_space_id  = $2`,[artifactID,workspaceID])
 
-    console.log(result.rowCount)
-
     if (result.rowCount >= 1)
     {
         res.status(409).json({})            
