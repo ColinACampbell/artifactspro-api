@@ -215,4 +215,13 @@ router.post('/:workspaceID/artifact/add',async (req,res)=>{
     res.status(200).json({})
 })
 
+// Get specific workspace message, post or thread
+router.get("/:workspaceID/message/:messageID",async (req,res)=>{
+
+    const workspaceID = req.params.workspaceID
+    const messageID = req.params.messageID;
+    const result = await db.query(`select * from work_space_messages where work_space_id = $1 and work_space_msg_id = $2`,[workspaceID,messageID])    
+    const workspacePost = result.rows[0];
+    res.status(200).json(workspacePost)
+})
 module.exports = router;
