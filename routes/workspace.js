@@ -220,8 +220,41 @@ router.get("/:workspaceID/message/:messageID",async (req,res)=>{
 
     const workspaceID = req.params.workspaceID
     const messageID = req.params.messageID;
-    const result = await db.query(`select * from work_space_messages where work_space_id = $1 and work_space_msg_id = $2`,[workspaceID,messageID])    
+    const result = await db.query(`select * from work_space_messages 
+    
+    inner join users on users.user_id = work_space_messages.user_id 
+
+    where work_space_id = $1 and work_space_msg_id = $2`,[workspaceID,messageID])    
     const workspacePost = result.rows[0];
     res.status(200).json(workspacePost)
 })
+
+// Now working with message replies
+router.get("/:workspaceID/message/:messageID/replies",async (req,res)=>{
+    //const workspaceID = req.params.workspaceID
+    const messageID = req.params.messageID;
+    const result = await db.query(`SELECT * FROM "work_space_message_replies" WHERE work_space_msg_id = $1`,[messageID]);
+    const rows = result.rows;
+    res.status(200).json(rows)
+})
+
+router.post("/:workspaceID/message/:messageID/reply",async (req,res)=>{
+
+    const userID = req.session.userInfo.user_id;
+
+    const { content, actionType, timestamp, messageID } = req.body;
+    
+    console.log(messageID)
+    const query = `INSERT INTO work_space_message_replies
+    ("timestamp", "content", action_type, work_space_msg_id, user_id)
+    VALUES($1, $2, $3, $4, $5);`
+
+    const results = await db.query(query,[timestamp,content,actionType,messageID,userID])
+    .catch(err=>{
+        if (err) throw err
+        res.status(500).json({})
+    })
+    res.status(201).json({})
+})
+
 module.exports = router;
