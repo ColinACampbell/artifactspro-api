@@ -233,7 +233,10 @@ router.get("/:workspaceID/message/:messageID",async (req,res)=>{
 router.get("/:workspaceID/message/:messageID/replies",async (req,res)=>{
     //const workspaceID = req.params.workspaceID
     const messageID = req.params.messageID;
-    const result = await db.query(`SELECT * FROM "work_space_message_replies" WHERE work_space_msg_id = $1`,[messageID]);
+    const result = await db.query(`SELECT "timestamp", "content" , action_type, users.user_id,users.email,
+    users.first_name, users.last_name,work_space_msg_reply_id, work_space_msg_id FROM work_space_message_replies
+    inner join users on users.user_id = work_space_message_replies.user_id 
+    WHERE work_space_msg_id = $1`,[messageID]);
     const rows = result.rows;
     res.status(200).json(rows)
 })
