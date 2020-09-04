@@ -9,7 +9,7 @@ exports.getAll = (req,res)=>{
     })
 }
 
-// TODO : Test this again
+// TODO : Change the response type for client
 exports.create = (req,res)=>{
 
     let orgInfo = req.session.orgInfo;

@@ -241,11 +241,14 @@ router.get("/:workspaceID/message/:messageID/replies",async (req,res)=>{
     res.status(200).json(rows)
 })
 
+
+// Submit a reply to a workspace
 router.post("/:workspaceID/message/:messageID/reply",async (req,res)=>{
 
     const userID = req.session.userInfo.user_id;
 
-    const { content, actionType, timestamp, messageID } = req.body;
+    const messageID = req.params.messageID
+    const { content, actionType, timestamp } = req.body;
     
     console.log(messageID)
     const query = `INSERT INTO work_space_message_replies
@@ -257,6 +260,7 @@ router.post("/:workspaceID/message/:messageID/reply",async (req,res)=>{
         if (err) throw err
         res.status(500).json({})
     })
+
     res.status(201).json({})
 })
 
