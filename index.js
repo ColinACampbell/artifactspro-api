@@ -3,6 +3,7 @@ const express = require('express')
 const app = express();
 const http = require('http');
 const io = require('socket.io')
+
 const cors = require('cors');
 const session = require('express-session');
 
@@ -12,6 +13,7 @@ const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
 const membersRoute = require('./routes/member');
 const workspaceRoute = require('./routes/workspace');
+const chatsRoute = require('./routes/chats')
 
 // Middlewares
 const userMiddleware = require('./middleware/user');
@@ -24,10 +26,9 @@ const socketIO = io.listen(server);
 
 socketIO.on('connect',(socket)=>{
     console.log("Socket Connected")
-    socket.on('foo',(val)=>{
-        console.log(val)
-    })
+    socket.emit("demo_event","Hello World")
 })
+
 
 const staticPath = __dirname + '/static';
 
@@ -53,6 +54,7 @@ app.use('/', express.static(staticPath))
 app.use('/api/art',authMiddleware);
 app.use('/api/members/',authMiddleware);
 app.use('/api/workspace/',authMiddleware);
+app.use('/api/chats/',chatsRoute)
 
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
 app.use('/api/user/signup/process-1', userMiddleware.password); // middleware to hash password on user routes
@@ -63,6 +65,7 @@ app.use('/api/art/', artifactsRoute);
 app.use('/api/docs/', documentsRoute); 
 app.use('/api/members/',membersRoute);
 app.use('/api/workspace/',workspaceRoute);
+app.use('/api/chats/',chatsRoute) 
 
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");

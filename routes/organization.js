@@ -10,7 +10,7 @@ router.post('/create',authMiddleware,orgController.createOrg);
 // TODO : Update client
 router.get('/info',authMiddleware,orgController.info)
 
-router.get('/info-from/access-code/:accessCode',authMiddleware,orgController.infoFromAccessCode)
+router.get('/info-from/access-code/:accessCode',orgController.infoFromAccessCode)
 
 router.get("/test",(req,res)=>{
     res.send({num:10})

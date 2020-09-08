@@ -7,7 +7,7 @@ const authMiddleware = require("./../middleware/auth")
 router.post('/auth',authMiddleware,userController.auth);
 
 // TODO : Update client
-router.post('/signup/process-1',authMiddleware,userController.signup);
+router.post('/signup/process-1',userController.signup);
 
 // TODO : Update client
 router.post('/login', userController.login);

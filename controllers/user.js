@@ -138,9 +138,9 @@ exports.verifyUser = (req, res) => {
             if (err) throw err;
                 
             if (result.rowCount === 0)
-                statusCode = 401
+                statusCode = 409
             else
-                statusCode = 200
+                statusCode = 201
 
             let row = result.rows[0]
             if (row === undefined) {

@@ -2,7 +2,8 @@ const db = require('./../config/db')
 
 exports.getAll = (req,res)=>{
     let orgID = req.session.orgInfo.org_id;
-    db.query('SELECT * FROM artifacts where org_id = $1',[orgID],
+    let userID = req.session.userInfo.user_id;
+    db.query('SELECT * FROM artifacts where org_id = $1 AND user_id = $2',[orgID,userID],
     (err,result)=>{
         if (err) throw err;
         res.json(result.rows);
