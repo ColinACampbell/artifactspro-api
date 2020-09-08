@@ -113,8 +113,10 @@ exports.info = (req, res) => {
     let last_name = req.session.userInfo.last_name;
     let email = req.session.userInfo.email
     let is_verified = req.session.userInfo.is_verified;
+    let user_id = req.session.userInfo.user_id;
 
     res.json({
+        user_id,
         first_name,
         last_name,
         email,
