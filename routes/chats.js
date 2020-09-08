@@ -20,4 +20,7 @@ router.get("/active-chats", async (req,res)=>{
 
 })
 
+router.get("/:chatID/load-messages",(req,res)=>{
+    
+})
 module.exports = router
