@@ -26,7 +26,13 @@ const socketIO = io.listen(server);
 
 socketIO.on('connect',(socket)=>{
     console.log("Socket Connected")
-    socket.emit("demo_event","Hello World")
+    socket.on("join_room",(internalChatID)=>{
+        console.log(`A user joined Room ${internalChatID}`)
+        socket.join(`${internalChatID}`)
+    })
+    socket.on("internal_message",(val)=>{
+        
+    })
 })
 
 
