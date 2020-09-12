@@ -7,7 +7,8 @@ const fileTypes = {
     'application/msword': 'doc',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
     'image/jpeg': 'jpg',
-    'image/png' : 'png'
+    'image/png' : 'png',
+    'application/pdf' : 'pdf'
 };
 
 exports.docFromArtFromID = (req, res) => {
@@ -58,18 +59,12 @@ exports.preview = (req, res) => {
 
 exports.getLink = (req, res, next) => {
 
-    let code = 200
-    if (!req.session.userInfo)
-        code = 401;
-    // TODO : AUTH user
-
     const artID = req.params.artID;
     const docID = req.params.docID;
     const dir = `./docs/preview/${artID}`; // the directory for which the doc will be in
 
     if (!fs.existsSync(dir))
         fs.mkdirSync(dir, { recursive: true });
-
 
     // doc id will act as the file name with the extenstion so docid.file_ext
     db.query('SELECT * FROM documents WHERE doc_id = $1', [docID],
@@ -81,13 +76,14 @@ exports.getLink = (req, res, next) => {
 
             let filePath = `${dir}/${docID}.${fileTypes[doc.type]}`
 
-            if (!fs.existsSync(filePath))
+            if (!fs.existsSync(filePath)) // check if the file exists
                 fs.writeFileSync(filePath, doc.data);
 
             // TODO Change this value whenever pushing to production
             // TODO make this more automated
             let serverhost = config.dev ? 'http://localhost:3000': config.host
-            res.status(code).json({
+            
+            res.status(200).json({
                 download: `${serverhost}/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`
             });
 

@@ -1,5 +1,6 @@
 {
     "postgres" : {
+        "host_" : "host.docker.internal",
         "host" : "localhost",
         "user" : "postgres",
         "password" : "wedered.200",
