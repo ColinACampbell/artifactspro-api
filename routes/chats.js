@@ -4,45 +4,42 @@ const db = require("./../config/db")
 
 router.get("/active-chats", async (req,res)=>{
     const userID = req.session.userInfo.user_id;
-    const query = `select distinct 
-    MAX(icm.internal_chat_msg_id),
-    icm."timestamp", icm.chat_text,
-    ic.internal_chat_id, ic.user_one, 
-    icm.from_user as sender_id, icm.to_user as reciever_id,
-    CONCAT(sender.first_name,' ', sender.last_name) as sender_name,
-    CONCAT(reciever.first_name,' ', reciever.last_name) as reciever_name
-    from internal_chats as ic 
-    inner join internal_chat_messages as icm on icm.internal_chat_id = ic.internal_chat_id 
-    inner join users as reciever on reciever.user_id = icm.to_user 
-    inner join users as sender on sender.user_id = icm.from_user 
-    where icm.from_user = $1 or icm.from_user = $1 group by icm."timestamp", icm."timestamp", icm.chat_text,
-    ic.internal_chat_id, ic.user_one, icm.from_user, icm.to_user, sender.first_name, sender.last_name, reciever.first_name, reciever.last_name`
-
-    console.log(userID);
+    const query = `select crm.chat_room_id, 
+    (select cm.chat_message_id from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as chat_message_id,
+    (select chat_message_text from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as chat_message_text,
+    (select sender_id from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as sender_id,
+    (select reciever_id from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as reciever_id,
+    (select "timestamp" from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as "timestamp",
+    (select concat(users.first_name,' ',users.last_name) from chat_messages cm 
+    inner join users on users.user_id = cm.sender_id where cm.chat_room_id = crm.chat_room_id
+    order by cm.chat_message_id desc limit 1) as sender_name,
+    (select concat(users.first_name,' ',users.last_name) from chat_messages cm 
+    inner join users on users.user_id = cm.reciever_id where cm.chat_room_id = crm.chat_room_id
+    order by cm.chat_message_id desc limit 1) as reciever_name
+    from chat_room_members crm where crm.user_id = $1 order by chat_message_id desc `
 
     const results = await db.query(query,[userID]);
     let chats = results.rows;
-    console.log(chats)
     res.status(200).json(chats);
-
 })
 
-router.get("/:internalChatID/load-messages", async (req,res)=>{
-    const internalChatID = req.params.internalChatID;
-    console.log(internalChatID);
-    const results = await db.query("select * from internal_chat_messages as icm where icm.internal_chat_id = $1",[internalChatID]);
-    res.status(200).send(results.rows);
+
+router.get("/:chatRoomID/load-messages", async (req,res)=>{
+    const chatRoomID = req.params.chatRoomID;
+    const chats = await db.query("select * from chat_messages cm where cm.chat_room_id = $1",[chatRoomID]);
+    res.status(200).send(chats.rows);
 })
 
 router.post("/send-message", async (req,res)=>{
-    const query = `INSERT INTO internal_chat_messages
-    (chat_text, internal_chat_id, "timestamp", to_user, from_user)
+
+    const query = `INSERT INTO chat_messages
+    (chat_message_text, "timestamp", chat_room_id, sender_id, reciever_id)
     VALUES($1, $2, $3, $4, $5);`
 
-    const {chatText, internalChatID, timestamp, toUser, fromUser } = req.body;
+    console.log(req.body)
+    const {chatText, chatRoomID, timestamp, toUser, fromUser } = req.body;
 
-    const results = await db.query(query,[chatText,internalChatID,timestamp,toUser,fromUser]);
-    console.log(results);
+    await db.query(query,[chatText,timestamp,chatRoomID,fromUser,toUser]).catch((err)=> console.log(err));
 
     res.status(201).json({})
 })
