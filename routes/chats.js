@@ -36,7 +36,6 @@ router.post("/send-message", async (req,res)=>{
     (chat_message_text, "timestamp", chat_room_id, sender_id, reciever_id)
     VALUES($1, $2, $3, $4, $5);`
 
-    console.log(req.body)
     const {chatText, chatRoomID, timestamp, toUser, fromUser } = req.body;
 
     await db.query(query,[chatText,timestamp,chatRoomID,fromUser,toUser]).catch((err)=> console.log(err));
