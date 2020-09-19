@@ -1,7 +1,7 @@
 const db = require('./../config/db');
 const fs = require('fs');
 const path = require('path')
-const config = require('./../config/config')
+const config = require('./../config/configControl')
 
 const fileTypes = {
     'application/msword': 'doc',

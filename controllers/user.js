@@ -1,5 +1,5 @@
 const db = require('./../config/db')
-const config = require('./../config/config')
+const config = require('./../config/configControl')
 const mailTransporter = require('./../config/mail')
 const jwt = require("jsonwebtoken");
 
