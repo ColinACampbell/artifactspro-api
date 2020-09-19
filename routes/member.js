@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const memberContoller = require('./../controllers/members')
+const memberController = require('./../controllers/members')
 
-router.get('/all',memberContoller.getAll)
+router.get('/all',memberController.getAll)
 
-router.get('/invite-code',memberContoller.getInviteCode)
+router.get('/invite-code',memberController.getInviteCode)
 
 module.exports = router;

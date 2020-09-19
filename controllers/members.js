@@ -1,12 +1,14 @@
 const db = require('./../config/db');
-const config = require('./../config/config')
+const config = require('./../config/config');
+const { use } = require('../routes/member');
 
 exports.getAll = (req,res)=>{
-    //console.log(req.session)
+    let userID = req.session.userInfo.user_id;
+    console.log(userID)
     let orgID = req.session.orgInfo.org_id;
     db.query(`select role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
-    where org_id  = $1`,[orgID],
+    where org_id  = $1 and users.user_id <> $2`,[orgID,userID],
     (err,result)=>{
         if (err) throw err;
         //console.log(result.rows);

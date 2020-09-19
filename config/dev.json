@@ -14,5 +14,6 @@
     "jwt" : {
         "secret" : "sweet"
     },
-    "host" : "http://localhost:4200"
+    "host" : "http://localhost:4200",
+    "host_" : "http://192.168.100.192:4200"
 }
