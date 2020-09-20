@@ -1,27 +1,27 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
   return sequelize.define('chat_messages', {
     chat_message_id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     chat_message_text: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     timestamp: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     chat_room_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false
     },
     sender_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: {
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     reciever_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: {
