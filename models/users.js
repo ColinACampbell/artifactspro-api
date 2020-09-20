@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     is_verified: {
-      type: '"CHAR"',
+      type: DataTypes.CHAR,
       allowNull: true
     },
     access_code: {
