@@ -1,23 +1,23 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
   return sequelize.define('work_space_messages', {
     work_space_msg_id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     message_title: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     message_content: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: {
@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     work_space_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: {
@@ -37,11 +37,11 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     time: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     date: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     }
   }, {

@@ -1,15 +1,15 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
   return sequelize.define('work_space_members', {
     work_space_member_id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: {
@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     work_space_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: true,
       references: {
         model: {
@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     role: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     }
   }, {

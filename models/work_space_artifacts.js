@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     work_space_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: nextvalworkspace_artifacts_work_space_id_seq::regclass,
+      //defaultValue: nextvalworkspace_artifacts_work_space_id_seq::regclass,
       references: {
         model: {
           tableName: 'work_spaces',
@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
     art_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: nextvalworkspace_artifacts_art_id_seq::regclass,
+      //defaultValue: nextvalworkspace_artifacts_art_id_seq::regclass,
       references: {
         model: {
           tableName: 'artifacts',
