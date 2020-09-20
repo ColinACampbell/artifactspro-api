@@ -6,12 +6,12 @@ exports.getAll = (req,res)=>{
     let userID = req.session.userInfo.user_id;
     console.log(userID)
     let orgID = req.session.orgInfo.org_id;
-    db.query(`select role, email, first_name, last_name from organization_members
+    db.query(`select users.user_id, role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
     where org_id  = $1 and users.user_id <> $2`,[orgID,userID],
     (err,result)=>{
         if (err) throw err;
-        //console.log(result.rows);
+        console.log(result.rows)
         res.json(result.rows)
     })
 }
