@@ -39,9 +39,9 @@ exports.upload = (req, res) => {
     //fs.writeFileSync(`temp/${version}.${fileTypes[fileType]}`, buffer);
 
     db.query(`INSERT INTO documents
-    ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type")
-    VALUES($1, $2, $3, $4, $5, $6, $7, $8);
-    `, [version, comment, userID, buffer, dateUploaded, dateModified, artID, fileType],
+    ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type","createdAt","updatedAt")
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+    `, [version, comment, userID, buffer, dateUploaded, dateModified, artID, fileType, new Date(), new Date()],
         (err, result) => {
             if (err) throw err;
 

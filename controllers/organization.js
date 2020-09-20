@@ -23,7 +23,7 @@ exports.createOrg = (req,res)=>{
         if (rowCount === 0)
         {
             // add organization to the database
-            db.query("INSERT INTO public.organizations (user_id, name, type, org_key, org_code,access_key) VALUES ($1, $2, '', $3, $4,$5);",[userID,orgName,orgKey,orgPassKey,accessCode],(err,result)=>{
+            db.query(`INSERT INTO public.organizations (user_id, name, type, org_key, org_code,access_key,"createdAt","updatedAt") VALUES ($1, $2, '', $3, $4, $5, $6, $7);`,[userID,orgName,orgKey,orgPassKey,accessCode,new Date(),new Date()],(err,result)=>{
                 if (err) throw err;
                 // get organization info to store in session object in req object
                 db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
@@ -33,7 +33,7 @@ exports.createOrg = (req,res)=>{
                     const orgID = result.rows[0].org_id;
  
                     // store user as a member of that organization
-                    db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'owner'],(err,result)=>{
+                    db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'owner', new Date(),new Date()],(err,result)=>{
                         if (err) throw err;
                         res.status(201).json();
                     });
@@ -78,7 +78,7 @@ exports.inviteFromAccessCode = (req,res)=>
         const orgID = result.rows[0].org_id;
 
         // store user as a member of that organization
-        db.query('INSERT INTO public.organization_members (user_id, org_id,role) VALUES($1, $2, $3);',[userID,orgID,'member'],(err,result)=>{
+        db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'member', new Date(), new Date()],(err,result)=>{
             if (err) throw err;
             res.status(201).json({});
         });

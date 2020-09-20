@@ -24,8 +24,8 @@ router.post('/create',(req,res)=>{
     let dateCreated = req.body.date_created;
 
     // First create the workspace
-    db.query("INSERT INTO work_spaces (work_space_name, date_created, org_id) VALUES($1, $2, $3);",
-    [workspaceName,dateCreated,orgID],(err,result)=>{
+    db.query(`INSERT INTO work_spaces (work_space_name, date_created, org_id,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);`,
+    [workspaceName,dateCreated,orgID, new Date(), new Date()],(err,result)=>{
         // select the id of the work space created
         db.query("SELECT work_space_id FROM work_spaces where work_space_name = $1 and org_id = $2",
         [workspaceName,orgID],(err,result)=>{
@@ -33,8 +33,8 @@ router.post('/create',(req,res)=>{
             //console.log(result.rows[0].work_space_id)
             let workspaceID = result.rows[0].work_space_id;
             // Then add the user a member (admin) of the workspace
-            db.query("INSERT INTO work_space_members (user_id, work_space_id, role) VALUES($1, $2, 'admin');",
-            [userID,workspaceID],(err,result)=>{
+            db.query(`INSERT INTO work_space_members (user_id, work_space_id, role,"createdAt","updatedAt") VALUES($1, $2, 'admin', $3, $4);`,
+            [userID,workspaceID, new Date(), new Date()],(err,result)=>{
                 if (err) throw err;
                 res.json({message:'ok',work_space_id:workspaceID})
             });
@@ -63,9 +63,9 @@ router.post('/:workspaceID/add-member', async (req,res)=>{
         const userID = (await result).rows[0].user_id;
 
         db.query(`INSERT INTO work_space_members
-        (user_id, work_space_id, "role")
-        VALUES($1, $2, 'member');;
-        `,[userID,workspaceID])
+        (user_id, work_space_id, "role","createdAt","updatedAt")
+        VALUES($1, $2, 'member',$3,$4);;
+        `,[userID,workspaceID,new Date(), new Date()])
 
         res.status(200).json({message:"success"});
     }
@@ -150,8 +150,8 @@ router.post("/:workspaceID/add/message", async (req,res)=>{
     const workspaceID = req.params.workspaceID;
 
     await db.query(`INSERT INTO work_space_messages
-    (message_title, message_content, user_id, work_space_id, "time", "date")
-    VALUES($1, $2, $3, $4, $5, $6);`,[title,content,userID,workspaceID,time,date])
+    (message_title, message_content, user_id, work_space_id, "time", "date","createdAt","updatedAt")
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,[title,content,userID,workspaceID,time,date, new Date(), new Date()])
     .then((err,result)=>{
         if (err) throw err;
         
@@ -207,8 +207,8 @@ router.post('/:workspaceID/artifact/add',async (req,res)=>{
 
     // add the artifact to the workspace
     await db.query(`INSERT INTO work_space_artifacts
-    (work_space_id,art_id) VALUES($1,$2);`,
-    [workspaceID,artifactID]).catch((err)=>{
+    (work_space_id,art_id) VALUES($1,$2,$3,$4);`,
+    [workspaceID,artifactID,new Date(),new Date()]).catch((err)=>{
         if (err) throw err || res.status(500).json({})
     })
 
@@ -252,10 +252,10 @@ router.post("/:workspaceID/message/:messageID/reply",async (req,res)=>{
     
     console.log(messageID)
     const query = `INSERT INTO work_space_message_replies
-    ("timestamp", "content", action_type, work_space_msg_id, user_id)
-    VALUES($1, $2, $3, $4, $5);`
+    ("timestamp", "content", action_type, work_space_msg_id, user_id, "createdAt","updatedAt")
+    VALUES($1, $2, $3, $4, $5, $6, $7);`
 
-    const results = await db.query(query,[timestamp,content,actionType,messageID,userID])
+    const results = await db.query(query,[timestamp,content,actionType,messageID,userID, new Date(), new Date()])
     .catch(err=>{
         if (err) throw err
         res.status(500).json({})

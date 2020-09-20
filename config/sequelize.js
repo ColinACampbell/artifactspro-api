@@ -19,7 +19,3 @@ async function setUpModels()
 }
 
 //setUpModels()
-
-db.users.findAll().then((users)=>{
-    console.log(users[0].email)
-})

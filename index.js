@@ -85,3 +85,5 @@ server.listen(port, (err) => {
     if (err) throw err;
     console.log("Server Started");
 }) 
+
+require('./config/sequelize')

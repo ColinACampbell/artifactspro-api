@@ -25,10 +25,10 @@ exports.create = (req,res)=>{
 
     db.query(`
     INSERT INTO artifacts
-    ("name", org_id, user_id, date_created, description,owner)
-    VALUES($1, $2, $3, $4, $5,$6);
+    ("name", org_id, user_id, date_created, description,owner,"createdAt","updatedAt")
+    VALUES($1, $2, $3, $4, $5,$6, $7, $8);
 
-    `,[name,orgID,userID,dateCreated,description,owner],
+    `,[name,orgID,userID,dateCreated,description,owner, new Date(), new Date()],
     (err,result)=>{
         if (err) throw err
 

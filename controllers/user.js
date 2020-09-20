@@ -1,7 +1,6 @@
 const db = require('./../config/db')
 const config = require('./../config/configControl')
 const mailTransporter = require('./../config/mail')
-const jwt = require("jsonwebtoken");
 
 // TODO : Test Everything here
 
@@ -31,12 +30,13 @@ exports.signup = (req, res) => {
         if (rowCount === 0) {
             // insert user
             db.query(`INSERT INTO users
-            ("password", last_name, first_name, email, is_verified, access_code)
-            VALUES($1, '', '', $2, $3,$4);`, [password, email, '0', accessCode],
+            ("password", last_name, first_name, email, is_verified, access_code,"updatedAt")
+            VALUES($1, '', '', $2, $3,$4,$5);`, [password, email, '0', accessCode,new Date()],
                 (err, result) => {
                     if (err) throw err;
 
                     // Send of verification mail to user
+                
                     var mailOptions = {
                         from: 'app.artifactspro@gmail.com',
                         to: email,
@@ -45,13 +45,14 @@ exports.signup = (req, res) => {
                     };
                 
                     // TODO : Remove this when finished
+                    /** 
                     mailTransporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
                             console.log('Email sent: ' + info.response);
                         }
-                    });
+                    });**/
 
                     // fetch user information and store it in the browser using sesssions
                     db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
