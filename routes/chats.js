@@ -43,4 +43,43 @@ router.post("/send-message", async (req,res)=>{
     res.status(201).json({})
 })
 
+
+// TODO : Don't forget to check if the chat already exists
+router.post("/create-chat", async (req,res)=>{
+
+    const {
+        senderID,
+        recieverID,
+        messageContent,
+        timestamp
+      } = req.body;
+
+    let date = new Date();
+
+    // create chat rooms
+    const data = await db.query(`INSERT INTO chat_rooms
+    ("timestamp", "createdAt", "updatedAt")
+    VALUES($1, $2, $3) returning chat_room_id;`,[`${date.getTime()}`,date,date])
+
+    const chatRoomID = data.rows[0].chat_room_id
+
+    // Insert the two chatting members
+    await db.query(`INSERT INTO chat_room_members
+    (user_id, chat_room_id, "createdAt", "updatedAt")
+    VALUES($1, $2, $3, $4);
+    `,[senderID,chatRoomID,date,date])
+    await db.query(`INSERT INTO chat_room_members
+    (user_id, chat_room_id, "createdAt", "updatedAt")
+    VALUES($1, $2, $3, $4);
+    `,[recieverID,chatRoomID,date,date])
+
+    // Send the chat Message
+    await db.query(`INSERT INTO chat_messages
+    (chat_message_text, "timestamp", chat_room_id, sender_id, reciever_id, "createdAt", "updatedAt")
+    VALUES($1, $2, $3, $4, $5, $6, $7);
+    `,[messageContent,timestamp,chatRoomID,senderID,recieverID,date,date])
+    
+    res.status(200).json({})
+
+})
 module.exports = router
