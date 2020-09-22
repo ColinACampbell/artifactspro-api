@@ -56,7 +56,7 @@ router.post("/create-chat", async (req,res)=>{
 
     let date = new Date();
 
-    // create chat rooms
+    // Create chat rooms
     const data = await db.query(`INSERT INTO chat_rooms
     ("timestamp", "createdAt", "updatedAt")
     VALUES($1, $2, $3) returning chat_room_id;`,[`${date.getTime()}`,date,date])
