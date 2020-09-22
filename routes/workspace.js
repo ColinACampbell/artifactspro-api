@@ -250,7 +250,6 @@ router.post("/:workspaceID/message/:messageID/reply",async (req,res)=>{
     const messageID = req.params.messageID
     const { content, actionType, timestamp } = req.body;
     
-    console.log(messageID)
     const query = `INSERT INTO work_space_message_replies
     ("timestamp", "content", action_type, work_space_msg_id, user_id, "createdAt","updatedAt")
     VALUES($1, $2, $3, $4, $5, $6, $7);`
