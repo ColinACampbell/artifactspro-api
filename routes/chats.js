@@ -56,22 +56,29 @@ router.post("/create-chat", async (req,res)=>{
 
     let date = new Date();
 
-    // Create chat rooms
-    const data = await db.query(`INSERT INTO chat_rooms
-    ("timestamp", "createdAt", "updatedAt")
-    VALUES($1, $2, $3) returning chat_room_id;`,[`${date.getTime()}`,date,date])
+    const dataCheck = await db.query("select distinct chat_room_id from chat_room_members crm where crm.user_id = $1 or crm.user_id = $2",[senderID,recieverID]);
 
-    const chatRoomID = data.rows[0].chat_room_id
+    let chatRoomID = 0;
+    if (dataCheck.rowCount > 0)
+    {
+        chatRoomID = dataCheck.rows[0].chat_room_id;
+    } else {
+        // Create chat rooms
+        const data = await db.query(`INSERT INTO chat_rooms
+        ("timestamp", "createdAt", "updatedAt")
+        VALUES($1, $2, $3) returning chat_room_id;`,[`${date.getTime()}`,date,date])
+        chatRoomID = data.rows[0].chat_room_id
 
-    // Insert the two chatting members
-    await db.query(`INSERT INTO chat_room_members
-    (user_id, chat_room_id, "createdAt", "updatedAt")
-    VALUES($1, $2, $3, $4);
-    `,[senderID,chatRoomID,date,date])
-    await db.query(`INSERT INTO chat_room_members
-    (user_id, chat_room_id, "createdAt", "updatedAt")
-    VALUES($1, $2, $3, $4);
-    `,[recieverID,chatRoomID,date,date])
+        // Insert the two chatting members
+        await db.query(`INSERT INTO chat_room_members
+        (user_id, chat_room_id, "createdAt", "updatedAt")
+        VALUES($1, $2, $3, $4);
+        `,[senderID,chatRoomID,date,date])
+        await db.query(`INSERT INTO chat_room_members
+        (user_id, chat_room_id, "createdAt", "updatedAt")
+        VALUES($1, $2, $3, $4);
+        `,[recieverID,chatRoomID,date,date])
+    }
 
     // Send the chat Message
     await db.query(`INSERT INTO chat_messages
