@@ -207,7 +207,7 @@ router.post('/:workspaceID/artifact/add',async (req,res)=>{
 
     // add the artifact to the workspace
     await db.query(`INSERT INTO work_space_artifacts
-    (work_space_id,art_id) VALUES($1,$2,$3,$4);`,
+    (work_space_id,art_id,"createdAt","updatedAt") VALUES($1,$2,$3,$4);`,
     [workspaceID,artifactID,new Date(),new Date()]).catch((err)=>{
         if (err) throw err || res.status(500).json({})
     })
