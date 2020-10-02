@@ -117,7 +117,8 @@ router.get("/:workspaceID/suggestion/artifacts",async (req,res)=>{
     inner join work_space_members on work_space_members.user_id = users.user_id 
     inner join work_spaces on work_spaces.work_space_id = work_space_members.work_space_id 
     inner join organizations on organizations.org_id = work_spaces.org_id 
-    where users.user_id = $1 and work_spaces.work_space_id = $2
+    left join work_space_artifacts on work_space_artifacts.art_id = artifacts.art_id
+    where users.user_id = $1 and work_spaces.work_space_id = $2 and work_space_artifacts.work_space_artifacts_id is null
     and artifacts."name" like '%' || $3 || '%' and organizations.org_id = $4`
 
     let results = await db.query(query,[userID,workspaceID,artifactName,orgID])
@@ -169,7 +170,7 @@ router.get('/suggestion/email', async (req,res)=>{
     const orgID = req.session.orgInfo.org_id;
     let email = req.query.email;
     
-    let result = await db.query(`select  email from users 
+    let result = await db.query(`select email from users 
     inner join organization_members ON organization_members.user_id = users.user_id 
     inner join organizations  on organizations.org_id  = organization_members.org_id 
     where users.email like '%' || $1 || '%' and organizations.org_id = $2;`,[email,orgID]);
