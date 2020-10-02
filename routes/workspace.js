@@ -117,8 +117,7 @@ router.get("/:workspaceID/suggestion/artifacts",async (req,res)=>{
     inner join work_space_members on work_space_members.user_id = users.user_id 
     inner join work_spaces on work_spaces.work_space_id = work_space_members.work_space_id 
     inner join organizations on organizations.org_id = work_spaces.org_id 
-    left join work_space_artifacts on work_space_artifacts.art_id = artifacts.art_id
-    where users.user_id = $1 and work_spaces.work_space_id = $2 and work_space_artifacts.work_space_artifacts_id is null
+    where users.user_id = $1 and work_spaces.work_space_id = $2
     and artifacts."name" like '%' || $3 || '%' and organizations.org_id = $4`
 
     let results = await db.query(query,[userID,workspaceID,artifactName,orgID])
@@ -142,24 +141,64 @@ router.get('/:workspaceID/messages', async (req,res)=>{
 })
 
 // Create a message
-// Getting a no body for the result... check this one out
+const createReference = async (artifactName,workspaceID,messageID,req)=>{
+
+    const userID = req.session.userInfo.user_id
+
+    console.log({artifactName,userID,workspaceID,messageID})
+
+    const results = await db.query(`select a.art_id from work_spaces ws 
+    inner join work_space_artifacts wsa ON wsa.work_space_id = ws.work_space_id 
+    inner join artifacts a on a.art_id  = wsa.art_id 
+    where ws.work_space_id = $1 and a."name" = $2`,[workspaceID,artifactName])
+
+    let artID = 0;
+    if (results.rowCount === 0)
+    {
+        console.log("Artifact not found")
+        res.status(404).json({})
+        return
+    } else 
+    {
+        artID = results.rows[0].art_id
+    }
+
+    let results2 = await db.query(`INSERT INTO work_space_references
+    ("createdAt", work_space_msg_id)
+    VALUES($1, $2) returning work_space_ref_id`,[new Date(),messageID])
+
+    let referenceID = results2.rows[0].work_space_ref_id;
+    console.log("Reference ID "+referenceID)
+
+    await db.query(`INSERT INTO work_space_ref_items
+    (art_id, work_space_ref_id, "createdAt", "updatedAt")
+    VALUES($1, $2, $3, $4);`,[artID,referenceID,new Date(),new Date()])
+}
+
 router.post("/:workspaceID/add/message", async (req,res)=>{
 
-    const { title, content, time, date} = req.body;
+    const { title, content, time, date, artifactName } = req.body;
     const userID = req.session.userInfo.user_id;
     //console.log(userID);
     const workspaceID = req.params.workspaceID;
 
-    await db.query(`INSERT INTO work_space_messages
+    let result = await db.query(`INSERT INTO work_space_messages
     (message_title, message_content, user_id, work_space_id, "time", "date","createdAt","updatedAt")
-    VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,[title,content,userID,workspaceID,time,date, new Date(), new Date()])
-    .then((err,result)=>{
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8) returning work_space_msg_id`,[title,content,userID,workspaceID,time,date, new Date(), new Date()])
+    /**.then((err,result)=>{
         if (err) throw err;
         
     }).catch((err)=>{
         console.log(err)
-    })
+    })**/
 
+    if (artifactName.length > 0)
+    {
+        let messageID = result.rows[0].work_space_msg_id;
+        console.log(messageID)
+        await createReference(artifactName,workspaceID,messageID,req);
+    }
+    
     res.status(201).json({});
 })
 
