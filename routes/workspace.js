@@ -127,7 +127,9 @@ router.get("/:workspaceID/suggestion/artifacts",async (req,res)=>{
 // Get Messages
 router.get('/:workspaceID/messages', async (req,res)=>{
     let workspaceID = req.params.workspaceID;
-    let result = await db.query(`SELECT 
+
+
+    let tempQuery = `SELECT 
     
     work_space_msg_id, message_title,message_content, work_space_messages.user_id, work_space_id, time, date, first_name, last_name, email  
 
@@ -135,8 +137,29 @@ router.get('/:workspaceID/messages', async (req,res)=>{
     inner join users on users.user_id = work_space_messages.user_id 
     WHERE work_space_id = $1 
     
-    ORDER BY work_space_messages.work_space_msg_id DESC`,[workspaceID]);
-    //console.log(result.rows);
+    ORDER BY work_space_messages.work_space_msg_id DESC`
+
+    let query = `SELECT 
+    wsm.work_space_msg_id, 
+    wsm.message_title,
+    wsm.message_content, 
+    wsm.user_id, 
+    wsm.work_space_id, 
+    wsm.time, 
+    wsm.date, 
+    first_name, last_name, email,
+    a2."name" as artifact_name, a2.art_id as artifact_id, a2.user_id as artifact_user,
+    a2.description as artifact_description
+    FROM work_space_messages wsm
+    inner join users on users.user_id = wsm.user_id 
+    left join work_space_references wsr on wsr.work_space_msg_id = wsm.work_space_msg_id 
+    left join work_space_ref_items wsri on wsri.work_space_ref_id = wsr.work_space_ref_id 
+    left join artifacts a2 on a2.art_id = wsri.art_id 
+    WHERE work_space_id = $1
+    ORDER BY wsm.work_space_msg_id DESC`
+
+    let result = await db.query(query,[workspaceID]);
+    console.log(result.rows);
     res.status(200).json(result.rows)
 })
 
@@ -260,11 +283,32 @@ router.get("/:workspaceID/message/:messageID",async (req,res)=>{
 
     const workspaceID = req.params.workspaceID
     const messageID = req.params.messageID;
-    const result = await db.query(`select * from work_space_messages 
+    const tempQuery = `select * from work_space_messages 
     
     inner join users on users.user_id = work_space_messages.user_id 
 
-    where work_space_id = $1 and work_space_msg_id = $2`,[workspaceID,messageID])    
+    where work_space_id = $1 and work_space_msg_id = $2`
+
+    const query = `select date,
+    message_content,
+    message_title,
+    time,
+    users.user_id,
+    work_space_id,
+    wsm.work_space_msg_id,
+    first_name,
+    last_name,
+    email,
+    a2."name" as artifact_name,
+    a2.art_id as artifact_id,
+    a2.description as artifact_description,
+    a2.user_id as artifact_user from work_space_messages wsm
+    inner join users on users.user_id = wsm.user_id 
+    left join work_space_references wsr on wsr.work_space_msg_id = wsm.work_space_msg_id 
+    left join work_space_ref_items wsri on wsri.work_space_ref_id = wsr.work_space_ref_id 
+    left join artifacts a2 on a2.art_id = wsri.art_id 
+    where wsm.work_space_id = $1 and wsm.work_space_msg_id = $2`
+    const result = await db.query(query,[workspaceID,messageID])    
     const workspacePost = result.rows[0];
     res.status(200).json(workspacePost)
 })
@@ -280,7 +324,6 @@ router.get("/:workspaceID/message/:messageID/replies",async (req,res)=>{
     const rows = result.rows;
     res.status(200).json(rows)
 })
-
 
 // Submit a reply to a workspace
 router.post("/:workspaceID/message/:messageID/reply",async (req,res)=>{
