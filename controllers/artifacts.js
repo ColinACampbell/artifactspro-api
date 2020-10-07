@@ -64,3 +64,27 @@ exports.deleteArtifactFromID = (req,res)=>{
         })
     })
 }
+
+exports.search = async (req,res) => {
+    let orgID = req.session.orgInfo.org_id;
+    let userID = req.session.userInfo.user_id;
+    const { key } = req.query;
+    console.log(key)
+    
+    let query = `SELECT * FROM artifacts 
+    where org_id = $1 AND user_id = $2 and name like '%' || $3 || '%'`
+
+    let results = [];
+
+    if (key.length === 0) // if the string is empty
+    {
+        query = `SELECT * FROM artifacts 
+        where org_id = $1 AND user_id = $2`
+        results = await db.query(query,[orgID,userID])
+    } else
+    {
+        results = await db.query(query,[orgID,userID,key])
+    }
+    
+    res.status(200).json(results.rows)
+}

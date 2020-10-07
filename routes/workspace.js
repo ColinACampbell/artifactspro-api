@@ -159,7 +159,6 @@ router.get('/:workspaceID/messages', async (req,res)=>{
     ORDER BY wsm.work_space_msg_id DESC`
 
     let result = await db.query(query,[workspaceID]);
-    console.log(result.rows);
     res.status(200).json(result.rows)
 })
 
@@ -199,7 +198,6 @@ const createReference = async (artifactName,workspaceID,messageID,req)=>{
 }
 
 router.post("/:workspaceID/add/message", async (req,res)=>{
-
     const { title, content, time, date, artifactName } = req.body;
     const userID = req.session.userInfo.user_id;
     //console.log(userID);

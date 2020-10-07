@@ -5,6 +5,8 @@ const artifactsController = require("./../controllers/artifacts")
 // Get all artifacts from org id in sessions
 router.get('/',artifactsController.getAll);
 
+router.get('/search',artifactsController.search)
+
 // Create artifact
 router.post('/create',artifactsController.create)
 
