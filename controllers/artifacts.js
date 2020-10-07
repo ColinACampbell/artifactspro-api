@@ -69,7 +69,6 @@ exports.search = async (req,res) => {
     let orgID = req.session.orgInfo.org_id;
     let userID = req.session.userInfo.user_id;
     const { key } = req.query;
-    console.log(key)
     
     let query = `SELECT * FROM artifacts 
     where org_id = $1 AND user_id = $2 and name like '%' || $3 || '%'`
