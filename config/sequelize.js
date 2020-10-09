@@ -16,6 +16,8 @@ async function setUpModels()
     await db.chat_rooms.sync()
     await db.chat_room_members.sync()
     await db.chat_messages.sync()
+    await db.work_space_references.sync()
+    await db.work_space_ref_items.sync()
 }
 
 ( async()=>{
