@@ -18,4 +18,6 @@ async function setUpModels()
     await db.chat_messages.sync()
 }
 
-setUpModels()
+( async()=>{
+    await setUpModels()
+})()
