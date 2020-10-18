@@ -207,8 +207,8 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
     }
 
     let results2 = await db.query(`INSERT INTO work_space_references
-    ("createdAt", work_space_msg_id)
-    VALUES($1, $2) returning work_space_ref_id`, [new Date(), messageID])
+    ("createdAt","updatedAt", work_space_msg_id)
+    VALUES($1, $2, $3) returning work_space_ref_id`, [new Date(), new Date(), messageID])
 
     let referenceID = results2.rows[0].work_space_ref_id;
     console.log("Reference ID " + referenceID)
