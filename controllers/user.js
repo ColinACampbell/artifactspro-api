@@ -165,6 +165,8 @@ exports.verifyUser = (req, res) => {
 }
 
 exports.logout = (req,res)=>{
-    req.session = {}
+    req.session.userInfo = null;
+    req.session.orgInfo = null;
+    
     res.status(200).json({})
 }

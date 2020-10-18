@@ -2,12 +2,23 @@ const db = require('./../config/db');
 const config = require('./../config/configControl');
 const { use } = require('../routes/member');
 
+exports.getUserAsMember = async (req,res) => {
+    const userID = req.session.userInfo.user_id;
+    let orgID = req.session.orgInfo.org_id;
+
+    const results = await db.query(`select users.user_id, role, email, first_name, last_name from organization_members
+    INNER JOIN users on users.user_id = organization_members.user_id
+    where org_id = $1 and users.user_id = $2`,[orgID,userID])
+
+    res.status(200).json(results.rows[0]);
+}
+
 exports.getAll = (req,res)=>{
     let userID = req.session.userInfo.user_id;
     let orgID = req.session.orgInfo.org_id;
     db.query(`select users.user_id, role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
-    where org_id  = $1 and users.user_id <> $2`,[orgID,userID],
+    where org_id = $1 and users.user_id <> $2`,[orgID,userID],
     (err,result)=>{
         if (err) throw err;
         res.json(result.rows)

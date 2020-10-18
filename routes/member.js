@@ -6,4 +6,6 @@ router.get('/all',memberController.getAll)
 
 router.get('/invite-code',memberController.getInviteCode)
 
+router.get('/user-as-member',memberController.getUserAsMember);
+
 module.exports = router;
