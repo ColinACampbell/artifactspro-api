@@ -8,4 +8,6 @@ router.get('/invite-code',memberController.getInviteCode)
 
 router.get('/user-as-member',memberController.getUserAsMember);
 
+router.get('/member-from-id',memberController.getMemberFromID);
+
 module.exports = router;

@@ -327,7 +327,7 @@ router.get("/:workspaceID/message/:messageID", async (req, res) => {
     const result = await db.query(query, [workspaceID, messageID])
     const workspacePost = result.rows[0];
     res.status(200).json(workspacePost)
-})
+}) 
 
 // Now working with message replies
 router.get("/:workspaceID/message/:messageID/replies", async (req, res) => {
@@ -362,6 +362,4 @@ router.post("/:workspaceID/message/:messageID/reply", async (req, res) => {
     res.status(201).json({})
 })
 
-
-    
 module.exports = router;
