@@ -45,3 +45,20 @@ exports.getMemberFromID = async (req,res) =>{
     where org_id = $1 and users.user_id = $2`,[orgID,userID])
     res.status(200).json(results.rows[0])
 }
+
+exports.changeMemberRole = async (req,res) => {
+    const orgID = req.session.orgInfo.org_id;
+    const userID = req.body.userID; // userID of member whose role to be changed NOT current user
+    const role = req.body.role;
+
+    const result = await db.query(`select mem_id from organization_members om 
+    inner join users u on u.user_id  = om.user_id 
+    inner join organizations o on o.org_id  = om.org_id 
+    where u.user_id  = $1 and o.org_id  = $2`,[userID,orgID])
+
+    const memberID = result.rows[0].mem_id
+
+    await db.query(`update organization_members set "role" = $1 where mem_id = $2`,[role,memberID])
+    
+    res.status(200).json({})
+}
