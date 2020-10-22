@@ -66,6 +66,19 @@ router.get("/search", async (req, res) => {
     res.status(200).json(results.rows)
 })
 
+router.get("/info", async (req,res)=>{
+    const workspaceID = req.query.id;
+    const orgID = req.session.orgInfo.org_id;
+
+    const result = await db.query("select * from work_spaces ws where ws.org_id = $1 and ws.work_space_id = $2",[orgID,workspaceID])
+
+    console.log(result.rows[0])
+    
+    res.status(200).json(result.rows[0])
+    
+})
+
+
 // Add member 
 router.post('/:workspaceID/add-member', async (req, res) => {
     const email = req.body.email;
@@ -90,7 +103,7 @@ router.post('/:workspaceID/add-member', async (req, res) => {
         VALUES($1, $2, 'member',$3,$4);;
         `, [userID, workspaceID, new Date(), new Date()])
 
-        res.status(200).json({ message: "success" });
+        res.status(201).json({});
     }
 });
 
