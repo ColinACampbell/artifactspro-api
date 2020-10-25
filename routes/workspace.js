@@ -113,6 +113,16 @@ router.get('/:workspaceID', (req, res) => {
         })
 });
 
+router.put("/:workspaceID/submit-change",async (req,res)=>{
+    const workspaceID = req.params.workspaceID;
+    const newWorkspaceName = req.body.workspaceName;
+    const newWorkspaceDsc = req.body.workspaceDsc;
+
+    await db.query("UPDATE work_spaces SET work_space_name = $1, work_space_description = $2 WHERE work_space_id = $3",
+        [newWorkspaceName,newWorkspaceDsc,workspaceID])
+    res.status(200).json({})
+})
+
 // Get Members fom Workspace
 router.get('/:workspaceID/members', async (req, res) => {
     let workspaceID = req.params.workspaceID;
