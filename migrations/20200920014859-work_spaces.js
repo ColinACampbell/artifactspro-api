@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      work_space_description: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       date_created: {
         type: Sequelize.STRING,
         allowNull: false

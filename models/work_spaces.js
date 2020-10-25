@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+    work_space_description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     date_created: {
       type: DataTypes.STRING,
       allowNull: false

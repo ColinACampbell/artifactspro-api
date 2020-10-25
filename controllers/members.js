@@ -45,7 +45,7 @@ exports.getMemberFromID = async (req,res) =>{
     where org_id = $1 and users.user_id = $2`,[orgID,userID])
     res.status(200).json(results.rows[0])
 }
-
+ 
 exports.changeMemberRole = async (req,res) => {
     const orgID = req.session.orgInfo.org_id;
     const userID = req.body.userID; // userID of member whose role to be changed NOT current user

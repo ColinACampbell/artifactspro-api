@@ -16,30 +16,25 @@ router.get('/all', (req, res) => {
     })
 });
 
-router.post('/create', (req, res) => {
+// TODO make this function async
+router.post('/create', async (req, res) => {
     const userID = req.session.userInfo.user_id;
     const orgID = req.session.orgInfo.org_id;
 
     let workspaceName = req.body.workspace_name;
     let dateCreated = req.body.date_created;
+    const description = req.body.description;
 
     // First create the workspace
-    db.query(`INSERT INTO work_spaces (work_space_name, date_created, org_id,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);`,
-        [workspaceName, dateCreated, orgID, new Date(), new Date()], (err, result) => {
-            // select the id of the work space created
-            db.query("SELECT work_space_id FROM work_spaces where work_space_name = $1 and org_id = $2",
-                [workspaceName, orgID], (err, result) => {
-                    if (err) throw err;
-                    //console.log(result.rows[0].work_space_id)
-                    let workspaceID = result.rows[0].work_space_id;
-                    // Then add the user a member (admin) of the workspace
-                    db.query(`INSERT INTO work_space_members (user_id, work_space_id, role,"createdAt","updatedAt") VALUES($1, $2, 'admin', $3, $4);`,
-                        [userID, workspaceID, new Date(), new Date()], (err, result) => {
-                            if (err) throw err;
-                            res.json({ message: 'ok', work_space_id: workspaceID })
-                        });
-                })
-        });
+    const results = await db.query(`INSERT INTO work_spaces (work_space_name, date_created, org_id,"createdAt","updatedAt",work_space_description) VALUES($1, $2, $3, $4, $5,$6) returning work_space_id;`,
+        [workspaceName, dateCreated, orgID, new Date(), new Date(), description]);
+
+    const workspaceID = results.rows[0].work_space_id
+
+    await db.query(`INSERT INTO work_space_members (user_id, work_space_id, role,"createdAt","updatedAt") VALUES($1, $2, 'admin', $3, $4);`,
+        [userID, workspaceID, new Date(), new Date()]);
+
+    res.status(201).json({ workspaceID })
 });
 
 // Search workspace by name
@@ -58,24 +53,24 @@ router.get("/search", async (req, res) => {
         inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
         inner join users on users.user_id = work_space_members.user_id 
         where users.user_id = $1`
-        results = await db.query(query,[userID])
+        results = await db.query(query, [userID])
     } else {
-        results = await db.query(query,[userID,key])
+        results = await db.query(query, [userID, key])
         console.log()
     }
     res.status(200).json(results.rows)
 })
 
-router.get("/info", async (req,res)=>{
+router.get("/info", async (req, res) => {
     const workspaceID = req.query.id;
     const orgID = req.session.orgInfo.org_id;
 
-    const result = await db.query("select * from work_spaces ws where ws.org_id = $1 and ws.work_space_id = $2",[orgID,workspaceID])
+    const result = await db.query("select * from work_spaces ws where ws.org_id = $1 and ws.work_space_id = $2", [orgID, workspaceID])
 
     console.log(result.rows[0])
-    
+
     res.status(200).json(result.rows[0])
-    
+
 })
 
 
@@ -340,7 +335,7 @@ router.get("/:workspaceID/message/:messageID", async (req, res) => {
     const result = await db.query(query, [workspaceID, messageID])
     const workspacePost = result.rows[0];
     res.status(200).json(workspacePost)
-}) 
+})
 
 // Now working with message replies
 router.get("/:workspaceID/message/:messageID/replies", async (req, res) => {
