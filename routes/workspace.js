@@ -73,7 +73,7 @@ router.get("/info", async (req, res) => {
 
 })
 
-router.get("/participants/:workspaceID", async (req,res)=>{
+router.get("/:workspaceID/all-participants", async (req,res)=>{
     const workspaceID = req.params.workspaceID;
     const userID = req.session.userInfo.user_id;
     const result = await db.query(`select 
