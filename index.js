@@ -77,7 +77,6 @@ app.use('/api/chats/',chatsRoute)
 
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");
-    //res.json({mess:"Hello World"})
 })
 
 const port = process.env.PORT || 3000;

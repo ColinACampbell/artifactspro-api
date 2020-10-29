@@ -73,6 +73,18 @@ router.get("/info", async (req, res) => {
 
 })
 
+router.get("/participants/:workspaceID", async (req,res)=>{
+    const workspaceID = req.params.workspaceID;
+    const userID = req.session.userInfo.user_id;
+    const result = await db.query(`select 
+        u.user_id, wsm.work_space_member_id,
+        u.first_name, u.last_name,u.email, wsm."role"
+        from work_space_members wsm 
+        inner join users u on u.user_id = wsm.user_id 
+        where wsm.work_space_id = $1 and u.user_id <> $2`
+        ,[workspaceID,userID])
+    res.send(result.rows)
+})
 
 // Add member 
 router.post('/:workspaceID/add-member', async (req, res) => {
