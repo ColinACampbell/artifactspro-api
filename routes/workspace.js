@@ -16,7 +16,6 @@ router.get('/all', (req, res) => {
     })
 });
 
-// TODO make this function async
 router.post('/create', async (req, res) => {
     const userID = req.session.userInfo.user_id;
     const orgID = req.session.orgInfo.org_id;
@@ -84,6 +83,14 @@ router.get("/:workspaceID/all-participants", async (req,res)=>{
         where wsm.work_space_id = $1 and u.user_id <> $2`
         ,[workspaceID,userID])
     res.send(result.rows)
+})
+
+router.get("/:workspaceID/get-participant", async (req,res)=>{
+    const workspaceID = req.params.workspaceID
+    const participantID = req.query.id
+    const results = await db.query("select * from work_space_members wsm where work_space_id = $1 and work_space_member_id = $2",[workspaceID,participantID])
+    const participant = results.rows[0];
+    res.json(participant)
 })
 
 // Add member 
