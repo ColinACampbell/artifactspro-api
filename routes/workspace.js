@@ -85,12 +85,26 @@ router.get("/:workspaceID/all-participants", async (req,res)=>{
     res.send(result.rows)
 })
 
+// Get a particular participant from workspace
 router.get("/:workspaceID/get-participant", async (req,res)=>{
     const workspaceID = req.params.workspaceID
     const participantID = req.query.id
     const results = await db.query("select * from work_space_members wsm where work_space_id = $1 and work_space_member_id = $2",[workspaceID,participantID])
     const participant = results.rows[0];
     res.json(participant)
+})
+
+// Change a particular participant role in the workspace
+router.put("/:workspaceID/change-participant-role", async (req,res)=>{
+
+    const workspaceID = req.params.workspaceID;
+    const participantID = req.body.participantID
+    const newRole = req.body.newRole;
+
+    await db.query(`update work_space_members set "role" = $1 
+    where work_space_id = $2 and work_space_member_id = $3`,[newRole,workspaceID,participantID])
+
+    res.status(200).json({})
 })
 
 // Add member 
@@ -132,6 +146,7 @@ router.get('/:workspaceID', (req, res) => {
         })
 });
 
+// check workspace information
 router.put("/:workspaceID/submit-change",async (req,res)=>{
     const workspaceID = req.params.workspaceID;
     const newWorkspaceName = req.body.workspaceName;
