@@ -10,6 +10,19 @@ exports.getAll = (req,res)=>{
     })
 }
 
+exports.getByWorkspace = (req,res) =>
+{
+    let query = `select 
+    a.art_id, a.user_id, a."owner", 
+    a.org_id, a."name", a.description, 
+    a."createdAt", a."updatedAt", a.date_created, ws.work_space_name 
+    from work_space_artifacts wsa 
+    inner join artifacts a on a.art_id  = wsa.art_id 
+    inner join work_space_members wsm on wsm.user_id = 2
+    inner join work_spaces ws on ws.work_space_id = wsm.work_space_id 
+    where a.user_id <> 2 and wsa.work_space_id = wsm.work_space_id `
+}
+
 // TODO : Change the response type for client
 exports.create = (req,res)=>{
 
