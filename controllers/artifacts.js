@@ -49,7 +49,7 @@ exports.searchByWorkspace = async (req,res) => {
     where wsa.work_space_id = wsm.work_space_id and ws.org_id = $1 and ws.work_space_name = $2 and a."name" like '%' || $3 || '%'`
 
     let results = [];
-
+  
     if (key.length === 0) // if the string is empty
     {
         query = `select 
