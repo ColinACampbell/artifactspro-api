@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const db = require('./../config/db');
 
+router.get("/names",async (req,res)=>{
+    const userID = req.session.userInfo.user_id;
+    const orgID = req.session.orgInfo.org_id;
+    const query = `select ws.work_space_name from work_spaces ws 
+    inner join work_space_members wsm on wsm.work_space_id = ws.work_space_id 
+    inner join users u on u.user_id = wsm.user_id 
+    where u.user_id  = $1 and ws.org_id = $2`
+    const results = await db.query(query,[userID,orgID])
+    res.status(200).json(results.rows)
+})
+
 // Gets workspaces from user 
 router.get('/all', (req, res) => {
     //console.log(req.session);
