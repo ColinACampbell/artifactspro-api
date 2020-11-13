@@ -146,6 +146,7 @@ router.post('/:workspaceID/add-member', async (req, res) => {
     }
 });
 
+// Get Workspace
 router.get('/:workspaceID', (req, res) => {
     // TODO : Verify that user has access to resource
     let workspaceID = req.params.workspaceID;
@@ -321,10 +322,13 @@ router.get('/suggestion/email', async (req, res) => {
 });
 
 // Add Artifact to workspace
+// TODO : Test this endpoint
 router.post('/:workspaceID/artifact/add', async (req, res) => {
 
     const workspaceID = req.params.workspaceID;
     const artifactName = req.body.artifactName; // array of the artifact id's
+    const isSecured = req.body.isSecured === true ? 1 : 0; // check if the value corresponds with what it can put in the database
+    const password = req.body.password;
 
     // select the id of the artifact
     let artifacts = await db.query(`SELECT * FROM artifacts WHERE artifacts.name = $1`, [artifactName])
@@ -347,10 +351,11 @@ router.post('/:workspaceID/artifact/add', async (req, res) => {
         return
     }
 
-    // add the artifact to the workspace
+    
+    // Add the artifact to the workspace
     await db.query(`INSERT INTO work_space_artifacts
-    (work_space_id,art_id,"createdAt","updatedAt") VALUES($1,$2,$3,$4);`,
-        [workspaceID, artifactID, new Date(), new Date()]).catch((err) => {
+    (work_space_id,art_id,"createdAt","updatedAt",is_secured,"password") VALUES($1,$2,$3,$4,$5,$6);`,
+        [workspaceID, artifactID, new Date(), new Date(),isSecured,password]).catch((err) => {
             if (err) throw err || res.status(500).json({})
         })
 
