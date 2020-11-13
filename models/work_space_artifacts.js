@@ -29,6 +29,14 @@ module.exports = function(sequelize, DataTypes) {
         },
         key: 'art_id'
       }
+    },
+    is_secured : {
+      type : DataTypes.INTEGER,
+      allowNull : false,
+    },
+    password : {
+      type : DataTypes.TEXT,
+      allowNull : true,
     }
   }, {
     sequelize,

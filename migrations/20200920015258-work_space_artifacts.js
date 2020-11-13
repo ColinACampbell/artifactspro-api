@@ -30,6 +30,14 @@ module.exports = {
           },
           key: 'art_id'
         }
+      },
+      is_secured : {
+        type : Sequelize.INTEGER,
+        allowNull : false,
+      },
+      password : {
+        type : Sequelize.TEXT,
+        allowNull : true,
       }
     })
   },
