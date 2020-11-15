@@ -10,6 +10,7 @@ async function setUpModels()
     await db.work_spaces.sync()
     await db.work_space_members.sync()
     await db.work_space_messages.sync()
+    await db.workspace_art_access_users.sync()
     await db.work_space_artifacts.sync();
     await db.work_space_message_replies.sync();
     await db.work_space_artifacts.sync();

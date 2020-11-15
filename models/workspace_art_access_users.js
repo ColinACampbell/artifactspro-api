@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     permissions: DataTypes.STRING,
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     },
     permissions: DataTypes.STRING,
   }, {});
