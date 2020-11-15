@@ -28,6 +28,16 @@ module.exports = {
           key: 'work_space_ref_id'
         }
       },
+      ws_art_access_users_id : {
+        type : DataTypes.INTEGER,
+        allowNull : true,
+        references : {
+          model: {
+            tableName : 'workspace_art_access_users'
+          },
+          key : 'ws_art_access_users_id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

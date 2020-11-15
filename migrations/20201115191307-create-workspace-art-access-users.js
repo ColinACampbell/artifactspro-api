@@ -4,12 +4,12 @@ module.exports = {
     return queryInterface.createTable('workspace_art_access_users', {
       ws_art_access_users_id : {
         autoIncrement: true,
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true
       },
       user_id : {
-        type : DataTypes.INTEGER,
+        type : Sequelize.INTEGER,
         allowNull : false,
         references: {
           model: {
@@ -18,7 +18,7 @@ module.exports = {
           key: 'user_id'
         }
       },
-      permissions: DataTypes.STRING,
+      permissions: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
