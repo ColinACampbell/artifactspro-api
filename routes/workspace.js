@@ -307,7 +307,7 @@ router.post("/:workspaceID/add/message", async (req, res) => {
     res.status(201).json({});
 })
 
-// suggest email to add 
+// suggest email to add user to workspace
 router.get('/suggestion/email', async (req, res) => {
     //console.log(req.session);
 
@@ -320,6 +320,16 @@ router.get('/suggestion/email', async (req, res) => {
     where users.email like '%' || $1 || '%' and organizations.org_id = $2;`, [email, orgID]);
     res.json(result.rows);
 });
+
+router.get("/:workspaceID/user-emails-in-workspace",async (req,res)=>{
+    const email = req.query.email
+    const workspaceID = req.params.workspaceID
+    const results = await db.query(`select email from users u 
+    inner join work_space_members wsm on wsm.user_id  = u.user_id 
+    inner join work_spaces ws on ws.work_space_id  = wsm.work_space_id 
+    where ws.work_space_id = $1 and u.email like '%' || $2 || '%'`,[workspaceID,email])
+    res.status(200).json(results.rows);
+})
 
 // Add Artifact to workspace
 // TODO : Test this endpoint
