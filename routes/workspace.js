@@ -1,4 +1,5 @@
 const express = require('express');
+const { user } = require('./../config/db');
 const router = express.Router();
 const db = require('./../config/db');
 
@@ -324,10 +325,11 @@ router.get('/suggestion/email', async (req, res) => {
 router.get("/:workspaceID/user-emails-in-workspace",async (req,res)=>{
     const email = req.query.email
     const workspaceID = req.params.workspaceID
+    const userID = req.session.userInfo.user_id;
     const results = await db.query(`select email from users u 
     inner join work_space_members wsm on wsm.user_id  = u.user_id 
     inner join work_spaces ws on ws.work_space_id  = wsm.work_space_id 
-    where ws.work_space_id = $1 and u.email like '%' || $2 || '%'`,[workspaceID,email])
+    where ws.work_space_id = $1 and u.email like '%' || $2 || '%' and u.user_id <> $3`,[workspaceID,email,userID])
     res.status(200).json(results.rows);
 })
 
@@ -338,7 +340,8 @@ router.post('/:workspaceID/artifact/add', async (req, res) => {
     const workspaceID = req.params.workspaceID;
     const artifactName = req.body.artifactName; // array of the artifact id's
     const isSecured = req.body.isSecured === true ? 1 : 0; // check if the value corresponds with what it can put in the database
-    const password = req.body.password;
+    const password = req.body.password; // Hash this password
+    const usersList = req.body.usersList; // people who have default access
 
     // select the id of the artifact
     let artifacts = await db.query(`SELECT * FROM artifacts WHERE artifacts.name = $1`, [artifactName])
@@ -361,13 +364,37 @@ router.post('/:workspaceID/artifact/add', async (req, res) => {
         return
     }
 
-    
+
     // Add the artifact to the workspace
-    await db.query(`INSERT INTO work_space_artifacts
-    (work_space_id,art_id,"createdAt","updatedAt",is_secured,"password") VALUES($1,$2,$3,$4,$5,$6);`,
-        [workspaceID, artifactID, new Date(), new Date(),isSecured,password]).catch((err) => {
+    result2 = await db.query(`INSERT INTO work_space_artifacts
+    (work_space_id,art_id,"createdAt","updatedAt",is_secured,"password") VALUES($1,$2,$3,$4,$5,$6) returning work_space_artifacts_id`,
+        [workspaceID, artifactID, new Date(), new Date(),isSecured,password])
+        /**
+        .catch((err) => {
             if (err) throw err || res.status(500).json({})
-        })
+        })**/
+
+    const workspaceArtID = result2.rows[0].work_space_artifacts_id
+    if (usersList.length > 0) 
+    {
+        let usersToAdd = [] // [{ id : number, permission : string },...]
+        for (let i = 0; i < usersList.length; i ++ )
+        {
+            let user = usersList[i];
+            userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1",[user.email])).rows[0].user_id
+            usersToAdd.push({userID,permissions:user.permission})
+        }
+        
+        for (let i = 0; i < usersToAdd.length; i++)
+        {
+            let userToAdd = usersToAdd[i]
+            await db.query(`INSERT INTO workspace_art_access_users
+            (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
+            VALUES($1, $2, $3, $4,$5)`,[userToAdd.userID,userToAdd.permissions,new Date(),new Date(),workspaceArtID])
+
+        }
+    }
+
 
     res.status(200).json({})
 })

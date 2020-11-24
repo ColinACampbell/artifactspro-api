@@ -7,6 +7,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true
     },
+    work_space_artifacts_id : {
+      type : DataTypes.INTEGER,
+      allowNull : false,
+      references: {
+        model: {
+          tableName: 'work_space_artifacts',
+        },
+        key: 'work_space_artifacts_id'
+      }
+    }
+    ,
     user_id : {
       type : DataTypes.INTEGER,
       allowNull : false,

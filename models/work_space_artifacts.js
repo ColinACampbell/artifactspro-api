@@ -30,16 +30,6 @@ module.exports = function(sequelize, DataTypes) {
         key: 'art_id'
       }
     },
-    ws_art_access_users_id : {
-      type : DataTypes.INTEGER,
-      allowNull : true,
-      references : {
-        model: {
-          tableName : 'workspace_art_access_users'
-        },
-        key : 'ws_art_access_users_id'
-      }
-    },
     is_secured : {
       type : DataTypes.INTEGER,
       allowNull : false,

@@ -31,16 +31,6 @@ module.exports = {
           key: 'art_id'
         }
       },
-      ws_art_access_users_id : {
-        type : Sequelize.INTEGER,
-        allowNull : true,
-        references : {
-          model: {
-            tableName : 'workspace_art_access_users'
-          },
-          key : 'ws_art_access_users_id'
-        }
-      },
       is_secured : {
         type : Sequelize.INTEGER,
         allowNull : false,
