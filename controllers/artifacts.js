@@ -109,8 +109,33 @@ exports.getFromID = (req,res)=>{
     db.query(`SELECT * FROM artifacts WHERE art_id = $1 AND org_id = $2`,[artID,orgID],
     (err,result)=>{
         let artifact = result.rows['0'];
-        res.status(200).json(artifact);
+        console.log(artifact)
+        console.log(req.session.userInfo.user_id)
+        const userID = req.session.userInfo.user_id;
+        if (userID !== artifact.user_id) {
+            // Go on to check the if the user has access to this artifact
+            // TODO : Write code to see if it's also secured in the workspace
+            const query = `select u2.user_id from work_space_artifacts wsa 
+            inner join work_space_members wsm on wsa.work_space_id = wsm.work_space_id 
+            inner join users u2 on u2.user_id = wsm.user_id 
+            inner join workspace_art_access_users waau on waau.work_space_artifacts_id = wsa.work_space_artifacts_id and waau.user_id = u2.user_id 
+            where wsa.art_id = $1 and u2.user_id = $2`
+            db.query(query,[artID,userID],(err,result)=>{ // select to see if there's a user who has access to this document
+                if (err) throw err;
+                const rowCount = result.rowCount
+                if (rowCount == 0) 
+                {
+                    res.status(403).json({})
+                } else {
+                    res.status(200).json(artifact)
+                }
+            })
+        } else {
+            res.status(200).json(artifact);
+        }
+        
     })
+    
 }
 
 exports.deleteArtifactFromID = (req,res)=>{
