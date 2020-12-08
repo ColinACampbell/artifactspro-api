@@ -342,6 +342,13 @@ router.post('/:workspaceID/artifact/add', async (req, res) => {
     const isSecured = req.body.isSecured === true ? 1 : 0; // check if the value corresponds with what it can put in the database
     const password = req.body.password; // Hash this password
     const usersList = req.body.usersList; // people who have default access
+    const userEmail = req.session.userInfo.email
+
+    // Adds the user to the list by default as the admin
+    usersList.unshift({
+        email: userEmail,
+        permission: 'Admin'
+    }) 
 
     // select the id of the artifact
     let artifacts = await db.query(`SELECT * FROM artifacts WHERE artifacts.name = $1`, [artifactName])

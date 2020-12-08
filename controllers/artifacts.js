@@ -102,19 +102,22 @@ exports.create = (req,res)=>{
 }
 
 exports.getFromID = async (req,res)=>{
+
     let artID = req.params.artID;
     let workspaceReference = req.query.ref // Used to get the user password
     let orgInfo = req.session.orgInfo;
     let orgID = orgInfo.org_id;
+    const userID = req.session.userInfo.user_id;
 
+    workspaceReference = workspaceReference.replace(/^'(.*)'$/, '$1'); // remove surrounding single quotes from string like 'Workspace' to Workspace
     // When been accessed without reference, no workspace is specified, and it means it is being accessed by the user
     if ( workspaceReference == 'undefined') 
     {
         db.query(`SELECT * FROM artifacts WHERE art_id = $1 AND org_id = $2`,[artID,orgID],
         (err,result)=>{
 
-            let artifact = result.rows['0'];
-            const userID = req.session.userInfo.user_id;
+            let artifact = result.rows[0];
+            
         
             if (userID !== artifact.user_id) { // check if it's the original user who created the document, this is a safe guard
                 
@@ -125,87 +128,63 @@ exports.getFromID = async (req,res)=>{
                 where wsa.art_id = $1 and u2.user_id = $2`
                 db.query(query,[artID,userID],(err,result)=>{ // select to see if there's a user who has access to this document
                     if (err) throw err;
-                    console.log(result.rows)
+                    //console.log(result.rows)
                     const rowCount = result.rowCount
                     if (rowCount == 0) 
                     {
                         // Send a request that they don't have access
-                        res.status(403).json({})
+                        return res.status(403).json({})
                     } else {
-                        res.status(200).json(artifact)
+                        return res.status(200).json(artifact)
                     }
                 })
             } else {
-                res.status(200).json(artifact);
+                return res.status(200).json(artifact);
             }
             
         })
+
     } else {
         // Check if it's secured in the workspace
-        console.log(workspaceReference)
-        // TODO See what the issue is with this
+        
+
         let result = await db.query(`select * from work_spaces ws where ws.work_space_name = $1`,[workspaceReference]) // select workspace ID from the ref name
-        console.log(result.rows[0])
+
         const workspaceID = result.rows[0].work_space_id
         result = await db.query(`select * from work_space_artifacts wsa where wsa.art_id = $1 and wsa.work_space_id = $2`,[artID,workspaceID])
-        const isSecured = result.rows[0].is_secured
+        
+        const isSecured = result.rows[0].is_secured == 1 ? true : false // 1 is isSecured 
+
         result = await db.query(`select u2.user_id from work_space_artifacts wsa 
         inner join work_space_members wsm on wsa.work_space_id = wsm.work_space_id 
         inner join users u2 on u2.user_id = wsm.user_id 
         inner join workspace_art_access_users waau on waau.work_space_artifacts_id = wsa.work_space_artifacts_id and waau.user_id = u2.user_id 
         where wsa.art_id = $1 and u2.user_id = $2`,[artID,userID])
-        let hasAccess = result.rowCount > 0 ? true : false
-
+        
+        let hasAccess = result.rowCount > 0 ? true : false // more than 0 is has access
 
          // If is is not just let them in
+         isArtifactNeeded = false
          if (!isSecured)
          {
-            res.status(200).json({})
+            isArtifactNeeded = true
          } else if (hasAccess && isSecured){ // If it is and the user has access just give them access
-            res.status(200).json({})
+            isArtifactNeeded = true
          } else { // If it is and the user does not have access ask for the password
-            res.status(409).json({message:"password_needed"})
+            res.status(401).json({message:"password_needed"})
          }
+
+         if (isArtifactNeeded)
+         {
+            const query = 'select * from artifacts where art_id = $1 and org_id = $2'
+            const artifactResult = await db.query(query,[artID,orgID])
+            let artifact = artifactResult.rows[0]
+            res.status(200).json(artifact)
+         }
+            
         
         
-    }
-
-    db.query(`SELECT * FROM artifacts WHERE art_id = $1 AND org_id = $2`,[artID,orgID],
-    (err,result)=>{
-        let artifact = result.rows['0'];
-        const userID = req.session.userInfo.user_id;
-
-        // First select where the user and the artifact is common
-        // Check if the workspace artifact is secured
-        // If the artifact is secure and the user doesn't not have access, ask for passworkd
-        // If the user does have access, just let them in
-
-        if (userID !== artifact.user_id) { // check if it's the original user who created the document
-            // Go on to check the if the user has access to this artifact
-            // TODO : Write code to see if it's also secured in the workspace
-            const query = `select u2.user_id from work_space_artifacts wsa 
-            inner join work_space_members wsm on wsa.work_space_id = wsm.work_space_id 
-            inner join users u2 on u2.user_id = wsm.user_id 
-            inner join workspace_art_access_users waau on waau.work_space_artifacts_id = wsa.work_space_artifacts_id and waau.user_id = u2.user_id 
-            where wsa.art_id = $1 and u2.user_id = $2`
-            db.query(query,[artID,userID],(err,result)=>{ // select to see if there's a user who has access to this document
-                if (err) throw err;
-                console.log(result.rows)
-                const rowCount = result.rowCount
-                if (rowCount == 0) 
-                {
-                    // Test when the document is not secured
-                    res.status(403).json({})
-                } else {
-                    res.status(200).json(artifact)
-                }
-            })
-        } else {
-            res.status(200).json(artifact);
-        }
-        
-    })
-    
+    }    
 }
 
 exports.deleteArtifactFromID = (req,res)=>{
