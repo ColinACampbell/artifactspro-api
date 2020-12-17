@@ -106,6 +106,14 @@ router.get("/:workspaceID/get-participant", async (req,res)=>{
     res.json(participant)
 })
 
+router.get("/:workspaceID/get-user-as-participant",async (req,res)=>{
+    const { workspaceID } = req.params
+    const userID = req.session.userInfo.user_id
+    // Get The Current user as a participant
+    const result = await db.query("select * from work_space_members wsm where wsm.user_id = $1 and wsm.work_space_id = $2",[userID,workspaceID])
+    res.status(200).json(result.rows[0])
+})
+
 // Change a particular participant role in the workspace
 router.put("/:workspaceID/change-participant-role", async (req,res)=>{
 
