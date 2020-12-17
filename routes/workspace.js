@@ -334,7 +334,6 @@ router.get("/:workspaceID/user-emails-in-workspace",async (req,res)=>{
 })
 
 // Add Artifact to workspace
-// TODO : Test this endpoint
 router.post('/:workspaceID/artifact/add', async (req, res) => {
 
     const workspaceID = req.params.workspaceID;
@@ -401,9 +400,27 @@ router.post('/:workspaceID/artifact/add', async (req, res) => {
 
         }
     }
-
-
+    
     res.status(200).json({})
+})
+
+router.post("/authorize-password/workspace-artifact",async (req,res)=>{
+    const workspaceReference = req.query.ref;
+
+    const { password, artifactID } = req.body;
+    const orgID = req.session.orgInfo.org_id
+
+    const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`,[workspaceReference,orgID]) // select workspace ID from the ref name
+    const workspaceID = result1.rows[0].work_space_id
+
+    // Now Select The Workspace The Artifact
+    const result2 = await db.query(`select * from work_space_artifacts where art_id = $1 and work_space_id = $2 and password = $3`,[artifactID,workspaceID,password])
+    if (result2.rowCount > 0)
+    {
+        res.status(200).json({})
+    }
+    else 
+        res.status(401).json({})
 })
 
 // Get specific workspace message, post or thread

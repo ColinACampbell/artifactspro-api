@@ -106,7 +106,7 @@ exports.getFromID = async (req,res)=>{
     let artID = req.params.artID;
     let workspaceReference = req.query.ref // Used to get the user password
     let orgInfo = req.session.orgInfo;
-    let orgID = orgInfo.org_id;
+    const orgID = orgInfo.org_id;
     const userID = req.session.userInfo.user_id;
 
     workspaceReference = workspaceReference.replace(/^'(.*)'$/, '$1'); // remove surrounding single quotes from string like 'Workspace' to Workspace
@@ -146,9 +146,8 @@ exports.getFromID = async (req,res)=>{
 
     } else {
         // Check if it's secured in the workspace
-        
-
-        let result = await db.query(`select * from work_spaces ws where ws.work_space_name = $1`,[workspaceReference]) // select workspace ID from the ref name
+        // TODO Use organization that the user is part of to better select the workspace ID in an non-flawed manner
+        let result = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`,[workspaceReference,orgID]) // select workspace ID from the ref name
 
         const workspaceID = result.rows[0].work_space_id
         result = await db.query(`select * from work_space_artifacts wsa where wsa.art_id = $1 and wsa.work_space_id = $2`,[artID,workspaceID])
