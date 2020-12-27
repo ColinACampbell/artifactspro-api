@@ -2,6 +2,7 @@ const express = require('express');
 const { user } = require('./../config/db');
 const router = express.Router();
 const db = require('./../config/db');
+const workspaceMiddleware = require('./../middleware/workspace-middleware')
 
 router.get("/names",async (req,res)=>{
     const userID = req.session.userInfo.user_id;
@@ -192,7 +193,20 @@ router.get('/:workspaceID/members', async (req, res) => {
 // Get artifacts that belong to the workspace
 router.get('/:workspaceID/artifacts', async (req, res) => {
     let workspaceID = req.params.workspaceID;
-    let result = await db.query(`select * from artifacts 
+    let result = await db.query(`select 
+    artifacts.art_id,
+    artifacts.description,
+    is_secured,
+    artifacts."name",
+    artifacts.org_id,
+    artifacts."owner",
+    artifacts.user_id,
+    artifacts.date_created,
+    work_space_artifacts_id,
+    work_space_description,
+    work_space_artifacts.work_space_id ,
+    work_spaces.work_space_name 
+    from artifacts 
     inner join work_space_artifacts on work_space_artifacts.art_id  = artifacts.art_id 
     inner join work_spaces on work_spaces.work_space_id  = work_space_artifacts.work_space_id 
     where work_space_artifacts.work_space_id = $1`, [workspaceID]);
@@ -342,12 +356,12 @@ router.get("/:workspaceID/user-emails-in-workspace",async (req,res)=>{
 })
 
 // Add Artifact to workspace
-router.post('/:workspaceID/artifact/add', async (req, res) => {
+router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPassword,async (req, res) => {
 
     const workspaceID = req.params.workspaceID;
     const artifactName = req.body.artifactName; // array of the artifact id's
     const isSecured = req.body.isSecured === true ? 1 : 0; // check if the value corresponds with what it can put in the database
-    const password = req.body.password; // Hash this password
+    const password = req.session.artifactPassword;
     const usersList = req.body.usersList; // people who have default access
     const userEmail = req.session.userInfo.email
 
