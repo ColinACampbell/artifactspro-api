@@ -426,12 +426,13 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
     res.status(200).json({})
 })
 
-router.post("/authorize-password/workspace-artifact",async (req,res)=>{
+router.post("/authorize-password/workspace-artifact",workspaceMiddleware.encryptArtifactPassword,async (req,res)=>{
     const workspaceReference = req.query.ref;
 
-    const { password, artifactID } = req.body;
+    const { artifactID } = req.body;
+    const password = req.session.artifactPassword
     const orgID = req.session.orgInfo.org_id
-
+    
     const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`,[workspaceReference,orgID]) // select workspace ID from the ref name
     const workspaceID = result1.rows[0].work_space_id
 
