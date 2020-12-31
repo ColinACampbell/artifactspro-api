@@ -85,6 +85,39 @@ router.get("/info", async (req, res) => {
 
 })
 
+router.post("/authorize-password/workspace-artifact",workspaceMiddleware.encryptArtifactPassword,async (req,res)=>{
+    const workspaceReference = req.query.ref;
+
+    const { artifactID } = req.body;
+    const password = req.session.artifactPassword
+    const orgID = req.session.orgInfo.org_id
+    
+    const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`,[workspaceReference,orgID]) // select workspace ID from the ref name
+    const workspaceID = result1.rows[0].work_space_id
+
+    // Now Select The Workspace The Artifact
+    const result2 = await db.query(`select * from work_space_artifacts where art_id = $1 and work_space_id = $2 and password = $3`,[artifactID,workspaceID,password])
+    if (result2.rowCount > 0)
+    {
+        res.status(200).json({})
+    }
+    else 
+        res.status(401).json({})
+})
+// suggest email to add user to workspace
+router.get('/suggestion/email', async (req, res) => {
+    //console.log(req.session);
+
+    const orgID = req.session.orgInfo.org_id;
+    let email = req.query.email;
+
+    let result = await db.query(`select email from users 
+    inner join organization_members ON organization_members.user_id = users.user_id 
+    inner join organizations  on organizations.org_id  = organization_members.org_id 
+    where users.email like '%' || $1 || '%' and organizations.org_id = $2;`, [email, orgID]);
+    res.json(result.rows);
+});
+
 router.get("/:workspaceID/all-participants", async (req,res)=>{
     const workspaceID = req.params.workspaceID;
     const userID = req.session.userInfo.user_id;
@@ -287,8 +320,7 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
     let artID = 0;
     if (results.rowCount === 0) {
         console.log("Artifact not found")
-        res.status(404).json({})
-        return
+        return 404
     } else {
         artID = results.rows[0].art_id
     }
@@ -303,6 +335,8 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
     await db.query(`INSERT INTO work_space_ref_items
     (art_id, work_space_ref_id, "createdAt", "updatedAt")
     VALUES($1, $2, $3, $4);`, [artID, referenceID, new Date(), new Date()])
+
+    return 200
 }
 
 router.post("/:workspaceID/add/message", async (req, res) => {
@@ -324,25 +358,12 @@ router.post("/:workspaceID/add/message", async (req, res) => {
     if (artifactName.length > 0) {
         let messageID = result.rows[0].work_space_msg_id;
         console.log(messageID)
-        await createReference(artifactName, workspaceID, messageID, req);
+        responseCode = await createReference(artifactName, workspaceID, messageID, req);
     }
+
 
     res.status(201).json({});
 })
-
-// suggest email to add user to workspace
-router.get('/suggestion/email', async (req, res) => {
-    //console.log(req.session);
-
-    const orgID = req.session.orgInfo.org_id;
-    let email = req.query.email;
-
-    let result = await db.query(`select email from users 
-    inner join organization_members ON organization_members.user_id = users.user_id 
-    inner join organizations  on organizations.org_id  = organization_members.org_id 
-    where users.email like '%' || $1 || '%' and organizations.org_id = $2;`, [email, orgID]);
-    res.json(result.rows);
-});
 
 router.get("/:workspaceID/user-emails-in-workspace",async (req,res)=>{
     const email = req.query.email
@@ -365,6 +386,8 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
     const usersList = req.body.usersList; // people who have default access
     const userEmail = req.session.userInfo.email
 
+    let responseCode = 200;
+
     // Adds the user to the list by default as the admin
     usersList.unshift({
         email: userEmail,
@@ -376,8 +399,8 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
 
     const emptyData = 0;
     if (artifacts.rows.length === emptyData) {
-        res.status(422).json({}) // let user know that info not valid or found
-        return
+        responseCode = 422 // let user know that info not valid or found
+        //return
     }
 
     const artifactID = artifacts.rows[0].art_id;
@@ -388,19 +411,17 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
         and work_space_artifacts.work_space_id  = $2`, [artifactID, workspaceID])
 
     if (result.rowCount >= 1) {
-        res.status(409).json({})
-        return
+        responseCode = 409
+        //return
     }
 
 
     // Add the artifact to the workspace
     result2 = await db.query(`INSERT INTO work_space_artifacts
     (work_space_id,art_id,"createdAt","updatedAt",is_secured,"password") VALUES($1,$2,$3,$4,$5,$6) returning work_space_artifacts_id`,
-        [workspaceID, artifactID, new Date(), new Date(),isSecured,password])
-        /**
-        .catch((err) => {
-            if (err) throw err || res.status(500).json({})
-        })**/
+        [workspaceID, artifactID, new Date(), new Date(),isSecured,password]).catch((err) => {
+            if (err) throw err
+        })
 
     const workspaceArtID = result2.rows[0].work_space_artifacts_id
     if (usersList.length > 0) 
@@ -423,27 +444,8 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
         }
     }
     
-    res.status(200).json({})
-})
-
-router.post("/authorize-password/workspace-artifact",workspaceMiddleware.encryptArtifactPassword,async (req,res)=>{
-    const workspaceReference = req.query.ref;
-
-    const { artifactID } = req.body;
-    const password = req.session.artifactPassword
-    const orgID = req.session.orgInfo.org_id
-    
-    const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`,[workspaceReference,orgID]) // select workspace ID from the ref name
-    const workspaceID = result1.rows[0].work_space_id
-
-    // Now Select The Workspace The Artifact
-    const result2 = await db.query(`select * from work_space_artifacts where art_id = $1 and work_space_id = $2 and password = $3`,[artifactID,workspaceID,password])
-    if (result2.rowCount > 0)
-    {
-        res.status(200).json({})
-    }
-    else 
-        res.status(401).json({})
+    console.log(responseCode)
+    res.status(responseCode).json({})
 })
 
 // Get specific workspace message, post or thread
