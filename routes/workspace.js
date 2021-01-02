@@ -448,6 +448,19 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
     res.status(responseCode).json({})
 })
 
+// Get who has access to a an workspace artifact
+router.get("/:workspaceID/artifact/access-users-collection",async (req,res)=>{
+    const artifactID = req.query.artID;
+    const workspaceID = req.params.workspaceID
+    console.log(artifactID)
+    const results = await db.query(`select waau.ws_art_access_users_id, users.first_name, users.last_name, users.email, waau.permissions from work_space_artifacts wsa 
+    inner join workspace_art_access_users waau on waau.work_space_artifacts_id = wsa.work_space_artifacts_id 
+    inner join users on users.user_id = waau.user_id 
+    where art_id  = $1 and work_space_id = $2`,[artifactID,workspaceID])
+
+    res.status(200).json(results.rows)
+})
+
 // Get specific workspace message, post or thread
 router.get("/:workspaceID/message/:messageID", async (req, res) => {
 
