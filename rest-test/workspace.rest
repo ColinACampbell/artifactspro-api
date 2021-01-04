@@ -8,4 +8,8 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/workspace/2/artifact/access-users-collection?artID=14
+GET http://localhost:3000/api/workspace/4/artifact/access-users-collection?artID=7
+
+###
+
+GET http://localhost:3000/api/workspace/4/artifact/as-workspace-artifact?artID=7
