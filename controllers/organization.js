@@ -51,7 +51,7 @@ exports.createOrg = (req,res)=>{
 
 exports.info = (req,res)=>{
     let org_key = req.session.orgInfo.org_key
-    db.query('SELECT * FROM organizations WHERE org_key = $1',[org_key],
+    db.query('SELECT org_id, name, "createdAt", "type", user_id FROM organizations WHERE org_key = $1',[org_key],
     (err,result)=>{
         res.json(result.rows[0])
     })
