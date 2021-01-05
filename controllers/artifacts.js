@@ -128,7 +128,6 @@ exports.getFromID = async (req,res)=>{
                 where wsa.art_id = $1 and u2.user_id = $2`
                 db.query(query,[artID,userID],(err,result)=>{ // select to see if there's a user who has access to this document
                     if (err) throw err;
-                    //console.log(result.rows)
                     const rowCount = result.rowCount
                     if (rowCount == 0) 
                     {

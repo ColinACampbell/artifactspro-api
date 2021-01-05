@@ -28,9 +28,7 @@ exports.getAll = (req,res)=>{
 exports.getInviteCode = (req,res)=>{
     let orgID = req.session.orgInfo.org_id;
     db.query('SELECT * FROM organizations WHERE org_id = $1',[orgID],(err,result)=>{
-        //console.log(result.rows[0].org_code);
         let orgCode = result.rows[0].org_code;
-        let orgName = result.rows[0].name;
         let serverhost = config.dev ? 'http://localhost:4200': config.host
         let invite_url = `${serverhost}/team/invite/${orgCode}`
         res.json({invite_url}); 

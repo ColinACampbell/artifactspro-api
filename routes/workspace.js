@@ -17,7 +17,6 @@ router.get("/names",async (req,res)=>{
 
 // Gets workspaces from user 
 router.get('/all', (req, res) => {
-    //console.log(req.session);
     const userID = req.session.userInfo.user_id;
     db.query(`select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
     inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
@@ -68,7 +67,6 @@ router.get("/search", async (req, res) => {
         results = await db.query(query, [userID])
     } else {
         results = await db.query(query, [userID, key])
-        console.log()
     }
     res.status(200).json(results.rows)
 })
@@ -78,8 +76,6 @@ router.get("/info", async (req, res) => {
     const orgID = req.session.orgInfo.org_id;
 
     const result = await db.query("select * from work_spaces ws where ws.org_id = $1 and ws.work_space_id = $2", [orgID, workspaceID])
-
-    console.log(result.rows[0])
 
     res.status(200).json(result.rows[0])
 
@@ -106,7 +102,6 @@ router.post("/authorize-password/workspace-artifact",workspaceMiddleware.encrypt
 })
 // suggest email to add user to workspace
 router.get('/suggestion/email', async (req, res) => {
-    //console.log(req.session);
 
     const orgID = req.session.orgInfo.org_id;
     let email = req.query.email;
@@ -165,7 +160,6 @@ router.put("/:workspaceID/change-participant-role", async (req,res)=>{
 router.post('/:workspaceID/add-member', async (req, res) => {
     const email = req.body.email;
     const workspaceID = req.params.workspaceID;
-    //console.log(workspaceID,email);
 
     // check it the member already exists
     let members = await db.query(`select * from work_space_members 
@@ -310,8 +304,6 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
 
     const userID = req.session.userInfo.user_id
 
-    console.log({ artifactName, userID, workspaceID, messageID })
-
     const results = await db.query(`select a.art_id from work_spaces ws 
     inner join work_space_artifacts wsa ON wsa.work_space_id = ws.work_space_id 
     inner join artifacts a on a.art_id  = wsa.art_id 
@@ -319,7 +311,6 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
 
     let artID = 0;
     if (results.rowCount === 0) {
-        console.log("Artifact not found")
         return 404
     } else {
         artID = results.rows[0].art_id
@@ -330,7 +321,6 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
     VALUES($1, $2, $3) returning work_space_ref_id`, [new Date(), new Date(), messageID])
 
     let referenceID = results2.rows[0].work_space_ref_id;
-    console.log("Reference ID " + referenceID)
 
     await db.query(`INSERT INTO work_space_ref_items
     (art_id, work_space_ref_id, "createdAt", "updatedAt")
@@ -342,7 +332,6 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
 router.post("/:workspaceID/add/message", async (req, res) => {
     const { title, content, time, date, artifactName } = req.body;
     const userID = req.session.userInfo.user_id;
-    //console.log(userID);
     const workspaceID = req.params.workspaceID;
 
     let result = await db.query(`INSERT INTO work_space_messages
@@ -357,7 +346,6 @@ router.post("/:workspaceID/add/message", async (req, res) => {
 
     if (artifactName.length > 0) {
         let messageID = result.rows[0].work_space_msg_id;
-        console.log(messageID)
         responseCode = await createReference(artifactName, workspaceID, messageID, req);
     }
 
@@ -444,7 +432,6 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
         }
     }
     
-    console.log(responseCode)
     res.status(responseCode).json({})
 })
 

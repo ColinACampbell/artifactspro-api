@@ -127,8 +127,6 @@ exports.info = (req, res) => {
 
 // TODO : Test this with jwt and update client
 exports.verifyUser = (req, res) => {
-
-    //console.log(req.body)
     const accessCode = req.params.accesscode;
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
@@ -150,7 +148,6 @@ exports.verifyUser = (req, res) => {
                 row = { user_id: undefined }
             }
             //req.session.userInfo = row // used later for login
-            //console.log(row)
             const userID = row.user_id;
 
             // if it does update the user name and last, name
