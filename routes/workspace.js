@@ -387,8 +387,7 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
 
     const emptyData = 0;
     if (artifacts.rows.length === emptyData) {
-        responseCode = 422 // let user know that info not valid or found
-        //return
+        return res.status(responseCode).json({}) // let user know that info not valid or found
     }
 
     const artifactID = artifacts.rows[0].art_id;
@@ -398,9 +397,9 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
         work_space_artifacts where work_space_artifacts.art_id  = $1 
         and work_space_artifacts.work_space_id  = $2`, [artifactID, workspaceID])
 
-    if (result.rowCount >= 1) {
+    if (result.rowCount  > 0) {
         responseCode = 409
-        //return
+        return res.status(responseCode).json({})
     }
 
 
@@ -432,7 +431,7 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
         }
     }
     
-    res.status(responseCode).json({})
+    return res.status(responseCode).json({})
 })
 
 // Get who has access to a an workspace artifact
