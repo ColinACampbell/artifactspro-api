@@ -4,14 +4,14 @@ const router = express.Router();
 const db = require('./../config/db');
 const workspaceMiddleware = require('./../middleware/workspace-middleware')
 
-router.get("/names",async (req,res)=>{
+router.get("/names", async (req, res) => {
     const userID = req.session.userInfo.user_id;
     const orgID = req.session.orgInfo.org_id;
     const query = `select ws.work_space_name from work_spaces ws 
     inner join work_space_members wsm on wsm.work_space_id = ws.work_space_id 
     inner join users u on u.user_id = wsm.user_id 
     where u.user_id  = $1 and ws.org_id = $2`
-    const results = await db.query(query,[userID,orgID])
+    const results = await db.query(query, [userID, orgID])
     res.status(200).json(results.rows)
 })
 
@@ -81,23 +81,22 @@ router.get("/info", async (req, res) => {
 
 })
 
-router.post("/authorize-password/workspace-artifact",workspaceMiddleware.encryptArtifactPassword,async (req,res)=>{
+router.post("/authorize-password/workspace-artifact", workspaceMiddleware.encryptArtifactPassword, async (req, res) => {
     const workspaceReference = req.query.ref;
 
     const { artifactID } = req.body;
     const password = req.session.artifactPassword
     const orgID = req.session.orgInfo.org_id
-    
-    const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`,[workspaceReference,orgID]) // select workspace ID from the ref name
+
+    const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`, [workspaceReference, orgID]) // select workspace ID from the ref name
     const workspaceID = result1.rows[0].work_space_id
 
     // Now Select The Workspace The Artifact
-    const result2 = await db.query(`select * from work_space_artifacts where art_id = $1 and work_space_id = $2 and password = $3`,[artifactID,workspaceID,password])
-    if (result2.rowCount > 0)
-    {
+    const result2 = await db.query(`select * from work_space_artifacts where art_id = $1 and work_space_id = $2 and password = $3`, [artifactID, workspaceID, password])
+    if (result2.rowCount > 0) {
         res.status(200).json({})
     }
-    else 
+    else
         res.status(401).json({})
 })
 // suggest email to add user to workspace
@@ -113,7 +112,7 @@ router.get('/suggestion/email', async (req, res) => {
     res.json(result.rows);
 });
 
-router.get("/:workspaceID/all-participants", async (req,res)=>{
+router.get("/:workspaceID/all-participants", async (req, res) => {
     const workspaceID = req.params.workspaceID;
     const userID = req.session.userInfo.user_id;
     const result = await db.query(`select 
@@ -122,36 +121,36 @@ router.get("/:workspaceID/all-participants", async (req,res)=>{
         from work_space_members wsm 
         inner join users u on u.user_id = wsm.user_id 
         where wsm.work_space_id = $1 and u.user_id <> $2`
-        ,[workspaceID,userID])
+        , [workspaceID, userID])
     res.send(result.rows)
 })
 
 // Get a particular participant from workspace
-router.get("/:workspaceID/get-participant", async (req,res)=>{
+router.get("/:workspaceID/get-participant", async (req, res) => {
     const workspaceID = req.params.workspaceID
     const participantID = req.query.id
-    const results = await db.query("select * from work_space_members wsm where work_space_id = $1 and work_space_member_id = $2",[workspaceID,participantID])
+    const results = await db.query("select * from work_space_members wsm where work_space_id = $1 and work_space_member_id = $2", [workspaceID, participantID])
     const participant = results.rows[0];
     res.json(participant)
 })
 
-router.get("/:workspaceID/get-user-as-participant",async (req,res)=>{
+router.get("/:workspaceID/get-user-as-participant", async (req, res) => {
     const { workspaceID } = req.params
     const userID = req.session.userInfo.user_id
     // Get The Current user as a participant
-    const result = await db.query("select * from work_space_members wsm where wsm.user_id = $1 and wsm.work_space_id = $2",[userID,workspaceID])
+    const result = await db.query("select * from work_space_members wsm where wsm.user_id = $1 and wsm.work_space_id = $2", [userID, workspaceID])
     res.status(200).json(result.rows[0])
 })
 
 // Change a particular participant role in the workspace
-router.put("/:workspaceID/change-participant-role", async (req,res)=>{
+router.put("/:workspaceID/change-participant-role", async (req, res) => {
 
     const workspaceID = req.params.workspaceID;
     const participantID = req.body.participantID
     const newRole = req.body.newRole;
 
     await db.query(`update work_space_members set "role" = $1 
-    where work_space_id = $2 and work_space_member_id = $3`,[newRole,workspaceID,participantID])
+    where work_space_id = $2 and work_space_member_id = $3`, [newRole, workspaceID, participantID])
 
     res.status(200).json({})
 })
@@ -196,13 +195,13 @@ router.get('/:workspaceID', (req, res) => {
 });
 
 // check workspace information
-router.put("/:workspaceID/submit-change",async (req,res)=>{
+router.put("/:workspaceID/submit-change", async (req, res) => {
     const workspaceID = req.params.workspaceID;
     const newWorkspaceName = req.body.workspaceName;
     const newWorkspaceDsc = req.body.workspaceDsc;
 
     await db.query("UPDATE work_spaces SET work_space_name = $1, work_space_description = $2 WHERE work_space_id = $3",
-        [newWorkspaceName,newWorkspaceDsc,workspaceID])
+        [newWorkspaceName, newWorkspaceDsc, workspaceID])
     res.status(200).json({})
 })
 
@@ -353,19 +352,45 @@ router.post("/:workspaceID/add/message", async (req, res) => {
     res.status(201).json({});
 })
 
-router.get("/:workspaceID/user-emails-in-workspace",async (req,res)=>{
+router.get("/:workspaceID/user-emails-in-workspace", async (req, res) => {
     const email = req.query.email
     const workspaceID = req.params.workspaceID
     const userID = req.session.userInfo.user_id;
     const results = await db.query(`select email from users u 
     inner join work_space_members wsm on wsm.user_id  = u.user_id 
     inner join work_spaces ws on ws.work_space_id  = wsm.work_space_id 
-    where ws.work_space_id = $1 and u.email like '%' || $2 || '%' and u.user_id <> $3`,[workspaceID,email,userID])
+    where ws.work_space_id = $1 and u.email like '%' || $2 || '%' and u.user_id <> $3`, [workspaceID, email, userID])
     res.status(200).json(results.rows);
 })
 
+async function userWorkspaceArtifactOperation(usersList, workspaceArtID, operation = "insert") {
+    let usersToAdd = [] // [{ id : number, permission : string },...]
+
+    for (let i = 0; i < usersList.length; i++) {
+        let user = usersList[i];
+        userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1", [user.email])).rows[0].user_id
+        usersToAdd.push({ userID, permissions: user.permissions })
+    }
+
+    if (operation === "insert")
+        for (let i = 0; i < usersToAdd.length; i++) {
+            let userToAdd = usersToAdd[i]
+            await db.query(`INSERT INTO workspace_art_access_users
+                (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
+                VALUES($1, $2, $3, $4,$5)`, [userToAdd.userID, userToAdd.permissions, new Date(), new Date(), workspaceArtID])
+        }
+    else if (operation === "update")
+        await db.query(`Delete From workspace_art_access_users Where work_space_artifacts_id = $1;`,[workspaceArtID])
+        for (let i = 0; i < usersToAdd.length; i++) {
+            let userToAdd = usersToAdd[i]
+            await db.query(`INSERT INTO workspace_art_access_users
+                (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
+                VALUES($1, $2, $3, $4,$5)`, [userToAdd.userID, userToAdd.permissions, new Date(), new Date(), workspaceArtID])
+        }
+}
+
 // Add Artifact to workspace
-router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPassword,async (req, res) => {
+router.post('/:workspaceID/artifact/add', workspaceMiddleware.encryptArtifactPassword, async (req, res) => {
 
     const workspaceID = req.params.workspaceID;
     const artifactName = req.body.artifactName; // array of the artifact id's
@@ -379,8 +404,8 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
     // Adds the user to the list by default as the admin
     usersList.unshift({
         email: userEmail,
-        permission: 'Admin'
-    }) 
+        permissions: 'Admin'
+    })
 
     // select the id of the artifact
     let artifacts = await db.query(`SELECT * FROM artifacts WHERE artifacts.name = $1`, [artifactName])
@@ -397,57 +422,64 @@ router.post('/:workspaceID/artifact/add',workspaceMiddleware.encryptArtifactPass
         work_space_artifacts where work_space_artifacts.art_id  = $1 
         and work_space_artifacts.work_space_id  = $2`, [artifactID, workspaceID])
 
-    if (result.rowCount  > 0) {
+    if (result.rowCount > 0) {
         responseCode = 409
         return res.status(responseCode).json({})
     }
 
-
     // Add the artifact to the workspace
     result2 = await db.query(`INSERT INTO work_space_artifacts
     (work_space_id,art_id,"createdAt","updatedAt",is_secured,"password") VALUES($1,$2,$3,$4,$5,$6) returning work_space_artifacts_id`,
-        [workspaceID, artifactID, new Date(), new Date(),isSecured,password]).catch((err) => {
+        [workspaceID, artifactID, new Date(), new Date(), isSecured, password]).catch((err) => {
             if (err) throw err
         })
 
     const workspaceArtID = result2.rows[0].work_space_artifacts_id
-    if (usersList.length > 0) 
-    {
-        let usersToAdd = [] // [{ id : number, permission : string },...]
-        for (let i = 0; i < usersList.length; i ++ )
-        {
+    if (usersList.length > 0) {
+        await userWorkspaceArtifactOperation(usersList, workspaceArtID,"insert")
+        /**
+         * 
+            let usersToAdd = [] // [{ id : number, permission : string },...]
+        for (let i = 0; i < usersList.length; i++) {
             let user = usersList[i];
-            userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1",[user.email])).rows[0].user_id
-            usersToAdd.push({userID,permissions:user.permission})
+            userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1", [user.email])).rows[0].user_id
+            usersToAdd.push({ userID, permissions: user.permission })
         }
-        
-        for (let i = 0; i < usersToAdd.length; i++)
-        {
+
+        for (let i = 0; i < usersToAdd.length; i++) {
             let userToAdd = usersToAdd[i]
             await db.query(`INSERT INTO workspace_art_access_users
             (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
-            VALUES($1, $2, $3, $4,$5)`,[userToAdd.userID,userToAdd.permissions,new Date(),new Date(),workspaceArtID])
+            VALUES($1, $2, $3, $4,$5)`, [userToAdd.userID, userToAdd.permissions, new Date(), new Date(), workspaceArtID])
 
         }
+         */
+
     }
-    
+
     return res.status(responseCode).json({})
 })
 
+router.put("/:workspaceID/artifact/update-access-users", async (req, res) => {
+    const { usersList, workspaceArtifactID } = req.body;
+    await userWorkspaceArtifactOperation(usersList,workspaceArtifactID,"update");
+    res.status(200).json({})
+})
+
 // Get who has access to a an workspace artifact
-router.get("/:workspaceID/artifact/access-users-collection",async (req,res)=>{
+router.get("/:workspaceID/artifact/access-users-collection", async (req, res) => {
     const artifactID = req.query.artID;
     const workspaceID = req.params.workspaceID
     const results = await db.query(`select waau.ws_art_access_users_id, users.first_name, users.last_name, users.email, waau.permissions from work_space_artifacts wsa 
     inner join workspace_art_access_users waau on waau.work_space_artifacts_id = wsa.work_space_artifacts_id 
     inner join users on users.user_id = waau.user_id 
-    where art_id  = $1 and work_space_id = $2`,[artifactID,workspaceID])
+    where art_id  = $1 and work_space_id = $2`, [artifactID, workspaceID])
 
     res.status(200).json(results.rows)
 })
 
 // Get Workspace Artifact
-router.get("/:workspaceID/artifact/as-workspace-artifact",async (req,res)=>{
+router.get("/:workspaceID/artifact/as-workspace-artifact", async (req, res) => {
     const artifactID = req.query.artID;
     const workspaceID = req.params.workspaceID
     const results = await db.query(`select 
@@ -457,7 +489,7 @@ router.get("/:workspaceID/artifact/as-workspace-artifact",async (req,res)=>{
     is_secured, 
     "createdAt" 
     from 
-    work_space_artifacts wsa where work_space_id = $1 and art_id = $2`,[workspaceID,artifactID])
+    work_space_artifacts wsa where work_space_id = $1 and art_id = $2`, [workspaceID, artifactID])
 
     res.status(200).json(results.rows[0])
 })
