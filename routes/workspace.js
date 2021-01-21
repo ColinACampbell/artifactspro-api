@@ -345,7 +345,7 @@ router.post("/:workspaceID/add/message", async (req, res) => {
 
     if (artifactName.length > 0) {
         let messageID = result.rows[0].work_space_msg_id;
-        responseCode = await createReference(artifactName, workspaceID, messageID, req);
+        await createReference(artifactName, workspaceID, messageID, req);
     }
 
 
@@ -368,18 +368,21 @@ async function userWorkspaceArtifactOperation(usersList, workspaceArtID, operati
 
     for (let i = 0; i < usersList.length; i++) {
         let user = usersList[i];
-        userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1", [user.email])).rows[0].user_id
+        const userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1", [user.email])).rows[0].user_id
         usersToAdd.push({ userID, permissions: user.permissions })
     }
 
     if (operation === "insert")
+    {
         for (let i = 0; i < usersToAdd.length; i++) {
             let userToAdd = usersToAdd[i]
             await db.query(`INSERT INTO workspace_art_access_users
                 (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
                 VALUES($1, $2, $3, $4,$5)`, [userToAdd.userID, userToAdd.permissions, new Date(), new Date(), workspaceArtID])
         }
+    }   
     else if (operation === "update")
+    {
         await db.query(`Delete From workspace_art_access_users Where work_space_artifacts_id = $1;`,[workspaceArtID])
         for (let i = 0; i < usersToAdd.length; i++) {
             let userToAdd = usersToAdd[i]
@@ -387,6 +390,7 @@ async function userWorkspaceArtifactOperation(usersList, workspaceArtID, operati
                 (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
                 VALUES($1, $2, $3, $4,$5)`, [userToAdd.userID, userToAdd.permissions, new Date(), new Date(), workspaceArtID])
         }
+    }
 }
 
 // Add Artifact to workspace
@@ -406,7 +410,7 @@ router.post('/:workspaceID/artifact/add', workspaceMiddleware.encryptArtifactPas
         email: userEmail,
         permissions: 'Admin'
     })
-
+    
     // select the id of the artifact
     let artifacts = await db.query(`SELECT * FROM artifacts WHERE artifacts.name = $1`, [artifactName])
 
@@ -428,33 +432,16 @@ router.post('/:workspaceID/artifact/add', workspaceMiddleware.encryptArtifactPas
     }
 
     // Add the artifact to the workspace
-    result2 = await db.query(`INSERT INTO work_space_artifacts
+    let result2 = await db.query(`INSERT INTO work_space_artifacts
     (work_space_id,art_id,"createdAt","updatedAt",is_secured,"password") VALUES($1,$2,$3,$4,$5,$6) returning work_space_artifacts_id`,
         [workspaceID, artifactID, new Date(), new Date(), isSecured, password]).catch((err) => {
             if (err) throw err
         })
 
+    // Add users to the access list
     const workspaceArtID = result2.rows[0].work_space_artifacts_id
-    if (usersList.length > 0) {
-        await userWorkspaceArtifactOperation(usersList, workspaceArtID,"insert")
-        /**
-         * 
-            let usersToAdd = [] // [{ id : number, permission : string },...]
-        for (let i = 0; i < usersList.length; i++) {
-            let user = usersList[i];
-            userID = await (await db.query("SELECT user_id FROM users WHERE users.email = $1", [user.email])).rows[0].user_id
-            usersToAdd.push({ userID, permissions: user.permission })
-        }
-
-        for (let i = 0; i < usersToAdd.length; i++) {
-            let userToAdd = usersToAdd[i]
-            await db.query(`INSERT INTO workspace_art_access_users
-            (user_id, permissions, "createdAt", "updatedAt",work_space_artifacts_id)
-            VALUES($1, $2, $3, $4,$5)`, [userToAdd.userID, userToAdd.permissions, new Date(), new Date(), workspaceArtID])
-
-        }
-         */
-
+    if (usersList.length > 1) {
+        await userWorkspaceArtifactOperation(usersList, workspaceArtID)
     }
 
     return res.status(responseCode).json({})
@@ -463,6 +450,12 @@ router.post('/:workspaceID/artifact/add', workspaceMiddleware.encryptArtifactPas
 router.put("/:workspaceID/artifact/update-access-users", async (req, res) => {
     const { usersList, workspaceArtifactID } = req.body;
     await userWorkspaceArtifactOperation(usersList,workspaceArtifactID,"update");
+    res.status(200).json({})
+})
+
+router.put("/:workspaceID/artifact/toggle-password-protection",async (req,res)=>{
+    const {newIsSecured, workspaceArtifactID} = req.body
+    await db.query(`UPDATE work_space_artifacts SET is_secured = $1 WHERE work_space_artifacts_id = $2`,[newIsSecured,workspaceArtifactID])
     res.status(200).json({})
 })
 
