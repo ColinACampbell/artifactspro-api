@@ -440,9 +440,9 @@ router.post('/:workspaceID/artifact/add', workspaceMiddleware.encryptArtifactPas
 
     // Add users to the access list
     const workspaceArtID = result2.rows[0].work_space_artifacts_id
-    if (usersList.length > 1) {
-        await userWorkspaceArtifactOperation(usersList, workspaceArtID)
-    }
+    
+    await userWorkspaceArtifactOperation(usersList, workspaceArtID)
+
 
     return res.status(responseCode).json({})
 })
@@ -455,6 +455,7 @@ router.put("/:workspaceID/artifact/update-access-users", async (req, res) => {
 
 router.put("/:workspaceID/artifact/toggle-password-protection",async (req,res)=>{
     const {newIsSecured, workspaceArtifactID} = req.body
+    await db.query(`UPDATE work_space_artifacts SET is_secured = $1 WHERE work_space_artifacts_id = $2`,[newIsSecured,workspaceArtifactID])
     await db.query(`UPDATE work_space_artifacts SET is_secured = $1 WHERE work_space_artifacts_id = $2`,[newIsSecured,workspaceArtifactID])
     res.status(200).json({})
 })

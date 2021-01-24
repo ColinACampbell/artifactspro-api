@@ -22,7 +22,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.4.6",
     "pg": "^7.18.2",
-    "sequelize": "^6.3.5",
+    "sequelize": "^6.4.0",
     "socket.io": "^2.3.0"
   }
 }
