@@ -1,2 +1,4 @@
-docs
-node_modules
+/docs
+
+# dependencies
+/node_modules
