@@ -2,23 +2,23 @@ const db = require("./../models/index")
 
 async function setUpModels()
 {
-    await db.users.sync()
-    await db.organizations.sync()
-    await db.organization_members.sync()
-    await db.artifacts.sync()
-    await db.documents.sync()
-    await db.work_spaces.sync()
-    await db.work_space_members.sync()
-    await db.work_space_messages.sync()
-    await db.work_space_artifacts.sync();
-    await db.workspace_art_access_users.sync()
-    await db.work_space_message_replies.sync();
-    await db.work_space_artifacts.sync();
-    await db.chat_rooms.sync()
-    await db.chat_room_members.sync()
-    await db.chat_messages.sync()
-    await db.work_space_references.sync()
-    await db.work_space_ref_items.sync()
+    await db.users.sync({alter:true})
+    await db.organizations.sync({alter:true})
+    await db.organization_members.sync({alter:true})
+    await db.artifacts.sync({alter:true})
+    await db.documents.sync({alter:true})
+    await db.work_spaces.sync({alter:true})
+    await db.work_space_members.sync({alter:true})
+    await db.work_space_messages.sync({alter:true})
+    await db.work_space_artifacts.sync({alter:true});
+    await db.workspace_art_access_users.sync({alter:true})
+    await db.work_space_message_replies.sync({alter:true});
+    await db.work_space_artifacts.sync({alter:true});
+    await db.chat_rooms.sync({alter:true})
+    await db.chat_room_members.sync({alter:true})
+    await db.chat_messages.sync({alter:true})
+    await db.work_space_references.sync({alter:true})
+    await db.work_space_ref_items.sync({alter:true})
 }
 
 ( async()=>{
