@@ -5,41 +5,33 @@ exports.createOrg = (req,res)=>{
 
     const userID = req.session.userInfo.user_id;
     const orgName = req.body.name;
-    const orgKey = req.body.orgKey;
-    let orgPassKey = req.body.orgPassKey;
     
-
-    orgPassKey = crypto.createHash("sha256")
-    .update(orgPassKey)
-    .digest("hex");
-
     let accessCode = crypto.randomBytes(30).toString('hex');
  
     // check if the organization key already exists
-    db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
+    db.query("SELECT * FROM organizations WHERE name = $1",[orgName],(err,result)=>{
         if (err) throw err;
         let rowCount = result.rowCount;
         // if the key does not exists
         if (rowCount === 0)
         {
             // add organization to the database
-            db.query(`INSERT INTO public.organizations (user_id, name, type, org_key, org_code,access_key,"createdAt","updatedAt") VALUES ($1, $2, '', $3, $4, $5, $6, $7);`,[userID,orgName,orgKey,orgPassKey,accessCode,new Date(),new Date()],(err,result)=>{
+            db.query(`INSERT INTO public.organizations 
+            (user_id, name, type, org_code,"createdAt","updatedAt") 
+            VALUES ($1, $2, '', $3, $4, $5) RETURNING org_id,user_id, name, type,"createdAt","updatedAt"`,
+            [userID,orgName,accessCode,new Date(),new Date()],(err,result)=>{
                 if (err) throw err;
                 // get organization info to store in session object in req object
-                db.query("SELECT * FROM organizations WHERE org_key = $1",[orgKey],(err,result)=>{
-                    if (err) throw err;
 
-                    req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
-                    const orgID = result.rows[0].org_id;
+                req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
+                const orgID = result.rows[0].org_id;
  
-                    // store user as a member of that organization
-                    db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'owner', new Date(),new Date()],(err,result)=>{
-                        if (err) throw err;
-                        res.status(201).json();
-                    });
+                // store user as a member of that organization
+                db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'owner', new Date(),new Date()],(err,result)=>{
+                    if (err) throw err;
+                    res.status(201).json();
+                });
                     
-                })
-
             })
 
         } else
@@ -50,8 +42,8 @@ exports.createOrg = (req,res)=>{
 }
 
 exports.info = (req,res)=>{
-    let org_key = req.session.orgInfo.org_key
-    db.query('SELECT org_id, name, "createdAt", "type", user_id FROM organizations WHERE org_key = $1',[org_key],
+    let org_id = req.session.orgInfo.org_id
+    db.query('SELECT org_id, name, "createdAt", "type", user_id FROM organizations WHERE org_id = $1',[org_id],
     (err,result)=>{
         res.json(result.rows[0])
     })

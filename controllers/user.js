@@ -90,13 +90,13 @@ exports.login = (req, res) => {
             organizations.name, 
             organizations.org_id, 
             organizations.type,  
-            organizations.org_code,
-            organizations.org_key
+            organizations.org_code
             FROM users 
             INNER JOIN organization_members ON organization_members.user_id = users.user_id
             INNER JOIN organizations ON organizations.org_id = organization_members.org_id
             WHERE users.email = $1
             `, [email], (err, result) => {
+                    if (err) throw err
                     req.session.orgInfo = result.rows[0];
                     res.status(200).json({})
                 })

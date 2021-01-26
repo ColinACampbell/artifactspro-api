@@ -27,10 +27,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
-      org_key: {
-        type: Sequelize.TEXT,
-        allowNull: false
-      },
       org_code: {
         type: Sequelize.TEXT,
         allowNull: false

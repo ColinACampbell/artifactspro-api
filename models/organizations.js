@@ -26,18 +26,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    org_key: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
     org_code: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    access_key: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    }
   }, {
     sequelize,
     tableName: 'organizations',
