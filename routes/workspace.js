@@ -48,6 +48,14 @@ router.post('/create', async (req, res) => {
     res.status(201).json({ workspaceID })
 });
 
+router.delete("/:workspaceID/delete",async (req,res)=>{
+    const { workspaceID } = req.params
+    console.log(workspaceID)
+    await db.query(`ALTER TABLE work_spaces DISABLE TRIGGER ALL;`);
+    await db.query(`DELETE FROM work_spaces WHERE work_space_id = $1`,[workspaceID]);
+    await db.query(`ALTER TABLE work_spaces ENABLE TRIGGER ALL;`);
+})
+
 // Search workspace by name
 router.get("/search", async (req, res) => {
     const { key } = req.query;

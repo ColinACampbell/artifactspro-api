@@ -162,7 +162,7 @@ exports.getFromID = async (req,res)=>{
         let hasAccess = result.rowCount > 0 ? true : false // more than 0 is has access
 
          // If is is not just let them in
-         isArtifactNeeded = false
+         let isArtifactNeeded = false
          if (!isSecured)
          {
             isArtifactNeeded = true
