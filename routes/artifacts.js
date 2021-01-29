@@ -18,6 +18,6 @@ router.post('/create',artifactsController.create)
 router.get('/:artID',artifactsController.getFromID)
 
 // delete artifact from id
-router.delete('/delete/:artID',artifactsController.deleteArtifactFromID)
+router.delete('/delete/:artID', artifactsController.deleteArtifactFromID)
 
 module.exports = router;
