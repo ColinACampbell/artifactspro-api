@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
           tableName: 'work_space_artifacts',
         },
         key: 'work_space_artifacts_id'
-      }
+      },
+      onDelete : 'CASCADE',
+      onUpdate : 'CASCADE'
     }
     ,
     user_id : {
@@ -26,7 +28,9 @@ module.exports = (sequelize, DataTypes) => {
           tableName: 'users',
         },
         key: 'user_id'
-      }
+      },
+      onDelete : 'CASCADE',
+      onUpdate : 'CASCADE'
     },
     permissions: DataTypes.STRING,
     createdAt: {

@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     work_space_msg_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete : 'CASCADE',
+      onUpdate : 'CASCADE',
       references: {
         model: {
           tableName: 'work_space_messages',

@@ -19,6 +19,8 @@ module.exports = function(sequelize, DataTypes) {
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete : 'CASCADE',
+      onUpdate : 'CASCADE',
       references: {
         model: {
           tableName: 'users',
@@ -41,6 +43,7 @@ module.exports = function(sequelize, DataTypes) {
     art_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      
       references: {
         model: {
           tableName: 'artifacts',

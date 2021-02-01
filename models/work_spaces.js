@@ -27,8 +27,10 @@ module.exports = function(sequelize, DataTypes) {
         model: {
           tableName: 'organizations',
         },
-        key: 'org_id'
-      }
+        key: 'org_id',
+      },
+      onDelete : 'CASCADE',
+      onUpdate : 'CASCADE'
     }
   }, {
     sequelize,
