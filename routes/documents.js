@@ -5,6 +5,8 @@ const documentController = require('./../controllers/documents')
 // Get documents from artifact
 router.get('/from-art/:artID',documentController.docFromArtFromID);
 
+router.get("/search/:artID",documentController.search)
+
 router.post('/upload/:artID',documentController.upload);
 
 router.post("/link/:artID/:docID",documentController.getLink)

@@ -22,6 +22,46 @@ exports.docFromArtFromID = (req, res) => {
         })
 }
 
+exports.search = (req,res) => {
+
+    let { documentName, documentComments } = req.query;
+    const { artID } = req.params;
+
+    // convert undefined string into actual value
+    if (documentName === 'undefined')
+        documentName = undefined
+
+    if (documentComments === 'undefined')
+        documentComments = undefined
+
+    if (documentName !== undefined && documentComments !== undefined)
+    {
+        const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
+                        WHERE "version" like '%' || $1 || '%' and "comment" like '%' || $2 || '%' and art_id = ${artID}`
+        db.query(query,[documentName,documentComments],(err,results)=>{
+            if (err) throw err;
+            res.status(200).json(results.rows)
+        })
+    } else if (documentName !== undefined)
+    {
+        const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
+                        WHERE "version" like '%' || $1 || '%' and art_id = ${artID}`
+        db.query(query,[documentName],(err,results)=>{
+            if (err) throw err;
+            res.status(200).json(results.rows)
+        })
+    } else if (documentComments !== undefined)
+    {
+        const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
+                        WHERE "comment" like '%' || $1 || '%' and art_id = ${artID}`
+        db.query(query,[documentComments],(err,results)=>{
+            if (err) throw err;
+            res.status(200).json(results.rows)
+        })
+    }
+}
+
+
 exports.upload = (req, res) => {
 
     let artID = req.params.artID;
