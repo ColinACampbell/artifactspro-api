@@ -16,7 +16,7 @@ exports.getByWorkspace = async (req,res) =>
 {
     //const userID = req.session.userInfo.user_id;
     const workspaceName = req.query.workspaceName
-    const ordId = req.session.orgInfo.org_id;
+    const org = req.session.orgInfo.org_id;
 
     let query = `select 
     a.art_id, a.user_id, a."owner", 
@@ -28,7 +28,7 @@ exports.getByWorkspace = async (req,res) =>
     inner join work_spaces ws on ws.work_space_id = wsm.work_space_id 
     where wsa.work_space_id = wsm.work_space_id and ws.org_id = $1 and ws.work_space_name = $2`
 
-    const results = await db.query(query,[ordId,workspaceName])
+    const results = await db.query(query,[org,workspaceName])
 
     res.status(200).json(results.rows)
 }
@@ -225,4 +225,19 @@ exports.search = async (req,res) => {
     }
     
     res.status(200).json(results.rows)
+}
+
+// TOOD : Test this later
+exports.getPermissionsForArtifact = (req,res) =>{
+    const { workspaceName } = req.query;
+    const { artID } = req.params;
+    const userID = req.session.userInfo.user_id;
+    db.query(`select permissions from workspace_art_access_users waau 
+        inner join work_space_artifacts wsa on wsa.work_space_artifacts_id = waau.work_space_artifacts_id 
+        inner join work_spaces ws on ws.work_space_id = wsa.work_space_artifacts_id 
+        where waau.user_id = $1 and wsa.art_id = $2 and ws.work_space_name = $3`,[userID,artID,workspaceName],(err,result)=>{
+            if (err) throw err;
+            console.log(result)
+            res.status(200).json(result.rows[0])
+        })
 }

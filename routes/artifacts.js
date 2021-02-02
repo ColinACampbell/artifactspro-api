@@ -17,6 +17,8 @@ router.post('/create',artifactsController.create)
 // Get specific artifacts
 router.get('/:artID',artifactsController.getFromID)
 
+router.get('/:artID/permissions',artifactsController.getPermissionsForArtifact)
+
 // delete artifact from id
 router.delete('/delete/:artID', artifactsController.deleteArtifactFromID)
 
