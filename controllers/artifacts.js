@@ -237,7 +237,6 @@ exports.getPermissionsForArtifact = (req,res) =>{
         inner join work_spaces ws on ws.work_space_id = wsa.work_space_artifacts_id 
         where waau.user_id = $1 and wsa.art_id = $2 and ws.work_space_name = $3`,[userID,artID,workspaceName],(err,result)=>{
             if (err) throw err;
-            console.log(result)
             res.status(200).json(result.rows[0])
         })
 }

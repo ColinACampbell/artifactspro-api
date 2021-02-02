@@ -35,6 +35,18 @@ socketIO.on('connect',(socket)=>{
         console.log(val)
         socket.to(`${val.chatRoomID}`).emit("update_chat_room",val)
     })
+
+    // Workspace sockets
+    socket.on("join_workspace",(workspaceID)=>{
+        console.log(`A user joined workspace ${workspaceID}`)
+        socket.join(`workspace::${workspaceID}`)
+    })
+
+    socket.on("start_discussion",(discussionInfo)=>{
+        const workspaceID = discussionInfo.workspaceID
+        socket.broadcast.to(`workspace::${workspaceID}`).emit('update_messages',discussionInfo.workspaceID);
+    })
+
 })
 
 
