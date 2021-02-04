@@ -25,7 +25,7 @@ const server = http.createServer(app);
 const socketIO = io.listen(server);
 
 socketIO.on('connect',(socket)=>{
-    console.log("Socket Connected")
+
     socket.on("join_room",(chatRoomID)=>{
         console.log(`A user joined Room ${chatRoomID}`)
         socket.join(`${chatRoomID}`)
@@ -38,13 +38,20 @@ socketIO.on('connect',(socket)=>{
 
     // Workspace sockets
     socket.on("join_workspace",(workspaceID)=>{
-        console.log(`A user joined workspace ${workspaceID}`)
         socket.join(`workspace::${workspaceID}`)
     })
 
-    socket.on("start_discussion",(discussionInfo)=>{
-        const workspaceID = discussionInfo.workspaceID
-        socket.broadcast.to(`workspace::${workspaceID}`).emit('update_messages',discussionInfo.workspaceID);
+    socket.on("start_discussion",(workspaceID)=>{
+        socket.broadcast.to(`workspace::${workspaceID}`).emit('update_workspace_discussion',workspaceID);
+    })
+
+    socket.on("join_discussion_thread",(messageID)=>{
+        socket.join(`message_thread::${messageID}`)
+    })
+
+    // send message under a thread (discussion)
+    socket.on("send_message_reply_to_discussion",(messageID)=>{
+        socket.broadcast.to(`message_thread::${messageID}`).emit('update_discussion_message_thread',messageID)
     })
 
 })
