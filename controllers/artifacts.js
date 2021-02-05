@@ -240,3 +240,17 @@ exports.getPermissionsForArtifact = (req,res) =>{
             res.status(200).json(result.rows[0])
         })
 }
+
+exports.changeNameAndDescription = (req,res) => {
+    // Ownership to authorize who can change was taken care of in the client side
+    const { artID } = req.params;
+    const { artifactName, artifactDescription } = req.body;
+    db.query(`UPDATE artifacts
+    SET name=$1, description=$2
+    WHERE art_id=$3`,[artifactName,artifactDescription,artID]).then((err,result)=>{
+        if (err) throw err;
+        res.status(200).json({});
+    }).catch((reason)=>{
+        
+    })
+}

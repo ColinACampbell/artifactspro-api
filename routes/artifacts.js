@@ -14,6 +14,8 @@ router.get('/search',artifactsController.search)
 // Create artifact
 router.post('/create',artifactsController.create)
 
+router.put('/:artID/change-name-and-description',artifactsController.changeNameAndDescription)
+
 // Get specific artifacts
 router.get('/:artID',artifactsController.getFromID)
 
