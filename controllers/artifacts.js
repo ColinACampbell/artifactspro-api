@@ -251,6 +251,6 @@ exports.changeNameAndDescription = (req,res) => {
         if (err) throw err;
         res.status(200).json({});
     }).catch((reason)=>{
-        
+        res.status(200).json({});
     })
 }
