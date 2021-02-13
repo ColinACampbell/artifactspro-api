@@ -21,6 +21,8 @@ router.get('/:artID',artifactsController.getFromID)
 
 router.get('/:artID/permissions',artifactsController.getPermissionsForArtifact)
 
+router.get('/:artID/total-size',artifactsController.getStorageSize);
+
 // delete artifact from id
 router.delete('/delete/:artID', artifactsController.deleteArtifactFromID)
 

@@ -254,3 +254,11 @@ exports.changeNameAndDescription = (req,res) => {
         res.status(200).json({});
     })
 }
+
+exports.getStorageSize = (req,res) => {
+    const {artID} = req.params;
+    db.query('select sum(d.file_size) from documents d where d.art_id  = $1',[artID],(err,result)=>{
+        if (err) throw err;
+        res.status(200).json(result.rows[0])
+    })
+}
