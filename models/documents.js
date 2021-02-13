@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    file_size : {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

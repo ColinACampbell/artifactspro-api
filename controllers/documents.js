@@ -14,7 +14,7 @@ const fileTypes = {
 exports.docFromArtFromID = (req, res) => {
     let artifactID = req.params.artID;
     // write code to check on the user id, prevent any other user from getting access to the resource purposefully or accidentally
-    db.query('SELECT doc_id, version, comment, user_id, date_uploaded, date_modified, art_id, type FROM documents WHERE art_id = $1', [artifactID],
+    db.query('SELECT doc_id, version, comment, user_id, date_uploaded, date_modified, art_id, type, file_size FROM documents WHERE art_id = $1', [artifactID],
         (err, result) => {
             if (err) throw err;
             let docs = result.rows;
@@ -72,6 +72,7 @@ exports.upload = (req, res) => {
     let version = req.body.version;
     let comment = req.body.comment;
     let fileType = req.body.file_type;
+    const fileSize = req.body.fileSize // it's in bytes by default;
 
     let base64Data = data.split(',')[1];
 
@@ -79,9 +80,9 @@ exports.upload = (req, res) => {
     //fs.writeFileSync(`temp/${version}.${fileTypes[fileType]}`, buffer);
 
     db.query(`INSERT INTO documents
-    ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type","createdAt","updatedAt")
-    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
-    `, [version, comment, userID, buffer, dateUploaded, dateModified, artID, fileType, new Date(), new Date()],
+    ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type","file_size","createdAt","updatedAt")
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);
+    `, [version, comment, userID, buffer, dateUploaded, dateModified, artID, fileType, fileSize,new Date(), new Date()],
         (err, result) => {
             if (err) throw err;
 
