@@ -19,8 +19,14 @@ async function setUpModels()
     await db.chat_messages.sync({alter:true})
     await db.work_space_references.sync({alter:true})
     await db.work_space_ref_items.sync({alter:true})
+    await db.organization_pricing_packages.sync({alter:true})
+}
+
+async function setUpModelsGeneral()
+{
+    await db.sequelize.sync({alter:true})
 }
 
 ( async()=>{
-    await setUpModels()
+    await setUpModelsGeneral()
 })()

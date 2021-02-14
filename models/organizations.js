@@ -12,6 +12,16 @@ module.exports = function(sequelize, DataTypes) {
         key: 'user_id'
       }
     },
+    package_id: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+      references: {
+        model: {
+          tableName: 'organization_pricing_packages',
+        },
+        key: 'package_id'
+      }
+    },
     org_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,

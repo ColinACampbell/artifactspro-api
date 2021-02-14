@@ -13,8 +13,8 @@ const artifactsRoute = require('./routes/artifacts');
 const documentsRoute = require('./routes/documents')
 const membersRoute = require('./routes/member');
 const workspaceRoute = require('./routes/workspace');
-const chatsRoute = require('./routes/chats')
-
+const chatsRoute = require('./routes/chats');
+const pricingRoute = require('./routes/pricing');
 // Middlewares
 const userMiddleware = require('./middleware/user');
 const authMiddleware = require('./middleware/auth');
@@ -92,6 +92,7 @@ app.use('/api/art/', artifactsRoute);
 app.use('/api/docs/', documentsRoute); 
 app.use('/api/members/',membersRoute);
 app.use('/api/workspace/',workspaceRoute);
+app.use('/api/pricing/',pricingRoute)
 app.use('/api/chats/',chatsRoute) 
 
 app.get("/*", (req, res) => {
