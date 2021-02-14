@@ -32,6 +32,22 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    address_line_1: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    address_line_2: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    phone_line_1 : {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    phone_line_2 : {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     type: {
       type: DataTypes.TEXT,
       allowNull: false
