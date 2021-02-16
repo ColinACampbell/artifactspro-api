@@ -1163,14 +1163,19 @@ const environment = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignupActionComponent", function() { return SignupActionComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var src_app_services_organization_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/services/organization.service */ "q+QX");
-/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "dNgK");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _header_header_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../header/header.component */ "TIUA");
-/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/form-field */ "kmnG");
-/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/input */ "qFsG");
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/icon */ "NFeN");
-/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/button */ "bTqV");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+/* harmony import */ var src_app_services_organization_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/organization.service */ "q+QX");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "dNgK");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _header_header_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../header/header.component */ "TIUA");
+/* harmony import */ var _angular_material_stepper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/stepper */ "xHqg");
+/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/form-field */ "kmnG");
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/input */ "qFsG");
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/icon */ "NFeN");
+/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/button */ "bTqV");
+/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/select */ "d3UM");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var _angular_material_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/core */ "FKr1");
 
 
 
@@ -1181,13 +1186,47 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+function SignupActionComponent_ng_template_5_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](0, " Fill out your name and address");
+} }
+function SignupActionComponent_ng_template_60_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](0, " Chose A Plan ");
+} }
+function SignupActionComponent_mat_option_65_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "mat-option", 20);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const x_r10 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("value", x_r10);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", x_r10, " ");
+} }
+function SignupActionComponent_ng_template_72_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](0, "Done");
+} }
+const _c0 = function () { return [1, 3, 4, 5]; };
 class SignupActionComponent {
-    constructor(orgServ, snackBar, router) {
+    constructor(orgServ, snackBar, router, _formBuilder) {
         this.orgServ = orgServ;
         this.snackBar = snackBar;
         this.router = router;
+        this._formBuilder = _formBuilder;
+        this.isLinear = true;
     }
     ngOnInit() {
+        this.firstFormGroup = this._formBuilder.group({
+            firstCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+            secondCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
+        });
     }
     createOrganization(name, orgKey, orgPassKey) {
         this.orgServ.createOrganization(name, orgKey, orgPassKey)
@@ -1205,50 +1244,153 @@ class SignupActionComponent {
         });
     }
 }
-SignupActionComponent.ɵfac = function SignupActionComponent_Factory(t) { return new (t || SignupActionComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_organization_service__WEBPACK_IMPORTED_MODULE_1__["OrganizationService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"])); };
-SignupActionComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SignupActionComponent, selectors: [["app-signup-action"]], decls: 23, vars: 1, consts: [[1, "container"], [2, "width", "90%", "height", "500px"], [1, "container", 2, "position", "relative"], [2, "width", "80%"], [2, "text-align", "center"], ["src", "./../../../../assets/undraw_Building_re_xfcm.png", "alt", "Business", "width", "300"], ["appearance", "outline", 2, "width", "350px", "max-width", "500px"], ["matInput", "", "placeholder", "Name of Organization", 3, "type"], ["name", ""], ["matSuffix", ""], ["mat-raised-button", "", "color", "primary", 3, "click"]], template: function SignupActionComponent_Template(rf, ctx) { if (rf & 1) {
-        const _r1 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
+SignupActionComponent.ɵfac = function SignupActionComponent_Factory(t) { return new (t || SignupActionComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_organization_service__WEBPACK_IMPORTED_MODULE_2__["OrganizationService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"])); };
+SignupActionComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SignupActionComponent, selectors: [["app-signup-action"]], decls: 82, vars: 12, consts: [[3, "linear"], ["stepper", ""], [3, "stepControl"], [3, "formGroup"], ["matStepLabel", ""], [2, "text-align", "center"], ["src", "./../../../../assets/undraw_Building_re_xfcm.png", "alt", "Business", "width", "300"], [2, "display", "flex", "justify-content", "center", "flex-direction", "column", "align-items", "center"], ["appearance", "outline", 2, "width", "350px", "max-width", "500px"], ["matInput", "", "formControlName", "firstCtrl", "placeholder", "Name of Organization", "required", "", 3, "type"], ["name", ""], ["matSuffix", ""], [1, "container"], ["mat-raised-button", "", "color", "primary", "matStepperNext", ""], ["appearance", "fill"], [3, "value", 4, "ngFor", "ngForOf"], ["mat-button", "", "matStepperPrevious", ""], ["mat-button", "", "matStepperNext", ""], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "primary", 3, "click"], [3, "value"]], template: function SignupActionComponent_Template(rf, ctx) { if (rf & 1) {
+        const _r11 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](0, "app-header");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "div", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "div");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "h1", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](7, " Add Your Business / Organization ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "mat-horizontal-stepper", 0, 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "mat-step", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "form", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](5, SignupActionComponent_ng_template_5_Template, 1, 0, "ng-template", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "div");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](8, "img", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "div", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](10, "mat-form-field", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "mat-label");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](12, " Enter Name of Organization/Business");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](13, "input", 9, 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "mat-icon", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](16, "apartment");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](17, "mat-hint");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](18, "Enter Name Or Business Or Organization");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "div", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "div");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](10, "img", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](19, "mat-form-field", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](20, "mat-label");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](21, " Address Line 1 ");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "mat-form-field", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "mat-label");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, " Enter Name of Organization/Business");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](22, "input", 9, 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](24, "mat-icon", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](25, "apartment");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](14, "input", 7, 8);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "mat-icon", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "apartment");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](18, "mat-hint");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](19, "Enter Name Or Business Or Organization");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](26, "mat-hint");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](27, "Enter Name Or Business Or Organization");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](20, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](21, "button", 10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SignupActionComponent_Template_button_click_21_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r1); const _r0 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵreference"](15); return ctx.createOrganization(_r0.value, "", ""); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](22, " Create Organization ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](28, "mat-form-field", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](29, "mat-label");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](30, " Address Line 2 ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](31, "input", 9, 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](33, "mat-icon", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](34, "apartment");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](35, "mat-hint");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](36, "Enter Name Or Business Or Organization");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](37, "mat-form-field", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](38, "mat-label");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](39, " Telephone 1 ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](40, "input", 9, 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](42, "mat-icon", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](43, "phone");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](44, "mat-hint");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](45, "Enter Name Or Business Or Organization");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](46, "mat-form-field", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](47, "mat-label");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](48, " Telephone 2 ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](49, "input", 9, 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](51, "mat-icon", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](52, "phone");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](53, "mat-hint");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](54, "Enter Name Or Business Or Organization");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](55, "div", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](56, "button", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](57, "Next");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](58, "mat-step", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](59, "form", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](60, SignupActionComponent_ng_template_60_Template, 1, 0, "ng-template", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](61, "mat-form-field", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](62, "mat-label");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](63, "Favorite food");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](64, "mat-select");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](65, SignupActionComponent_mat_option_65_Template, 2, 2, "mat-option", 15);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](66, "div");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](67, "button", 16);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](68, "Back");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](69, "button", 17);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](70, "Next");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](71, "mat-step");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](72, SignupActionComponent_ng_template_72_Template, 1, 0, "ng-template", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](73, "p");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](74, "You are now done.");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](75, "div");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](76, "button", 16);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](77, "Back");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](78, "button", 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SignupActionComponent_Template_button_click_78_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r11); const _r0 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵreference"](2); return _r0.reset(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](79, "Reset");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](80, "button", 19);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SignupActionComponent_Template_button_click_80_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r11); const _r2 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵreference"](14); return ctx.createOrganization(_r2.value, "", ""); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](81, " Create Organization ");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("linear", ctx.isLinear);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("stepControl", ctx.firstFormGroup);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("formGroup", ctx.firstFormGroup);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("type", "text");
-    } }, directives: [_header_header_component__WEBPACK_IMPORTED_MODULE_4__["HeaderComponent"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__["MatFormField"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__["MatLabel"], _angular_material_input__WEBPACK_IMPORTED_MODULE_6__["MatInput"], _angular_material_icon__WEBPACK_IMPORTED_MODULE_7__["MatIcon"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__["MatSuffix"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__["MatHint"], _angular_material_button__WEBPACK_IMPORTED_MODULE_8__["MatButton"]], styles: [".container[_ngcontent-%COMP%]\n{\n    display: flex;\n    justify-content: center;\n    margin-top: 10px;\n}\n\n.tab-item[_ngcontent-%COMP%]\n{\n    display: flex;\n    justify-content: center;\n}\n\n@media only screen and (max-width:999px)\n{\n    .img[_ngcontent-%COMP%]\n    {\n        display: none;\n    }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNpZ251cC1hY3Rpb24uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7SUFFSSxhQUFhO0lBQ2IsdUJBQXVCO0lBQ3ZCLGdCQUFnQjtBQUNwQjs7QUFFQTs7SUFFSSxhQUFhO0lBQ2IsdUJBQXVCO0FBQzNCOztBQUVBOztJQUVJOztRQUVJLGFBQWE7SUFDakI7QUFDSiIsImZpbGUiOiJzaWdudXAtYWN0aW9uLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuY29udGFpbmVyXG57XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgICBtYXJnaW4tdG9wOiAxMHB4O1xufVxuXG4udGFiLWl0ZW1cbntcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xufVxuXG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6OTk5cHgpXG57XG4gICAgLmltZ1xuICAgIHtcbiAgICAgICAgZGlzcGxheTogbm9uZTtcbiAgICB9XG59Il19 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("type", "text");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("type", "text");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("type", "text");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("type", "text");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("stepControl", ctx.secondFormGroup);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("formGroup", ctx.secondFormGroup);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction0"](11, _c0));
+    } }, directives: [_header_header_component__WEBPACK_IMPORTED_MODULE_5__["HeaderComponent"], _angular_material_stepper__WEBPACK_IMPORTED_MODULE_6__["MatHorizontalStepper"], _angular_material_stepper__WEBPACK_IMPORTED_MODULE_6__["MatStep"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_material_stepper__WEBPACK_IMPORTED_MODULE_6__["MatStepLabel"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__["MatFormField"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__["MatLabel"], _angular_material_input__WEBPACK_IMPORTED_MODULE_8__["MatInput"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["RequiredValidator"], _angular_material_icon__WEBPACK_IMPORTED_MODULE_9__["MatIcon"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__["MatSuffix"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__["MatHint"], _angular_material_button__WEBPACK_IMPORTED_MODULE_10__["MatButton"], _angular_material_stepper__WEBPACK_IMPORTED_MODULE_6__["MatStepperNext"], _angular_material_select__WEBPACK_IMPORTED_MODULE_11__["MatSelect"], _angular_common__WEBPACK_IMPORTED_MODULE_12__["NgForOf"], _angular_material_stepper__WEBPACK_IMPORTED_MODULE_6__["MatStepperPrevious"], _angular_material_core__WEBPACK_IMPORTED_MODULE_13__["MatOption"]], styles: [".container[_ngcontent-%COMP%]\n{\n    display: flex;\n    justify-content: center;\n    margin-top: 10px;\n}\n\n.tab-item[_ngcontent-%COMP%]\n{\n    display: flex;\n    justify-content: center;\n}\n\n@media only screen and (max-width:999px)\n{\n    .img[_ngcontent-%COMP%]\n    {\n        display: none;\n    }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNpZ251cC1hY3Rpb24uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7SUFFSSxhQUFhO0lBQ2IsdUJBQXVCO0lBQ3ZCLGdCQUFnQjtBQUNwQjs7QUFFQTs7SUFFSSxhQUFhO0lBQ2IsdUJBQXVCO0FBQzNCOztBQUVBOztJQUVJOztRQUVJLGFBQWE7SUFDakI7QUFDSiIsImZpbGUiOiJzaWdudXAtYWN0aW9uLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuY29udGFpbmVyXG57XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgICBtYXJnaW4tdG9wOiAxMHB4O1xufVxuXG4udGFiLWl0ZW1cbntcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xufVxuXG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6OTk5cHgpXG57XG4gICAgLmltZ1xuICAgIHtcbiAgICAgICAgZGlzcGxheTogbm9uZTtcbiAgICB9XG59Il19 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](SignupActionComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -1256,7 +1398,7 @@ SignupActionComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵde
                 templateUrl: './signup-action.component.html',
                 styleUrls: ['./signup-action.component.css']
             }]
-    }], function () { return [{ type: src_app_services_organization_service__WEBPACK_IMPORTED_MODULE_1__["OrganizationService"] }, { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }]; }, null); })();
+    }], function () { return [{ type: src_app_services_organization_service__WEBPACK_IMPORTED_MODULE_2__["OrganizationService"] }, { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }, { type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }]; }, null); })();
 
 
 /***/ }),
@@ -4429,80 +4571,82 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/paginator */ "M9IT");
 /* harmony import */ var _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/autocomplete */ "/1cH");
 /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/button */ "bTqV");
-/* harmony import */ var _angular_material_tree__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/tree */ "8yBR");
-/* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/list */ "MutI");
-/* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/grid-list */ "zkoq");
-/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/dialog */ "0IaG");
-/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/toolbar */ "/t3+");
-/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/input */ "qFsG");
-/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/tooltip */ "Qu3c");
-/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/select */ "d3UM");
-/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/snack-bar */ "dNgK");
-/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/form-field */ "kmnG");
-/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/material/tabs */ "wZkO");
-/* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material/checkbox */ "bSwM");
-/* harmony import */ var _angular_material_chips__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/material/chips */ "A5z7");
-/* harmony import */ var _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/material/slide-toggle */ "1jcm");
-/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/material/expansion */ "7EHt");
-/* harmony import */ var _home_landing_page_landing_page_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./home/landing-page/landing-page.component */ "S87H");
-/* harmony import */ var _home_login_login_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./home/login/login.component */ "I+oK");
-/* harmony import */ var _home_signup_signup_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./home/signup/signup.component */ "22EC");
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/material/icon */ "NFeN");
-/* harmony import */ var _home_header_header_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./home/header/header.component */ "TIUA");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./services/user.service */ "qfBg");
-/* harmony import */ var _home_signup_signup_action_signup_action_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./home/signup/signup-action/signup-action.component */ "BKPn");
-/* harmony import */ var _main_main_main_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./main/main/main.component */ "M6iO");
-/* harmony import */ var _main_components_main_header_main_header_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./main/components/main-header/main-header.component */ "grOO");
-/* harmony import */ var _services_organization_service__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./services/organization.service */ "q+QX");
-/* harmony import */ var _main_components_artifacts_artifacts_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./main/components/artifacts/artifacts.component */ "rKDh");
-/* harmony import */ var _services_artifacts_service__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./services/artifacts.service */ "ppLL");
-/* harmony import */ var _main_components_artifact_artifact_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./main/components/artifact/artifact.component */ "M9EC");
-/* harmony import */ var _services_document_service__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./services/document.service */ "V9dR");
-/* harmony import */ var _models_environment__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./models/environment */ "uK7S");
-/* harmony import */ var _home_noaccess_noaccess_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./home/noaccess/noaccess.component */ "zwXZ");
-/* harmony import */ var _main_components_team_team_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./main/components/team/team.component */ "530b");
-/* harmony import */ var ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ngx-doc-viewer */ "w4ga");
-/* harmony import */ var _services_member_service__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./services/member.service */ "XPT/");
-/* harmony import */ var _main_components_verify_user_verify_user_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./main/components/verify-user/verify-user.component */ "Q0kI");
-/* harmony import */ var _main_components_team_team_invite_team_invite_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./main/components/team/team-invite/team-invite.component */ "cFGf");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
-/* harmony import */ var _main_components_work_space_work_space_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./main/components/work-space/work-space.component */ "Ag8l");
-/* harmony import */ var _services_work_space_service__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./services/work-space.service */ "sTPV");
-/* harmony import */ var _main_components_work_space_view_work_space_view_work_space_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./main/components/work-space/view-work-space/view-work-space.component */ "eHJe");
-/* harmony import */ var _services_util_service__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./services/util.service */ "2Rin");
-/* harmony import */ var _main_components_work_space_work_space_info_panel_work_space_info_panel_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./main/components/work-space/work-space-info-panel/work-space-info-panel.component */ "n/n1");
-/* harmony import */ var _main_components_work_space_message_card_message_card_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./main/components/work-space/message-card/message-card.component */ "eWXD");
-/* harmony import */ var _main_components_chat_chat_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./main/components/chat/chat.component */ "ezbG");
-/* harmony import */ var _services_chat_service__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./services/chat.service */ "sjK5");
-/* harmony import */ var _main_components_chat_chat_rooms_chat_rooms_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./main/components/chat/chat-rooms/chat-rooms.component */ "aBHf");
-/* harmony import */ var _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/workpace-details.component */ "iiXK");
-/* harmony import */ var _main_components_work_space_work_space_message_thread_work_space_message_thread_reply_card_work_space_message_thread_reply_card_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./main/components/work-space/work-space-message-thread/work-space-message-thread-reply-card/work-space-message-thread-reply-card.component */ "nNwi");
-/* harmony import */ var _main_components_work_space_work_space_message_thread_work_space_message_thread_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./main/components/work-space/work-space-message-thread/work-space-message-thread.component */ "pP1J");
-/* harmony import */ var _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./main/dialogs/artifacts/create-artifact-dialog/create-dialog.component */ "fNcP");
-/* harmony import */ var _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./main/dialogs/artifacts/delete-artifact-dialog/delete-artifact-dialog.component */ "lnHo");
-/* harmony import */ var _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./main/dialogs/artifacts/upload-artifact-dialog/upload-dialog.component */ "iLny");
-/* harmony import */ var _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./main/dialogs/chat/chat-contacts-dialog/chat-contacts-dialog.component */ "Neqq");
-/* harmony import */ var _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./main/dialogs/team/change-user-permissions-dialog/change-user-permissions-dialog.component */ "85Ay");
-/* harmony import */ var _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ./main/dialogs/team/team-invite-dialog/invite-dialog.component */ "YHoY");
-/* harmony import */ var _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ./main/dialogs/workspace/add-artifact-dialog/add-artifact-dialog.component */ "9bAx");
-/* harmony import */ var _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ./main/dialogs/workspace/create-message-dialog/create-message-dialog.component */ "Y7C9");
-/* harmony import */ var _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_74__ = __webpack_require__(/*! ./main/dialogs/workspace/create-work-space-dialog/create-work-space-dialog.component */ "svFi");
-/* harmony import */ var _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_75__ = __webpack_require__(/*! ./main/dialogs/workspace/create-workspace-thread-dialog/create-workspace-thread-dialog.component */ "PLUY");
-/* harmony import */ var _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_76__ = __webpack_require__(/*! ./main/dialogs/workspace/work-space-add-member-dialog/work-space-add-member.component */ "8KUe");
-/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_77__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-overview/wsdetail-overview.component */ "kKo7");
-/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_component__WEBPACK_IMPORTED_MODULE_78__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-participants/wsdetail-participants.component */ "f6pP");
-/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_79__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-participants/wsdetail-participants-action-dialog/wsdetail-participants-action-dialog.component */ "naT1");
-/* harmony import */ var _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_80__ = __webpack_require__(/*! ./main/dialogs/workspace/add-people-to-artifact-access-dialog/add-people-to-artifact-access-dialog.component */ "V4sU");
-/* harmony import */ var _services_util_workspace_manager_service__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ./services/util/workspace-manager.service */ "LoVl");
-/* harmony import */ var _main_components_artifact_artifact_authorization_artifact_authorization_component__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ./main/components/artifact/artifact-authorization/artifact-authorization.component */ "HZTd");
-/* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! @angular/material/sidenav */ "XhcP");
-/* harmony import */ var _services_util_navigation_service__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ./services/util/navigation.service */ "xOrk");
-/* harmony import */ var _services_util_artifact_manager_service__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./services/util/artifact-manager.service */ "IOSg");
-/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_artifacts_wsdetail_artifacts_component__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-artifacts/wsdetail-artifacts.component */ "JGDG");
-/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-overview/confirm-delete-workspace/confirm-delete-workspace.component */ "x3N3");
-/* harmony import */ var _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ./main/components/artifact/document-search/document-search.component */ "jlXK");
-/* harmony import */ var _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! ./main/dialogs/artifacts/show-artifact-info-dialog/show-artifact-info-dialog.component */ "y3Ob");
+/* harmony import */ var _angular_material_stepper__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/stepper */ "xHqg");
+/* harmony import */ var _angular_material_tree__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/tree */ "8yBR");
+/* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/list */ "MutI");
+/* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/grid-list */ "zkoq");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/dialog */ "0IaG");
+/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/toolbar */ "/t3+");
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/input */ "qFsG");
+/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/tooltip */ "Qu3c");
+/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/select */ "d3UM");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/snack-bar */ "dNgK");
+/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/material/form-field */ "kmnG");
+/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material/tabs */ "wZkO");
+/* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/material/checkbox */ "bSwM");
+/* harmony import */ var _angular_material_chips__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/material/chips */ "A5z7");
+/* harmony import */ var _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/material/slide-toggle */ "1jcm");
+/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @angular/material/expansion */ "7EHt");
+/* harmony import */ var _home_landing_page_landing_page_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./home/landing-page/landing-page.component */ "S87H");
+/* harmony import */ var _home_login_login_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./home/login/login.component */ "I+oK");
+/* harmony import */ var _home_signup_signup_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./home/signup/signup.component */ "22EC");
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @angular/material/icon */ "NFeN");
+/* harmony import */ var _home_header_header_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./home/header/header.component */ "TIUA");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./services/user.service */ "qfBg");
+/* harmony import */ var _home_signup_signup_action_signup_action_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./home/signup/signup-action/signup-action.component */ "BKPn");
+/* harmony import */ var _main_main_main_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./main/main/main.component */ "M6iO");
+/* harmony import */ var _main_components_main_header_main_header_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./main/components/main-header/main-header.component */ "grOO");
+/* harmony import */ var _services_organization_service__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./services/organization.service */ "q+QX");
+/* harmony import */ var _main_components_artifacts_artifacts_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./main/components/artifacts/artifacts.component */ "rKDh");
+/* harmony import */ var _services_artifacts_service__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./services/artifacts.service */ "ppLL");
+/* harmony import */ var _main_components_artifact_artifact_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./main/components/artifact/artifact.component */ "M9EC");
+/* harmony import */ var _services_document_service__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./services/document.service */ "V9dR");
+/* harmony import */ var _models_environment__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./models/environment */ "uK7S");
+/* harmony import */ var _home_noaccess_noaccess_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./home/noaccess/noaccess.component */ "zwXZ");
+/* harmony import */ var _main_components_team_team_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./main/components/team/team.component */ "530b");
+/* harmony import */ var ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ngx-doc-viewer */ "w4ga");
+/* harmony import */ var _services_member_service__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./services/member.service */ "XPT/");
+/* harmony import */ var _main_components_verify_user_verify_user_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./main/components/verify-user/verify-user.component */ "Q0kI");
+/* harmony import */ var _main_components_team_team_invite_team_invite_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./main/components/team/team-invite/team-invite.component */ "cFGf");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+/* harmony import */ var _main_components_work_space_work_space_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./main/components/work-space/work-space.component */ "Ag8l");
+/* harmony import */ var _services_work_space_service__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./services/work-space.service */ "sTPV");
+/* harmony import */ var _main_components_work_space_view_work_space_view_work_space_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./main/components/work-space/view-work-space/view-work-space.component */ "eHJe");
+/* harmony import */ var _services_util_service__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./services/util.service */ "2Rin");
+/* harmony import */ var _main_components_work_space_work_space_info_panel_work_space_info_panel_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./main/components/work-space/work-space-info-panel/work-space-info-panel.component */ "n/n1");
+/* harmony import */ var _main_components_work_space_message_card_message_card_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./main/components/work-space/message-card/message-card.component */ "eWXD");
+/* harmony import */ var _main_components_chat_chat_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./main/components/chat/chat.component */ "ezbG");
+/* harmony import */ var _services_chat_service__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./services/chat.service */ "sjK5");
+/* harmony import */ var _main_components_chat_chat_rooms_chat_rooms_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./main/components/chat/chat-rooms/chat-rooms.component */ "aBHf");
+/* harmony import */ var _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/workpace-details.component */ "iiXK");
+/* harmony import */ var _main_components_work_space_work_space_message_thread_work_space_message_thread_reply_card_work_space_message_thread_reply_card_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./main/components/work-space/work-space-message-thread/work-space-message-thread-reply-card/work-space-message-thread-reply-card.component */ "nNwi");
+/* harmony import */ var _main_components_work_space_work_space_message_thread_work_space_message_thread_component__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./main/components/work-space/work-space-message-thread/work-space-message-thread.component */ "pP1J");
+/* harmony import */ var _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./main/dialogs/artifacts/create-artifact-dialog/create-dialog.component */ "fNcP");
+/* harmony import */ var _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./main/dialogs/artifacts/delete-artifact-dialog/delete-artifact-dialog.component */ "lnHo");
+/* harmony import */ var _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./main/dialogs/artifacts/upload-artifact-dialog/upload-dialog.component */ "iLny");
+/* harmony import */ var _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./main/dialogs/chat/chat-contacts-dialog/chat-contacts-dialog.component */ "Neqq");
+/* harmony import */ var _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ./main/dialogs/team/change-user-permissions-dialog/change-user-permissions-dialog.component */ "85Ay");
+/* harmony import */ var _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ./main/dialogs/team/team-invite-dialog/invite-dialog.component */ "YHoY");
+/* harmony import */ var _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ./main/dialogs/workspace/add-artifact-dialog/add-artifact-dialog.component */ "9bAx");
+/* harmony import */ var _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_74__ = __webpack_require__(/*! ./main/dialogs/workspace/create-message-dialog/create-message-dialog.component */ "Y7C9");
+/* harmony import */ var _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_75__ = __webpack_require__(/*! ./main/dialogs/workspace/create-work-space-dialog/create-work-space-dialog.component */ "svFi");
+/* harmony import */ var _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_76__ = __webpack_require__(/*! ./main/dialogs/workspace/create-workspace-thread-dialog/create-workspace-thread-dialog.component */ "PLUY");
+/* harmony import */ var _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_77__ = __webpack_require__(/*! ./main/dialogs/workspace/work-space-add-member-dialog/work-space-add-member.component */ "8KUe");
+/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_78__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-overview/wsdetail-overview.component */ "kKo7");
+/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_component__WEBPACK_IMPORTED_MODULE_79__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-participants/wsdetail-participants.component */ "f6pP");
+/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_80__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-participants/wsdetail-participants-action-dialog/wsdetail-participants-action-dialog.component */ "naT1");
+/* harmony import */ var _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ./main/dialogs/workspace/add-people-to-artifact-access-dialog/add-people-to-artifact-access-dialog.component */ "V4sU");
+/* harmony import */ var _services_util_workspace_manager_service__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ./services/util/workspace-manager.service */ "LoVl");
+/* harmony import */ var _main_components_artifact_artifact_authorization_artifact_authorization_component__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ./main/components/artifact/artifact-authorization/artifact-authorization.component */ "HZTd");
+/* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! @angular/material/sidenav */ "XhcP");
+/* harmony import */ var _services_util_navigation_service__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./services/util/navigation.service */ "xOrk");
+/* harmony import */ var _services_util_artifact_manager_service__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./services/util/artifact-manager.service */ "IOSg");
+/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_artifacts_wsdetail_artifacts_component__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-artifacts/wsdetail-artifacts.component */ "JGDG");
+/* harmony import */ var _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ./main/dialogs/workspace/workspace-details/wsdetail-overview/confirm-delete-workspace/confirm-delete-workspace.component */ "x3N3");
+/* harmony import */ var _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! ./main/components/artifact/document-search/document-search.component */ "jlXK");
+/* harmony import */ var _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_90__ = __webpack_require__(/*! ./main/dialogs/artifacts/show-artifact-info-dialog/show-artifact-info-dialog.component */ "y3Ob");
+
 
 
 
@@ -4599,18 +4743,18 @@ class AppModule {
 }
 AppModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineNgModule"]({ type: AppModule, bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]] });
 AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector"]({ factory: function AppModule_Factory(t) { return new (t || AppModule)(); }, providers: [
-        _services_user_service__WEBPACK_IMPORTED_MODULE_37__["UserService"],
-        _services_organization_service__WEBPACK_IMPORTED_MODULE_41__["OrganizationService"],
-        _services_artifacts_service__WEBPACK_IMPORTED_MODULE_43__["ArtifactsService"],
-        _services_document_service__WEBPACK_IMPORTED_MODULE_45__["DocumentService"],
-        _models_environment__WEBPACK_IMPORTED_MODULE_46__["Environment"],
-        _services_member_service__WEBPACK_IMPORTED_MODULE_50__["MemberService"],
-        _services_work_space_service__WEBPACK_IMPORTED_MODULE_55__["WorkSpaceService"],
-        _services_util_service__WEBPACK_IMPORTED_MODULE_57__["UtilService"],
-        _services_chat_service__WEBPACK_IMPORTED_MODULE_61__["ChatService"],
-        _services_util_workspace_manager_service__WEBPACK_IMPORTED_MODULE_81__["WorkspaceManagerService"],
-        _services_util_navigation_service__WEBPACK_IMPORTED_MODULE_84__["NavigationService"],
-        _services_util_artifact_manager_service__WEBPACK_IMPORTED_MODULE_85__["ArtifactManagerService"]
+        _services_user_service__WEBPACK_IMPORTED_MODULE_38__["UserService"],
+        _services_organization_service__WEBPACK_IMPORTED_MODULE_42__["OrganizationService"],
+        _services_artifacts_service__WEBPACK_IMPORTED_MODULE_44__["ArtifactsService"],
+        _services_document_service__WEBPACK_IMPORTED_MODULE_46__["DocumentService"],
+        _models_environment__WEBPACK_IMPORTED_MODULE_47__["Environment"],
+        _services_member_service__WEBPACK_IMPORTED_MODULE_51__["MemberService"],
+        _services_work_space_service__WEBPACK_IMPORTED_MODULE_56__["WorkSpaceService"],
+        _services_util_service__WEBPACK_IMPORTED_MODULE_58__["UtilService"],
+        _services_chat_service__WEBPACK_IMPORTED_MODULE_62__["ChatService"],
+        _services_util_workspace_manager_service__WEBPACK_IMPORTED_MODULE_82__["WorkspaceManagerService"],
+        _services_util_navigation_service__WEBPACK_IMPORTED_MODULE_85__["NavigationService"],
+        _services_util_artifact_manager_service__WEBPACK_IMPORTED_MODULE_86__["ArtifactManagerService"]
     ], imports: [[
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
@@ -4618,166 +4762,168 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
             _angular_material_button__WEBPACK_IMPORTED_MODULE_15__["MatButtonModule"],
             _angular_material_menu__WEBPACK_IMPORTED_MODULE_6__["MatMenuModule"],
             _angular_material_menu__WEBPACK_IMPORTED_MODULE_6__["MatMenuModule"],
-            _angular_material_icon__WEBPACK_IMPORTED_MODULE_34__["MatIconModule"],
-            _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_20__["MatToolbarModule"],
-            _angular_material_input__WEBPACK_IMPORTED_MODULE_21__["MatInputModule"],
-            _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_22__["MatTooltipModule"],
-            _angular_material_form_field__WEBPACK_IMPORTED_MODULE_25__["MatFormFieldModule"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_36__["HttpClientModule"],
-            _angular_material_tabs__WEBPACK_IMPORTED_MODULE_26__["MatTabsModule"],
-            _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_24__["MatSnackBarModule"],
-            _angular_material_select__WEBPACK_IMPORTED_MODULE_23__["MatSelectModule"],
-            _angular_material_list__WEBPACK_IMPORTED_MODULE_17__["MatListModule"],
-            _angular_material_dialog__WEBPACK_IMPORTED_MODULE_19__["MatDialogModule"],
+            _angular_material_icon__WEBPACK_IMPORTED_MODULE_35__["MatIconModule"],
+            _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_21__["MatToolbarModule"],
+            _angular_material_input__WEBPACK_IMPORTED_MODULE_22__["MatInputModule"],
+            _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_23__["MatTooltipModule"],
+            _angular_material_form_field__WEBPACK_IMPORTED_MODULE_26__["MatFormFieldModule"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_37__["HttpClientModule"],
+            _angular_material_tabs__WEBPACK_IMPORTED_MODULE_27__["MatTabsModule"],
+            _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_25__["MatSnackBarModule"],
+            _angular_material_select__WEBPACK_IMPORTED_MODULE_24__["MatSelectModule"],
+            _angular_material_list__WEBPACK_IMPORTED_MODULE_18__["MatListModule"],
+            _angular_material_dialog__WEBPACK_IMPORTED_MODULE_20__["MatDialogModule"],
             _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_8__["MatDatepickerModule"],
             _angular_material_core__WEBPACK_IMPORTED_MODULE_9__["MatNativeDateModule"],
             _angular_material_card__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
             _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_11__["MatProgressBarModule"],
             _angular_material_table__WEBPACK_IMPORTED_MODULE_12__["MatTableModule"],
-            ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_49__["NgxDocViewerModule"],
-            _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_18__["MatGridListModule"],
-            _angular_material_tree__WEBPACK_IMPORTED_MODULE_16__["MatTreeModule"],
+            ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_50__["NgxDocViewerModule"],
+            _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_19__["MatGridListModule"],
+            _angular_material_tree__WEBPACK_IMPORTED_MODULE_17__["MatTreeModule"],
             _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_14__["MatAutocompleteModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_53__["ReactiveFormsModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_54__["ReactiveFormsModule"],
             _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_7__["MatProgressSpinnerModule"],
             ngx_extended_pdf_viewer__WEBPACK_IMPORTED_MODULE_2__["NgxExtendedPdfViewerModule"],
             _angular_material_paginator__WEBPACK_IMPORTED_MODULE_13__["MatPaginatorModule"],
-            _angular_material_expansion__WEBPACK_IMPORTED_MODULE_30__["MatExpansionModule"],
-            _angular_material_chips__WEBPACK_IMPORTED_MODULE_28__["MatChipsModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_53__["FormsModule"],
-            _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_27__["MatCheckboxModule"],
-            _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_83__["MatSidenavModule"],
+            _angular_material_expansion__WEBPACK_IMPORTED_MODULE_31__["MatExpansionModule"],
+            _angular_material_chips__WEBPACK_IMPORTED_MODULE_29__["MatChipsModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_54__["FormsModule"],
+            _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_28__["MatCheckboxModule"],
+            _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_84__["MatSidenavModule"],
             _angular_material_core__WEBPACK_IMPORTED_MODULE_9__["MatRippleModule"],
-            _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_29__["MatSlideToggleModule"]
+            _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_30__["MatSlideToggleModule"],
+            _angular_material_stepper__WEBPACK_IMPORTED_MODULE_16__["MatStepperModule"]
         ]] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsetNgModuleScope"](AppModule, { declarations: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-        _home_landing_page_landing_page_component__WEBPACK_IMPORTED_MODULE_31__["LandingPageComponent"],
-        _home_login_login_component__WEBPACK_IMPORTED_MODULE_32__["LoginComponent"],
-        _home_signup_signup_component__WEBPACK_IMPORTED_MODULE_33__["SignupComponent"],
-        _home_header_header_component__WEBPACK_IMPORTED_MODULE_35__["HeaderComponent"],
-        _home_signup_signup_action_signup_action_component__WEBPACK_IMPORTED_MODULE_38__["SignupActionComponent"],
-        _main_main_main_component__WEBPACK_IMPORTED_MODULE_39__["MainComponent"],
-        _main_components_main_header_main_header_component__WEBPACK_IMPORTED_MODULE_40__["MainHeaderComponent"],
-        _main_components_artifacts_artifacts_component__WEBPACK_IMPORTED_MODULE_42__["ArtifactsComponent"],
-        _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_66__["CreateDialogComponent"],
-        _main_components_artifact_artifact_component__WEBPACK_IMPORTED_MODULE_44__["ArtifactComponent"],
-        _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_68__["UploadDialogComponent"],
-        _home_noaccess_noaccess_component__WEBPACK_IMPORTED_MODULE_47__["NoaccessComponent"],
-        _main_components_team_team_component__WEBPACK_IMPORTED_MODULE_48__["TeamComponent"],
-        _main_components_verify_user_verify_user_component__WEBPACK_IMPORTED_MODULE_51__["VerifyUserComponent"],
-        _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_67__["DeleteArtifactDialogComponent"],
-        _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_71__["InviteDialogComponent"],
-        _main_components_team_team_invite_team_invite_component__WEBPACK_IMPORTED_MODULE_52__["TeamInviteComponent"],
-        _main_components_work_space_work_space_component__WEBPACK_IMPORTED_MODULE_54__["WorkSpaceComponent"],
-        _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_74__["CreateWorkSpaceDialogComponent"],
-        _main_components_work_space_view_work_space_view_work_space_component__WEBPACK_IMPORTED_MODULE_56__["ViewWorkSpaceComponent"],
-        _main_components_work_space_work_space_info_panel_work_space_info_panel_component__WEBPACK_IMPORTED_MODULE_58__["WorkSpaceInfoPanelComponent"],
-        _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_76__["WorkSpaceAddMemberComponent"],
-        _main_components_work_space_message_card_message_card_component__WEBPACK_IMPORTED_MODULE_59__["MessageCardComponent"],
-        _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_73__["CreateMessageDialogComponent"],
-        _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_72__["AddArtifactDialogComponent"],
-        _main_components_work_space_work_space_message_thread_work_space_message_thread_component__WEBPACK_IMPORTED_MODULE_65__["WorkSpaceMessageThreadComponent"],
-        _main_components_work_space_work_space_message_thread_work_space_message_thread_reply_card_work_space_message_thread_reply_card_component__WEBPACK_IMPORTED_MODULE_64__["WorkSpaceMessageThreadReplyCardComponent"],
-        _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_75__["CreateWorkspaceThreadDialogComponent"],
-        _main_components_chat_chat_component__WEBPACK_IMPORTED_MODULE_60__["ChatComponent"],
-        _main_components_chat_chat_rooms_chat_rooms_component__WEBPACK_IMPORTED_MODULE_62__["ChatRoomsComponent"],
-        _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_69__["ChatContactsDialogComponent"],
-        _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_70__["ChangeUserPermissionsDialogComponent"],
-        _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_77__["WsdetailOverviewComponent"],
-        _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_63__["WorkpaceDetailsComponent"],
-        _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_77__["WsdetailOverviewComponent"],
-        _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_component__WEBPACK_IMPORTED_MODULE_78__["WsdetailParticipantsComponent"],
-        _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_79__["WsdetailParticipantsActionDialogComponent"],
-        _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_80__["AddPeopleToArtifactAccessDialogComponent"],
-        _main_components_artifact_artifact_authorization_artifact_authorization_component__WEBPACK_IMPORTED_MODULE_82__["ArtifactAuthorizationComponent"],
-        _main_dialogs_workspace_workspace_details_wsdetail_artifacts_wsdetail_artifacts_component__WEBPACK_IMPORTED_MODULE_86__["WsdetailArtifactsComponent"],
-        _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_87__["ConfirmDeleteWorkspaceComponent"],
-        _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_88__["DocumentSearchComponent"],
-        _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_89__["ShowArtifactInfoDialogComponent"]], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
+        _home_landing_page_landing_page_component__WEBPACK_IMPORTED_MODULE_32__["LandingPageComponent"],
+        _home_login_login_component__WEBPACK_IMPORTED_MODULE_33__["LoginComponent"],
+        _home_signup_signup_component__WEBPACK_IMPORTED_MODULE_34__["SignupComponent"],
+        _home_header_header_component__WEBPACK_IMPORTED_MODULE_36__["HeaderComponent"],
+        _home_signup_signup_action_signup_action_component__WEBPACK_IMPORTED_MODULE_39__["SignupActionComponent"],
+        _main_main_main_component__WEBPACK_IMPORTED_MODULE_40__["MainComponent"],
+        _main_components_main_header_main_header_component__WEBPACK_IMPORTED_MODULE_41__["MainHeaderComponent"],
+        _main_components_artifacts_artifacts_component__WEBPACK_IMPORTED_MODULE_43__["ArtifactsComponent"],
+        _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_67__["CreateDialogComponent"],
+        _main_components_artifact_artifact_component__WEBPACK_IMPORTED_MODULE_45__["ArtifactComponent"],
+        _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_69__["UploadDialogComponent"],
+        _home_noaccess_noaccess_component__WEBPACK_IMPORTED_MODULE_48__["NoaccessComponent"],
+        _main_components_team_team_component__WEBPACK_IMPORTED_MODULE_49__["TeamComponent"],
+        _main_components_verify_user_verify_user_component__WEBPACK_IMPORTED_MODULE_52__["VerifyUserComponent"],
+        _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_68__["DeleteArtifactDialogComponent"],
+        _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_72__["InviteDialogComponent"],
+        _main_components_team_team_invite_team_invite_component__WEBPACK_IMPORTED_MODULE_53__["TeamInviteComponent"],
+        _main_components_work_space_work_space_component__WEBPACK_IMPORTED_MODULE_55__["WorkSpaceComponent"],
+        _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_75__["CreateWorkSpaceDialogComponent"],
+        _main_components_work_space_view_work_space_view_work_space_component__WEBPACK_IMPORTED_MODULE_57__["ViewWorkSpaceComponent"],
+        _main_components_work_space_work_space_info_panel_work_space_info_panel_component__WEBPACK_IMPORTED_MODULE_59__["WorkSpaceInfoPanelComponent"],
+        _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_77__["WorkSpaceAddMemberComponent"],
+        _main_components_work_space_message_card_message_card_component__WEBPACK_IMPORTED_MODULE_60__["MessageCardComponent"],
+        _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_74__["CreateMessageDialogComponent"],
+        _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_73__["AddArtifactDialogComponent"],
+        _main_components_work_space_work_space_message_thread_work_space_message_thread_component__WEBPACK_IMPORTED_MODULE_66__["WorkSpaceMessageThreadComponent"],
+        _main_components_work_space_work_space_message_thread_work_space_message_thread_reply_card_work_space_message_thread_reply_card_component__WEBPACK_IMPORTED_MODULE_65__["WorkSpaceMessageThreadReplyCardComponent"],
+        _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_76__["CreateWorkspaceThreadDialogComponent"],
+        _main_components_chat_chat_component__WEBPACK_IMPORTED_MODULE_61__["ChatComponent"],
+        _main_components_chat_chat_rooms_chat_rooms_component__WEBPACK_IMPORTED_MODULE_63__["ChatRoomsComponent"],
+        _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_70__["ChatContactsDialogComponent"],
+        _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_71__["ChangeUserPermissionsDialogComponent"],
+        _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_78__["WsdetailOverviewComponent"],
+        _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_64__["WorkpaceDetailsComponent"],
+        _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_78__["WsdetailOverviewComponent"],
+        _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_component__WEBPACK_IMPORTED_MODULE_79__["WsdetailParticipantsComponent"],
+        _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_80__["WsdetailParticipantsActionDialogComponent"],
+        _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_81__["AddPeopleToArtifactAccessDialogComponent"],
+        _main_components_artifact_artifact_authorization_artifact_authorization_component__WEBPACK_IMPORTED_MODULE_83__["ArtifactAuthorizationComponent"],
+        _main_dialogs_workspace_workspace_details_wsdetail_artifacts_wsdetail_artifacts_component__WEBPACK_IMPORTED_MODULE_87__["WsdetailArtifactsComponent"],
+        _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_88__["ConfirmDeleteWorkspaceComponent"],
+        _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_89__["DocumentSearchComponent"],
+        _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_90__["ShowArtifactInfoDialogComponent"]], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
         _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
         _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__["BrowserAnimationsModule"],
         _angular_material_button__WEBPACK_IMPORTED_MODULE_15__["MatButtonModule"],
         _angular_material_menu__WEBPACK_IMPORTED_MODULE_6__["MatMenuModule"],
         _angular_material_menu__WEBPACK_IMPORTED_MODULE_6__["MatMenuModule"],
-        _angular_material_icon__WEBPACK_IMPORTED_MODULE_34__["MatIconModule"],
-        _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_20__["MatToolbarModule"],
-        _angular_material_input__WEBPACK_IMPORTED_MODULE_21__["MatInputModule"],
-        _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_22__["MatTooltipModule"],
-        _angular_material_form_field__WEBPACK_IMPORTED_MODULE_25__["MatFormFieldModule"],
-        _angular_common_http__WEBPACK_IMPORTED_MODULE_36__["HttpClientModule"],
-        _angular_material_tabs__WEBPACK_IMPORTED_MODULE_26__["MatTabsModule"],
-        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_24__["MatSnackBarModule"],
-        _angular_material_select__WEBPACK_IMPORTED_MODULE_23__["MatSelectModule"],
-        _angular_material_list__WEBPACK_IMPORTED_MODULE_17__["MatListModule"],
-        _angular_material_dialog__WEBPACK_IMPORTED_MODULE_19__["MatDialogModule"],
+        _angular_material_icon__WEBPACK_IMPORTED_MODULE_35__["MatIconModule"],
+        _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_21__["MatToolbarModule"],
+        _angular_material_input__WEBPACK_IMPORTED_MODULE_22__["MatInputModule"],
+        _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_23__["MatTooltipModule"],
+        _angular_material_form_field__WEBPACK_IMPORTED_MODULE_26__["MatFormFieldModule"],
+        _angular_common_http__WEBPACK_IMPORTED_MODULE_37__["HttpClientModule"],
+        _angular_material_tabs__WEBPACK_IMPORTED_MODULE_27__["MatTabsModule"],
+        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_25__["MatSnackBarModule"],
+        _angular_material_select__WEBPACK_IMPORTED_MODULE_24__["MatSelectModule"],
+        _angular_material_list__WEBPACK_IMPORTED_MODULE_18__["MatListModule"],
+        _angular_material_dialog__WEBPACK_IMPORTED_MODULE_20__["MatDialogModule"],
         _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_8__["MatDatepickerModule"],
         _angular_material_core__WEBPACK_IMPORTED_MODULE_9__["MatNativeDateModule"],
         _angular_material_card__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
         _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_11__["MatProgressBarModule"],
         _angular_material_table__WEBPACK_IMPORTED_MODULE_12__["MatTableModule"],
-        ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_49__["NgxDocViewerModule"],
-        _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_18__["MatGridListModule"],
-        _angular_material_tree__WEBPACK_IMPORTED_MODULE_16__["MatTreeModule"],
+        ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_50__["NgxDocViewerModule"],
+        _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_19__["MatGridListModule"],
+        _angular_material_tree__WEBPACK_IMPORTED_MODULE_17__["MatTreeModule"],
         _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_14__["MatAutocompleteModule"],
-        _angular_forms__WEBPACK_IMPORTED_MODULE_53__["ReactiveFormsModule"],
+        _angular_forms__WEBPACK_IMPORTED_MODULE_54__["ReactiveFormsModule"],
         _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_7__["MatProgressSpinnerModule"],
         ngx_extended_pdf_viewer__WEBPACK_IMPORTED_MODULE_2__["NgxExtendedPdfViewerModule"],
         _angular_material_paginator__WEBPACK_IMPORTED_MODULE_13__["MatPaginatorModule"],
-        _angular_material_expansion__WEBPACK_IMPORTED_MODULE_30__["MatExpansionModule"],
-        _angular_material_chips__WEBPACK_IMPORTED_MODULE_28__["MatChipsModule"],
-        _angular_forms__WEBPACK_IMPORTED_MODULE_53__["FormsModule"],
-        _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_27__["MatCheckboxModule"],
-        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_83__["MatSidenavModule"],
+        _angular_material_expansion__WEBPACK_IMPORTED_MODULE_31__["MatExpansionModule"],
+        _angular_material_chips__WEBPACK_IMPORTED_MODULE_29__["MatChipsModule"],
+        _angular_forms__WEBPACK_IMPORTED_MODULE_54__["FormsModule"],
+        _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_28__["MatCheckboxModule"],
+        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_84__["MatSidenavModule"],
         _angular_material_core__WEBPACK_IMPORTED_MODULE_9__["MatRippleModule"],
-        _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_29__["MatSlideToggleModule"]] }); })();
+        _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_30__["MatSlideToggleModule"],
+        _angular_material_stepper__WEBPACK_IMPORTED_MODULE_16__["MatStepperModule"]] }); })();
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](AppModule, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"],
         args: [{
                 declarations: [
                     _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-                    _home_landing_page_landing_page_component__WEBPACK_IMPORTED_MODULE_31__["LandingPageComponent"],
-                    _home_login_login_component__WEBPACK_IMPORTED_MODULE_32__["LoginComponent"],
-                    _home_signup_signup_component__WEBPACK_IMPORTED_MODULE_33__["SignupComponent"],
-                    _home_header_header_component__WEBPACK_IMPORTED_MODULE_35__["HeaderComponent"],
-                    _home_signup_signup_action_signup_action_component__WEBPACK_IMPORTED_MODULE_38__["SignupActionComponent"],
-                    _main_main_main_component__WEBPACK_IMPORTED_MODULE_39__["MainComponent"],
-                    _main_components_main_header_main_header_component__WEBPACK_IMPORTED_MODULE_40__["MainHeaderComponent"],
-                    _main_components_artifacts_artifacts_component__WEBPACK_IMPORTED_MODULE_42__["ArtifactsComponent"],
-                    _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_66__["CreateDialogComponent"],
-                    _main_components_artifact_artifact_component__WEBPACK_IMPORTED_MODULE_44__["ArtifactComponent"],
-                    _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_68__["UploadDialogComponent"],
-                    _home_noaccess_noaccess_component__WEBPACK_IMPORTED_MODULE_47__["NoaccessComponent"],
-                    _main_components_team_team_component__WEBPACK_IMPORTED_MODULE_48__["TeamComponent"],
-                    _main_components_verify_user_verify_user_component__WEBPACK_IMPORTED_MODULE_51__["VerifyUserComponent"],
-                    _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_67__["DeleteArtifactDialogComponent"],
-                    _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_71__["InviteDialogComponent"],
-                    _main_components_team_team_invite_team_invite_component__WEBPACK_IMPORTED_MODULE_52__["TeamInviteComponent"],
-                    _main_components_work_space_work_space_component__WEBPACK_IMPORTED_MODULE_54__["WorkSpaceComponent"],
-                    _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_74__["CreateWorkSpaceDialogComponent"],
-                    _main_components_work_space_view_work_space_view_work_space_component__WEBPACK_IMPORTED_MODULE_56__["ViewWorkSpaceComponent"],
-                    _main_components_work_space_work_space_info_panel_work_space_info_panel_component__WEBPACK_IMPORTED_MODULE_58__["WorkSpaceInfoPanelComponent"],
-                    _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_76__["WorkSpaceAddMemberComponent"],
-                    _main_components_work_space_message_card_message_card_component__WEBPACK_IMPORTED_MODULE_59__["MessageCardComponent"],
-                    _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_73__["CreateMessageDialogComponent"],
-                    _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_72__["AddArtifactDialogComponent"],
-                    _main_components_work_space_work_space_message_thread_work_space_message_thread_component__WEBPACK_IMPORTED_MODULE_65__["WorkSpaceMessageThreadComponent"],
-                    _main_components_work_space_work_space_message_thread_work_space_message_thread_reply_card_work_space_message_thread_reply_card_component__WEBPACK_IMPORTED_MODULE_64__["WorkSpaceMessageThreadReplyCardComponent"],
-                    _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_75__["CreateWorkspaceThreadDialogComponent"],
-                    _main_components_chat_chat_component__WEBPACK_IMPORTED_MODULE_60__["ChatComponent"],
-                    _main_components_chat_chat_rooms_chat_rooms_component__WEBPACK_IMPORTED_MODULE_62__["ChatRoomsComponent"],
-                    _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_69__["ChatContactsDialogComponent"],
-                    _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_70__["ChangeUserPermissionsDialogComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_77__["WsdetailOverviewComponent"],
-                    _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_63__["WorkpaceDetailsComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_77__["WsdetailOverviewComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_component__WEBPACK_IMPORTED_MODULE_78__["WsdetailParticipantsComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_79__["WsdetailParticipantsActionDialogComponent"],
-                    _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_80__["AddPeopleToArtifactAccessDialogComponent"],
-                    _main_components_artifact_artifact_authorization_artifact_authorization_component__WEBPACK_IMPORTED_MODULE_82__["ArtifactAuthorizationComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_artifacts_wsdetail_artifacts_component__WEBPACK_IMPORTED_MODULE_86__["WsdetailArtifactsComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_87__["ConfirmDeleteWorkspaceComponent"],
-                    _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_88__["DocumentSearchComponent"],
-                    _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_89__["ShowArtifactInfoDialogComponent"],
+                    _home_landing_page_landing_page_component__WEBPACK_IMPORTED_MODULE_32__["LandingPageComponent"],
+                    _home_login_login_component__WEBPACK_IMPORTED_MODULE_33__["LoginComponent"],
+                    _home_signup_signup_component__WEBPACK_IMPORTED_MODULE_34__["SignupComponent"],
+                    _home_header_header_component__WEBPACK_IMPORTED_MODULE_36__["HeaderComponent"],
+                    _home_signup_signup_action_signup_action_component__WEBPACK_IMPORTED_MODULE_39__["SignupActionComponent"],
+                    _main_main_main_component__WEBPACK_IMPORTED_MODULE_40__["MainComponent"],
+                    _main_components_main_header_main_header_component__WEBPACK_IMPORTED_MODULE_41__["MainHeaderComponent"],
+                    _main_components_artifacts_artifacts_component__WEBPACK_IMPORTED_MODULE_43__["ArtifactsComponent"],
+                    _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_67__["CreateDialogComponent"],
+                    _main_components_artifact_artifact_component__WEBPACK_IMPORTED_MODULE_45__["ArtifactComponent"],
+                    _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_69__["UploadDialogComponent"],
+                    _home_noaccess_noaccess_component__WEBPACK_IMPORTED_MODULE_48__["NoaccessComponent"],
+                    _main_components_team_team_component__WEBPACK_IMPORTED_MODULE_49__["TeamComponent"],
+                    _main_components_verify_user_verify_user_component__WEBPACK_IMPORTED_MODULE_52__["VerifyUserComponent"],
+                    _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_68__["DeleteArtifactDialogComponent"],
+                    _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_72__["InviteDialogComponent"],
+                    _main_components_team_team_invite_team_invite_component__WEBPACK_IMPORTED_MODULE_53__["TeamInviteComponent"],
+                    _main_components_work_space_work_space_component__WEBPACK_IMPORTED_MODULE_55__["WorkSpaceComponent"],
+                    _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_75__["CreateWorkSpaceDialogComponent"],
+                    _main_components_work_space_view_work_space_view_work_space_component__WEBPACK_IMPORTED_MODULE_57__["ViewWorkSpaceComponent"],
+                    _main_components_work_space_work_space_info_panel_work_space_info_panel_component__WEBPACK_IMPORTED_MODULE_59__["WorkSpaceInfoPanelComponent"],
+                    _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_77__["WorkSpaceAddMemberComponent"],
+                    _main_components_work_space_message_card_message_card_component__WEBPACK_IMPORTED_MODULE_60__["MessageCardComponent"],
+                    _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_74__["CreateMessageDialogComponent"],
+                    _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_73__["AddArtifactDialogComponent"],
+                    _main_components_work_space_work_space_message_thread_work_space_message_thread_component__WEBPACK_IMPORTED_MODULE_66__["WorkSpaceMessageThreadComponent"],
+                    _main_components_work_space_work_space_message_thread_work_space_message_thread_reply_card_work_space_message_thread_reply_card_component__WEBPACK_IMPORTED_MODULE_65__["WorkSpaceMessageThreadReplyCardComponent"],
+                    _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_76__["CreateWorkspaceThreadDialogComponent"],
+                    _main_components_chat_chat_component__WEBPACK_IMPORTED_MODULE_61__["ChatComponent"],
+                    _main_components_chat_chat_rooms_chat_rooms_component__WEBPACK_IMPORTED_MODULE_63__["ChatRoomsComponent"],
+                    _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_70__["ChatContactsDialogComponent"],
+                    _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_71__["ChangeUserPermissionsDialogComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_78__["WsdetailOverviewComponent"],
+                    _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_64__["WorkpaceDetailsComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_overview_wsdetail_overview_component__WEBPACK_IMPORTED_MODULE_78__["WsdetailOverviewComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_component__WEBPACK_IMPORTED_MODULE_79__["WsdetailParticipantsComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_80__["WsdetailParticipantsActionDialogComponent"],
+                    _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_81__["AddPeopleToArtifactAccessDialogComponent"],
+                    _main_components_artifact_artifact_authorization_artifact_authorization_component__WEBPACK_IMPORTED_MODULE_83__["ArtifactAuthorizationComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_artifacts_wsdetail_artifacts_component__WEBPACK_IMPORTED_MODULE_87__["WsdetailArtifactsComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_88__["ConfirmDeleteWorkspaceComponent"],
+                    _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_89__["DocumentSearchComponent"],
+                    _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_90__["ShowArtifactInfoDialogComponent"],
                 ],
                 imports: [
                     _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -4786,70 +4932,71 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
                     _angular_material_button__WEBPACK_IMPORTED_MODULE_15__["MatButtonModule"],
                     _angular_material_menu__WEBPACK_IMPORTED_MODULE_6__["MatMenuModule"],
                     _angular_material_menu__WEBPACK_IMPORTED_MODULE_6__["MatMenuModule"],
-                    _angular_material_icon__WEBPACK_IMPORTED_MODULE_34__["MatIconModule"],
-                    _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_20__["MatToolbarModule"],
-                    _angular_material_input__WEBPACK_IMPORTED_MODULE_21__["MatInputModule"],
-                    _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_22__["MatTooltipModule"],
-                    _angular_material_form_field__WEBPACK_IMPORTED_MODULE_25__["MatFormFieldModule"],
-                    _angular_common_http__WEBPACK_IMPORTED_MODULE_36__["HttpClientModule"],
-                    _angular_material_tabs__WEBPACK_IMPORTED_MODULE_26__["MatTabsModule"],
-                    _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_24__["MatSnackBarModule"],
-                    _angular_material_select__WEBPACK_IMPORTED_MODULE_23__["MatSelectModule"],
-                    _angular_material_list__WEBPACK_IMPORTED_MODULE_17__["MatListModule"],
-                    _angular_material_dialog__WEBPACK_IMPORTED_MODULE_19__["MatDialogModule"],
+                    _angular_material_icon__WEBPACK_IMPORTED_MODULE_35__["MatIconModule"],
+                    _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_21__["MatToolbarModule"],
+                    _angular_material_input__WEBPACK_IMPORTED_MODULE_22__["MatInputModule"],
+                    _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_23__["MatTooltipModule"],
+                    _angular_material_form_field__WEBPACK_IMPORTED_MODULE_26__["MatFormFieldModule"],
+                    _angular_common_http__WEBPACK_IMPORTED_MODULE_37__["HttpClientModule"],
+                    _angular_material_tabs__WEBPACK_IMPORTED_MODULE_27__["MatTabsModule"],
+                    _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_25__["MatSnackBarModule"],
+                    _angular_material_select__WEBPACK_IMPORTED_MODULE_24__["MatSelectModule"],
+                    _angular_material_list__WEBPACK_IMPORTED_MODULE_18__["MatListModule"],
+                    _angular_material_dialog__WEBPACK_IMPORTED_MODULE_20__["MatDialogModule"],
                     _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_8__["MatDatepickerModule"],
                     _angular_material_core__WEBPACK_IMPORTED_MODULE_9__["MatNativeDateModule"],
                     _angular_material_card__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
                     _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_11__["MatProgressBarModule"],
                     _angular_material_table__WEBPACK_IMPORTED_MODULE_12__["MatTableModule"],
-                    ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_49__["NgxDocViewerModule"],
-                    _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_18__["MatGridListModule"],
-                    _angular_material_tree__WEBPACK_IMPORTED_MODULE_16__["MatTreeModule"],
+                    ngx_doc_viewer__WEBPACK_IMPORTED_MODULE_50__["NgxDocViewerModule"],
+                    _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_19__["MatGridListModule"],
+                    _angular_material_tree__WEBPACK_IMPORTED_MODULE_17__["MatTreeModule"],
                     _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_14__["MatAutocompleteModule"],
-                    _angular_forms__WEBPACK_IMPORTED_MODULE_53__["ReactiveFormsModule"],
+                    _angular_forms__WEBPACK_IMPORTED_MODULE_54__["ReactiveFormsModule"],
                     _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_7__["MatProgressSpinnerModule"],
                     ngx_extended_pdf_viewer__WEBPACK_IMPORTED_MODULE_2__["NgxExtendedPdfViewerModule"],
                     _angular_material_paginator__WEBPACK_IMPORTED_MODULE_13__["MatPaginatorModule"],
-                    _angular_material_expansion__WEBPACK_IMPORTED_MODULE_30__["MatExpansionModule"],
-                    _angular_material_chips__WEBPACK_IMPORTED_MODULE_28__["MatChipsModule"],
-                    _angular_forms__WEBPACK_IMPORTED_MODULE_53__["FormsModule"],
-                    _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_27__["MatCheckboxModule"],
-                    _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_83__["MatSidenavModule"],
+                    _angular_material_expansion__WEBPACK_IMPORTED_MODULE_31__["MatExpansionModule"],
+                    _angular_material_chips__WEBPACK_IMPORTED_MODULE_29__["MatChipsModule"],
+                    _angular_forms__WEBPACK_IMPORTED_MODULE_54__["FormsModule"],
+                    _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_28__["MatCheckboxModule"],
+                    _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_84__["MatSidenavModule"],
                     _angular_material_core__WEBPACK_IMPORTED_MODULE_9__["MatRippleModule"],
-                    _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_29__["MatSlideToggleModule"]
+                    _angular_material_slide_toggle__WEBPACK_IMPORTED_MODULE_30__["MatSlideToggleModule"],
+                    _angular_material_stepper__WEBPACK_IMPORTED_MODULE_16__["MatStepperModule"]
                 ],
                 entryComponents: [
-                    _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_72__["AddArtifactDialogComponent"],
-                    _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_66__["CreateDialogComponent"],
-                    _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_68__["UploadDialogComponent"],
-                    _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_67__["DeleteArtifactDialogComponent"],
-                    _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_71__["InviteDialogComponent"],
-                    _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_74__["CreateWorkSpaceDialogComponent"],
-                    _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_76__["WorkSpaceAddMemberComponent"],
-                    _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_73__["CreateMessageDialogComponent"],
-                    _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_75__["CreateWorkspaceThreadDialogComponent"],
-                    _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_69__["ChatContactsDialogComponent"],
-                    _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_70__["ChangeUserPermissionsDialogComponent"],
-                    _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_63__["WorkpaceDetailsComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_79__["WsdetailParticipantsActionDialogComponent"],
-                    _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_80__["AddPeopleToArtifactAccessDialogComponent"],
-                    _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_87__["ConfirmDeleteWorkspaceComponent"],
-                    _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_88__["DocumentSearchComponent"],
-                    _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_89__["ShowArtifactInfoDialogComponent"]
+                    _main_dialogs_workspace_add_artifact_dialog_add_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_73__["AddArtifactDialogComponent"],
+                    _main_dialogs_artifacts_create_artifact_dialog_create_dialog_component__WEBPACK_IMPORTED_MODULE_67__["CreateDialogComponent"],
+                    _main_dialogs_artifacts_upload_artifact_dialog_upload_dialog_component__WEBPACK_IMPORTED_MODULE_69__["UploadDialogComponent"],
+                    _main_dialogs_artifacts_delete_artifact_dialog_delete_artifact_dialog_component__WEBPACK_IMPORTED_MODULE_68__["DeleteArtifactDialogComponent"],
+                    _main_dialogs_team_team_invite_dialog_invite_dialog_component__WEBPACK_IMPORTED_MODULE_72__["InviteDialogComponent"],
+                    _main_dialogs_workspace_create_work_space_dialog_create_work_space_dialog_component__WEBPACK_IMPORTED_MODULE_75__["CreateWorkSpaceDialogComponent"],
+                    _main_dialogs_workspace_work_space_add_member_dialog_work_space_add_member_component__WEBPACK_IMPORTED_MODULE_77__["WorkSpaceAddMemberComponent"],
+                    _main_dialogs_workspace_create_message_dialog_create_message_dialog_component__WEBPACK_IMPORTED_MODULE_74__["CreateMessageDialogComponent"],
+                    _main_dialogs_workspace_create_workspace_thread_dialog_create_workspace_thread_dialog_component__WEBPACK_IMPORTED_MODULE_76__["CreateWorkspaceThreadDialogComponent"],
+                    _main_dialogs_chat_chat_contacts_dialog_chat_contacts_dialog_component__WEBPACK_IMPORTED_MODULE_70__["ChatContactsDialogComponent"],
+                    _main_dialogs_team_change_user_permissions_dialog_change_user_permissions_dialog_component__WEBPACK_IMPORTED_MODULE_71__["ChangeUserPermissionsDialogComponent"],
+                    _main_dialogs_workspace_workspace_details_workpace_details_component__WEBPACK_IMPORTED_MODULE_64__["WorkpaceDetailsComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_participants_wsdetail_participants_action_dialog_wsdetail_participants_action_dialog_component__WEBPACK_IMPORTED_MODULE_80__["WsdetailParticipantsActionDialogComponent"],
+                    _main_dialogs_workspace_add_people_to_artifact_access_dialog_add_people_to_artifact_access_dialog_component__WEBPACK_IMPORTED_MODULE_81__["AddPeopleToArtifactAccessDialogComponent"],
+                    _main_dialogs_workspace_workspace_details_wsdetail_overview_confirm_delete_workspace_confirm_delete_workspace_component__WEBPACK_IMPORTED_MODULE_88__["ConfirmDeleteWorkspaceComponent"],
+                    _main_components_artifact_document_search_document_search_component__WEBPACK_IMPORTED_MODULE_89__["DocumentSearchComponent"],
+                    _main_dialogs_artifacts_show_artifact_info_dialog_show_artifact_info_dialog_component__WEBPACK_IMPORTED_MODULE_90__["ShowArtifactInfoDialogComponent"]
                 ],
                 providers: [
-                    _services_user_service__WEBPACK_IMPORTED_MODULE_37__["UserService"],
-                    _services_organization_service__WEBPACK_IMPORTED_MODULE_41__["OrganizationService"],
-                    _services_artifacts_service__WEBPACK_IMPORTED_MODULE_43__["ArtifactsService"],
-                    _services_document_service__WEBPACK_IMPORTED_MODULE_45__["DocumentService"],
-                    _models_environment__WEBPACK_IMPORTED_MODULE_46__["Environment"],
-                    _services_member_service__WEBPACK_IMPORTED_MODULE_50__["MemberService"],
-                    _services_work_space_service__WEBPACK_IMPORTED_MODULE_55__["WorkSpaceService"],
-                    _services_util_service__WEBPACK_IMPORTED_MODULE_57__["UtilService"],
-                    _services_chat_service__WEBPACK_IMPORTED_MODULE_61__["ChatService"],
-                    _services_util_workspace_manager_service__WEBPACK_IMPORTED_MODULE_81__["WorkspaceManagerService"],
-                    _services_util_navigation_service__WEBPACK_IMPORTED_MODULE_84__["NavigationService"],
-                    _services_util_artifact_manager_service__WEBPACK_IMPORTED_MODULE_85__["ArtifactManagerService"]
+                    _services_user_service__WEBPACK_IMPORTED_MODULE_38__["UserService"],
+                    _services_organization_service__WEBPACK_IMPORTED_MODULE_42__["OrganizationService"],
+                    _services_artifacts_service__WEBPACK_IMPORTED_MODULE_44__["ArtifactsService"],
+                    _services_document_service__WEBPACK_IMPORTED_MODULE_46__["DocumentService"],
+                    _models_environment__WEBPACK_IMPORTED_MODULE_47__["Environment"],
+                    _services_member_service__WEBPACK_IMPORTED_MODULE_51__["MemberService"],
+                    _services_work_space_service__WEBPACK_IMPORTED_MODULE_56__["WorkSpaceService"],
+                    _services_util_service__WEBPACK_IMPORTED_MODULE_58__["UtilService"],
+                    _services_chat_service__WEBPACK_IMPORTED_MODULE_62__["ChatService"],
+                    _services_util_workspace_manager_service__WEBPACK_IMPORTED_MODULE_82__["WorkspaceManagerService"],
+                    _services_util_navigation_service__WEBPACK_IMPORTED_MODULE_85__["NavigationService"],
+                    _services_util_artifact_manager_service__WEBPACK_IMPORTED_MODULE_86__["ArtifactManagerService"]
                 ],
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
             }]
