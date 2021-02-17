@@ -4,7 +4,11 @@ const db = require('./../config/db')
 exports.createOrg = (req,res)=>{
 
     const userID = req.session.userInfo.user_id;
-    const orgName = req.body.name;
+    const { name : orgName, 
+        phone1,
+        phone2,
+        address1,
+        address2, pricePackageID} = req.body;
     
     let accessCode = crypto.randomBytes(30).toString('hex');
  
@@ -17,9 +21,9 @@ exports.createOrg = (req,res)=>{
         {
             // add organization to the database
             db.query(`INSERT INTO public.organizations 
-            (user_id, name, type, org_code,"createdAt","updatedAt") 
-            VALUES ($1, $2, '', $3, $4, $5) RETURNING org_id,user_id, name, type,"createdAt","updatedAt"`,
-            [userID,orgName,accessCode,new Date(),new Date()],(err,result)=>{
+            (user_id, name, type, org_code,"createdAt","updatedAt",address_line_1,address_line_2,phone_line_1,phone_line_2,package_id) 
+            VALUES ($1, $2, '', $3, $4, $5, $6, $7, $8, $9, $10) RETURNING org_id,user_id, name, type,"createdAt","updatedAt"`,
+            [userID,orgName,accessCode,new Date(),new Date(),address1,address2,phone1,phone2,pricePackageID],(err,result)=>{
                 if (err) throw err;
                 // get organization info to store in session object in req object
 

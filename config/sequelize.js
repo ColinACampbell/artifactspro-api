@@ -2,6 +2,7 @@ const db = require("./../models/index")
 
 async function setUpModels()
 {
+    await db.organization_pricing_packages.sync({alter:true})
     await db.users.sync({alter:true})
     await db.organizations.sync({alter:true})
     await db.organization_members.sync({alter:true})
@@ -19,7 +20,7 @@ async function setUpModels()
     await db.chat_messages.sync({alter:true})
     await db.work_space_references.sync({alter:true})
     await db.work_space_ref_items.sync({alter:true})
-    await db.organization_pricing_packages.sync({alter:true})
+    
 }
 
 async function setUpModelsGeneral()
@@ -28,5 +29,5 @@ async function setUpModelsGeneral()
 }
 
 ( async()=>{
-    await setUpModelsGeneral()
+    await setUpModels()
 })()
