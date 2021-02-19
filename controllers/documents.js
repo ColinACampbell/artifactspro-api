@@ -93,6 +93,7 @@ exports.upload = (req, res) => {
         })
 }
 
+// TODO : Work on ways on how to secure this
 exports.preview = (req, res) => {
     let doc = req.params.docName;
     let artID = req.params.artID;
