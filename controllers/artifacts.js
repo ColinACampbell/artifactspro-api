@@ -169,7 +169,9 @@ exports.getFromID = async (req,res)=>{
          } else if (hasAccess && isSecured){ // If it is and the user has access just give them access
             isArtifactNeeded = true
          } else { // If it is and the user does not have access ask for the password
-            res.status(401).json({message:"password_needed"})
+            const query = 'select * from artifacts where art_id = $1 and org_id = $2'
+            const artifactResult = await db.query(query,[artID,orgID])
+            res.status(401).json({message:"password_needed",artifact: artifactResult.rows[0]})
          }
 
          if (isArtifactNeeded)

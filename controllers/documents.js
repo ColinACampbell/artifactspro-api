@@ -14,7 +14,9 @@ const fileTypes = {
 exports.docFromArtFromID = (req, res) => {
     let artifactID = req.params.artID;
     // write code to check on the user id, prevent any other user from getting access to the resource purposefully or accidentally
-    db.query('SELECT doc_id, version, comment, user_id, date_uploaded, date_modified, art_id, type, file_size FROM documents WHERE art_id = $1', [artifactID],
+    db.query(`SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
+    inner join users u2 on u2.user_id = documents.user_id 
+    WHERE art_id = $1`, [artifactID],
         (err, result) => {
             if (err) throw err;
             let docs = result.rows;
