@@ -82,6 +82,7 @@ app.use('/api/art',authMiddleware);
 app.use('/api/members/',authMiddleware);
 app.use('/api/workspace/',authMiddleware);
 app.use('/api/chats/',authMiddleware)
+app.use('/api/docs/',authMiddleware)
 
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
 app.use('/api/user/signup/process-1', userMiddleware.password); // middleware to hash password on user routes

@@ -2,6 +2,7 @@ const db = require('./../config/db');
 const fs = require('fs');
 const path = require('path')
 const config = require('./../config/configControl')
+const encryptionUtil = require('./../utils/encryptionUtil');
 
 const fileTypes = {
     'application/msword': 'doc',
@@ -80,6 +81,7 @@ exports.upload = (req, res) => {
 
     let buffer = Buffer.from(base64Data, "base64"); // convert the file buffer
     //fs.writeFileSync(`temp/${version}.${fileTypes[fileType]}`, buffer);
+    //buffer = encryptionUtil.encryptBuffer(buffer);
 
     db.query(`INSERT INTO documents
     ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type","file_size","createdAt","updatedAt")
@@ -93,7 +95,6 @@ exports.upload = (req, res) => {
         })
 }
 
-// TODO : Work on ways on how to secure this
 exports.preview = (req, res) => {
     let doc = req.params.docName;
     let artID = req.params.artID;
@@ -101,6 +102,7 @@ exports.preview = (req, res) => {
     res.sendFile(link);
 }
 
+// TODO : Update code to allow user to get the link only if they have access to the link
 exports.getLink = (req, res, next) => {
 
     const artID = req.params.artID;
@@ -119,6 +121,8 @@ exports.getLink = (req, res, next) => {
             let doc = results.rows[0];
 
             let filePath = `${dir}/${docID}.${fileTypes[doc.type]}`
+
+            //const data = encryptionUtil.decryptBuffer(doc.data);
 
             if (!fs.existsSync(filePath)) // check if the file exists
                 fs.writeFileSync(filePath, doc.data);
