@@ -68,7 +68,7 @@ exports.search = (req,res) => {
 exports.upload = (req, res) => {
 
     let artID = req.params.artID;
-    let userID = req.session.userInfo.user_id;
+    let userID = req.token_data.userInfo.user_id;
     let dateModified = req.body.date_modified;
     let dateUploaded = req.body.date_uploaded;
     let data = req.body.data;

@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("./../config/db")
 
 router.get("/active-chats", async (req,res)=>{
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
     const query = `select crm.chat_room_id, 
     (select cm.chat_message_id from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as chat_message_id,
     (select chat_message_text from chat_messages cm where cm.chat_room_id = crm.chat_room_id order by cm.chat_message_id desc limit 1) as chat_message_text,

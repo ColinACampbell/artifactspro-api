@@ -14,6 +14,6 @@ exports.encryptArtifactPassword = (req,res,next) =>{
         .digest("hex");
     }
 
-    req.session.artifactPassword = password
+    req.artifactPassword = password
     next()
 }

@@ -1,15 +1,18 @@
 const crypto = require('crypto');
+const { userInfo } = require('os');
 const db = require('./../config/db')
+const jwtUtil = require('./../utils/jwtUtil');
 
 exports.createOrg = (req,res)=>{
 
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
+    const userInfo = req.token_data.userInfo.user_id;
     const { name : orgName, 
         phone1,
         phone2,
         address1,
         address2, pricePackageID} = req.body;
-    
+    console.log(req.body)
     let accessCode = crypto.randomBytes(30).toString('hex');
  
     // check if the organization key already exists
@@ -27,13 +30,19 @@ exports.createOrg = (req,res)=>{
                 if (err) throw err;
                 // get organization info to store in session object in req object
 
-                req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
+                let orgInfo = result.rows[0]; // store information about the organization so it can be used later
                 const orgID = result.rows[0].org_id;
  
                 // store user as a member of that organization
+                // TODO : Test this thorughly
                 db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'owner', new Date(),new Date()],(err,result)=>{
                     if (err) throw err;
-                    res.status(201).json();
+                    jwtUtil.createToken(userInfo,orgInfo).then((token)=>{
+                        res.status(201).json({
+                            token
+                        });
+                    })
+                
                 });
                     
             })
@@ -46,7 +55,7 @@ exports.createOrg = (req,res)=>{
 }
 
 exports.info = (req,res)=>{
-    let org_id = req.session.orgInfo.org_id
+    let org_id = req.token_data.orgInfo.org_id
     db.query('SELECT org_id, name, "createdAt", "type", user_id FROM organizations WHERE org_id = $1',[org_id],
     (err,result)=>{
         res.json(result.rows[0])
@@ -66,11 +75,12 @@ exports.infoFromAccessCode = (req,res)=>{
 exports.inviteFromAccessCode = (req,res)=>
 {
     let code = req.params.code; 
-    let userID = req.session.userInfo.user_id; // this session was set from the signup process
+    let userID = req.token_data.userInfo.user_id; // this session was set from the signup process
     db.query("SELECT * FROM organizations WHERE org_code = $1",[code],(err,result)=>{
         if (err) throw err;
 
-        req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
+        // TODO : Make this work for user
+        //req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
         const orgID = result.rows[0].org_id;
 
         // store user as a member of that organization

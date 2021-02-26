@@ -1,13 +1,14 @@
 const db = require('./../config/db')
 const config = require('./../config/configControl')
 const mailTransporter = require('./../config/mail')
+const jwtUtil = require('../utils/jwtUtil')
 
 // TODO : Test Everything here
 
 exports.auth = (req, res) => {
     
     let status = 401
-    if (req.session.userInfo)
+    if (req.token_data.userInfo)
         status = 200
         
     res.status(status).json({})
@@ -40,27 +41,34 @@ exports.signup = (req, res) => {
                     var mailOptions = {
                         from: 'app.artifactspro@gmail.com',
                         to: email,
-                        subject: 'Verify Your Account !',
-                        text: `Please click on the link to verify your ArtifactsPro account ${config.host}/account/verify/${accessCode}`
+                        subject: 'Artifacts Pro : Verify Your Account !',
+                        text: `Thanks for signing up on artifacts pro. 
+                                Please click on the link to verify 
+                                your ArtifactsPro account 
+                                ${config.host}/account/verify/${accessCode}`
                     };
                 
                     // TODO : Remove this when finished
                     
+                    /** 
                     mailTransporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
                             console.log('Email sent: ' + info.response);
                         }
-                    });
+                    }); **/
 
                     // fetch user information and store it in the browser using sesssions
                     db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
                         if (err) throw err;
-
-                        req.session.userInfo = result.rows[0];
-
-                        res.status(201).json({});
+                        // Test this out with organization sign up
+                        const userInfo = result.rows[0];
+                        jwtUtil.createToken(userInfo,{}).then((token)=>{
+                            res.status(201).json({
+                                token
+                            });
+                        })
                     });
 
                 })
@@ -76,14 +84,17 @@ exports.login = (req, res) => {
     let email = req.body.email;
     let password = req.user.password;
 
-    db.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password],
+    db.query('SELECT first_name, last_name, email, is_verified, user_id FROM users WHERE email = $1 AND password = $2', [email, password],
         (err, result) => {
             if (err) throw err;
 
             let rowCount = result.rowCount;
 
+            let userInfo = {}
             if (rowCount > 0) {
-                req.session.userInfo = result.rows[0];
+                //req.session.userInfo = result.rows[0];
+                userInfo = result.rows[0]
+
 
                 db.query(`
             SELECT 
@@ -97,8 +108,15 @@ exports.login = (req, res) => {
             WHERE users.email = $1
             `, [email], (err, result) => {
                     if (err) throw err
-                    req.session.orgInfo = result.rows[0];
-                    res.status(200).json({})
+                    
+                    //req.session.orgInfo = result.rows[0];
+                    const orgInfo = result.rows[0];
+                    jwtUtil.createToken(userInfo,orgInfo)
+                    .then((token)=>{
+                        res.status(200).json({
+                            token 
+                        })
+                    })
                 })
             } else {
                
@@ -110,11 +128,11 @@ exports.login = (req, res) => {
 
 exports.info = (req, res) => {
 
-    let first_name = req.session.userInfo.first_name;
-    let last_name = req.session.userInfo.last_name;
-    let email = req.session.userInfo.email
-    let is_verified = req.session.userInfo.is_verified;
-    let user_id = req.session.userInfo.user_id;
+    let first_name = req.token_data.userInfo.first_name;
+    let last_name = req.token_data.userInfo.last_name;
+    let email = req.token_data.userInfo.email
+    let is_verified = req.token_data.userInfo.is_verified;
+    let user_id = req.token_data.userInfo.user_id;
 
     res.json({
         user_id,
@@ -161,6 +179,8 @@ exports.verifyUser = (req, res) => {
         })
 }
 
+
+// TODO : Make this redudant
 exports.logout = (req,res)=>{
     req.session.userInfo = null;
     req.session.orgInfo = null;

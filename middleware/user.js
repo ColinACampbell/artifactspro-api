@@ -21,6 +21,7 @@ exports.password = (req,res,next) =>
     next();
 }
 
+// TODO : Make this redundant
 exports.userInformation = (req,res,next) =>
 {
     if (req.session.userInfo)

@@ -17,7 +17,7 @@ const chatsRoute = require('./routes/chats');
 const billingRoute = require('./routes/billing');
 // Middlewares
 const userMiddleware = require('./middleware/user');
-const authMiddleware = require('./middleware/auth');
+const authMiddleware = require('./middleware/authenticate');
 
 //require('./config/mail')
 

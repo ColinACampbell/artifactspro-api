@@ -1,30 +1,29 @@
 const jwt = require("jsonwebtoken")
-const config = require('./../config/config')
+const jwtUtil = require('./../utils/jwtUtil')
 
-const auth = (req,res,next) =>{
+module.exports = (req,res,next) =>{
 
-    
+    console.log("jwt hit !!!")
+
     let authHeader = req.header("Authorization");
-    
     console.log(authHeader)
     if (authHeader === undefined)
-        res.status(401);
+        return res.status(401).json({});
 
     let token = authHeader.substring(7)
 
     if (token === undefined)
-        res.status(401).json({})
-    
-    
-    let authInfo = jwt.verify(token,config.jwt.secret)
-    console.log("JWT Auth Hit");
+        return res.status(401).json({})
+    else
+    {
+        jwtUtil.checkIfTokenIsVerified(token)
+        .then((decodedData)=>{
+            req.token_data = decodedData;
+            next()
+        }).catch((reason)=>{
+            console.log(reason);
+            res.status(401).json({})
+        })
+    }
 
-    if (authInfo === undefined) 
-        res.status(401).json({})
-
-    console.log(authInfo)
-    req.authentication = authInfo;
-    next()
 } 
-
-module.exports = auth

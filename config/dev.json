@@ -9,7 +9,7 @@
     "mail" : {
         "service" : "gmail",
         "user" : "app.artifactspro@gmail.com",
-        "password" : "pisspi$$"
+        "password" : "pisspi$$.123"
     },
     "jwt" : {
         "secret" : "sweet"

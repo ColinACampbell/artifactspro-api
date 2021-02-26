@@ -1,8 +1,9 @@
 const db = require('./../config/db')
 
 exports.getAll = (req,res)=>{
-    let orgID = req.session.orgInfo.org_id;
-    let userID = req.session.userInfo.user_id;
+    console.log(req.token_data)
+    let orgID = req.token_data.orgInfo.org_id;
+    let userID = req.token_data.userInfo.user_id;
     db.query('SELECT * FROM artifacts where org_id = $1 AND user_id = $2',[orgID,userID],
     (err,result)=>{
         if (err) throw err;
@@ -16,7 +17,7 @@ exports.getByWorkspace = async (req,res) =>
 {
     //const userID = req.session.userInfo.user_id;
     const workspaceName = req.query.workspaceName
-    const org = req.session.orgInfo.org_id;
+    const org = req.token_data.orgInfo.org_id;
 
     let query = `select 
     a.art_id, a.user_id, a."owner", 
@@ -34,7 +35,7 @@ exports.getByWorkspace = async (req,res) =>
 }
 
 exports.searchByWorkspace = async (req,res) => {
-    let orgID = req.session.orgInfo.org_id;
+    let orgID = req.token_data.orgInfo.org_id;
     //let userID = req.session.userInfo.user_id;
     const { key,workspaceName } = req.query;
     
@@ -73,8 +74,8 @@ exports.searchByWorkspace = async (req,res) => {
 // TODO : Change the response type for client
 exports.create = (req,res)=>{
 
-    let orgInfo = req.session.orgInfo;
-    let userInfo = req.session.userInfo;
+    let orgInfo = req.token_data.orgInfo;
+    let userInfo = req.token_data.userInfo;
     let userID = userInfo.user_id;
     let orgID = orgInfo.org_id;
 
@@ -105,9 +106,9 @@ exports.getFromID = async (req,res)=>{
 
     let artID = req.params.artID;
     let workspaceReference = req.query.ref // Used to get the user password
-    let orgInfo = req.session.orgInfo;
+    let orgInfo = req.token_data.orgInfo;
     const orgID = orgInfo.org_id;
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
 
     workspaceReference = workspaceReference.replace(/^'(.*)'$/, '$1'); // remove surrounding single quotes from string like 'Workspace' to Workspace
     // When been accessed without reference, no workspace is specified, and it means it is being accessed by the user
@@ -207,8 +208,8 @@ exports.deleteArtifactFromID =  async function(req,res){
 }
 
 exports.search = async (req,res) => {
-    let orgID = req.session.orgInfo.org_id;
-    let userID = req.session.userInfo.user_id;
+    let orgID = req.token_data.orgInfo.org_id;
+    let userID = req.token_data.userInfo.user_id;
     const { key } = req.query;
     
     let query = `SELECT * FROM artifacts 
@@ -233,7 +234,7 @@ exports.search = async (req,res) => {
 exports.getPermissionsForArtifact = (req,res) =>{
     const { workspaceName } = req.query;
     const { artID } = req.params;
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
     db.query(`select permissions from workspace_art_access_users waau 
         inner join work_space_artifacts wsa on wsa.work_space_artifacts_id = waau.work_space_artifacts_id 
         inner join work_spaces ws on ws.work_space_id = wsa.work_space_artifacts_id 

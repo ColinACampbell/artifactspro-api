@@ -3,8 +3,8 @@ const config = require('./../config/configControl');
 const { use } = require('../routes/member');
 
 exports.getUserAsMember = async (req,res) => {
-    const userID = req.session.userInfo.user_id;
-    let orgID = req.session.orgInfo.org_id;
+    const userID = req.token_data.userInfo.user_id;
+    let orgID = req.token_data.orgInfo.org_id;
 
     const results = await db.query(`select users.user_id, role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
@@ -14,8 +14,8 @@ exports.getUserAsMember = async (req,res) => {
 }
 
 exports.getAll = (req,res)=>{
-    let userID = req.session.userInfo.user_id;
-    let orgID = req.session.orgInfo.org_id;
+    let userID = req.token_data.userInfo.user_id;
+    let orgID = req.token_data.orgInfo.org_id;
     db.query(`select users.user_id, role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
     where org_id = $1 and users.user_id <> $2`,[orgID,userID],
@@ -26,7 +26,7 @@ exports.getAll = (req,res)=>{
 }
 
 exports.getInviteCode = (req,res)=>{
-    let orgID = req.session.orgInfo.org_id;
+    let orgID = req.token_data.orgInfo.org_id;
     db.query('SELECT * FROM organizations WHERE org_id = $1',[orgID],(err,result)=>{
         let orgCode = result.rows[0].org_code;
         let serverhost = config.dev ? 'http://localhost:4200': config.host
@@ -36,7 +36,7 @@ exports.getInviteCode = (req,res)=>{
 }
 
 exports.getMemberFromID = async (req,res) =>{
-    const orgID = req.session.orgInfo.org_id;
+    const orgID = req.token_data.orgInfo.org_id;
     const userID = req.query.id;
     const results = await db.query(`select users.user_id, role, email, first_name, last_name from organization_members
     INNER JOIN users on users.user_id = organization_members.user_id
@@ -45,7 +45,7 @@ exports.getMemberFromID = async (req,res) =>{
 }
  
 exports.changeMemberRole = async (req,res) => {
-    const orgID = req.session.orgInfo.org_id;
+    const orgID = req.token_data.orgInfo.org_id;
     const userID = req.body.userID; // userID of member whose role to be changed NOT current user
     const role = req.body.role;
 

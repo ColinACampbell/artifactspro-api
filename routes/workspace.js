@@ -5,8 +5,8 @@ const db = require('./../config/db');
 const workspaceMiddleware = require('./../middleware/workspace-middleware')
 
 router.get("/names", async (req, res) => {
-    const userID = req.session.userInfo.user_id;
-    const orgID = req.session.orgInfo.org_id;
+    const userID = req.token_data.userInfo.user_id;
+    const orgID = req.token_data.orgInfo.org_id;
     const query = `select ws.work_space_name from work_spaces ws 
     inner join work_space_members wsm on wsm.work_space_id = ws.work_space_id 
     inner join users u on u.user_id = wsm.user_id 
@@ -17,7 +17,7 @@ router.get("/names", async (req, res) => {
 
 // Gets workspaces from user 
 router.get('/all', (req, res) => {
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
     db.query(`select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
     inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
     inner join users on users.user_id = work_space_members.user_id 
@@ -29,8 +29,8 @@ router.get('/all', (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
-    const userID = req.session.userInfo.user_id;
-    const orgID = req.session.orgInfo.org_id;
+    const userID = req.token_data.userInfo.user_id;
+    const orgID = req.token_data.orgInfo.org_id;
 
     let workspaceName = req.body.workspace_name;
     let dateCreated = req.body.date_created;
@@ -59,7 +59,7 @@ router.delete("/:workspaceID/delete",async (req,res)=>{
 // Search workspace by name
 router.get("/search", async (req, res) => {
     const { key } = req.query;
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
 
     let query = `select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
     inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
@@ -81,7 +81,7 @@ router.get("/search", async (req, res) => {
 
 router.get("/info", async (req, res) => {
     const workspaceID = req.query.id;
-    const orgID = req.session.orgInfo.org_id;
+    const orgID = req.token_data.orgInfo.org_id;
 
     const result = await db.query("select * from work_spaces ws where ws.org_id = $1 and ws.work_space_id = $2", [orgID, workspaceID])
 
@@ -93,8 +93,8 @@ router.post("/authorize-password/workspace-artifact", workspaceMiddleware.encryp
     const workspaceReference = req.query.ref;
 
     const { artifactID } = req.body;
-    const password = req.session.artifactPassword
-    const orgID = req.session.orgInfo.org_id
+    const password = req.artifactPassword
+    const orgID = req.token_data.orgInfo.org_id
 
     const result1 = await db.query(`select * from work_spaces ws where ws.work_space_name = $1 and ws.org_id = $2`, [workspaceReference, orgID]) // select workspace ID from the ref name
     const workspaceID = result1.rows[0].work_space_id
@@ -110,7 +110,7 @@ router.post("/authorize-password/workspace-artifact", workspaceMiddleware.encryp
 // suggest email to add user to workspace
 router.get('/suggestion/email', async (req, res) => {
 
-    const orgID = req.session.orgInfo.org_id;
+    const orgID = req.token_data.orgInfo.org_id;
     let email = req.query.email;
 
     let result = await db.query(`select email from users 
@@ -122,7 +122,7 @@ router.get('/suggestion/email', async (req, res) => {
 
 router.get("/:workspaceID/all-participants", async (req, res) => {
     const workspaceID = req.params.workspaceID;
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
     const result = await db.query(`select 
         u.user_id, wsm.work_space_member_id,
         u.first_name, u.last_name,u.email, wsm."role"
@@ -144,7 +144,7 @@ router.get("/:workspaceID/get-participant", async (req, res) => {
 
 router.get("/:workspaceID/get-user-as-participant", async (req, res) => {
     const { workspaceID } = req.params
-    const userID = req.session.userInfo.user_id
+    const userID = req.token_data.userInfo.user_id
     // Get The Current user as a participant
     const result = await db.query("select * from work_space_members wsm where wsm.user_id = $1 and wsm.work_space_id = $2", [userID, workspaceID])
     res.status(200).json(result.rows[0])
@@ -253,8 +253,8 @@ router.get("/:workspaceID/suggestion/artifacts", async (req, res) => {
     const workspaceID = req.params.workspaceID;
     const artifactName = req.query.artifactName;
 
-    const userID = req.session.userInfo.user_id;
-    const orgID = req.session.orgInfo.org_id;
+    const userID = req.token_data.userInfo.user_id;
+    const orgID = req.token_data.orgInfo.org_id;
 
     let query = `select artifacts."name" from artifacts 
     inner join users on artifacts.user_id = users.user_id 
@@ -309,7 +309,7 @@ router.get('/:workspaceID/messages', async (req, res) => {
 // Create a message
 const createReference = async (artifactName, workspaceID, messageID, req) => {
 
-    const userID = req.session.userInfo.user_id
+    const userID = req.token_data.userInfo.user_id
 
     const results = await db.query(`select a.art_id from work_spaces ws 
     inner join work_space_artifacts wsa ON wsa.work_space_id = ws.work_space_id 
@@ -338,7 +338,7 @@ const createReference = async (artifactName, workspaceID, messageID, req) => {
 
 router.post("/:workspaceID/add/message", async (req, res) => {
     const { title, content, time, date, artifactName } = req.body;
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
     const workspaceID = req.params.workspaceID;
 
     let result = await db.query(`INSERT INTO work_space_messages
@@ -363,7 +363,7 @@ router.post("/:workspaceID/add/message", async (req, res) => {
 router.get("/:workspaceID/user-emails-in-workspace", async (req, res) => {
     const email = req.query.email
     const workspaceID = req.params.workspaceID
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
     const results = await db.query(`select email from users u 
     inner join work_space_members wsm on wsm.user_id  = u.user_id 
     inner join work_spaces ws on ws.work_space_id  = wsm.work_space_id 
@@ -407,9 +407,9 @@ router.post('/:workspaceID/artifact/add', workspaceMiddleware.encryptArtifactPas
     const workspaceID = req.params.workspaceID;
     const artifactName = req.body.artifactName; // array of the artifact id's
     const isSecured = req.body.isSecured === true ? 1 : 0; // check if the value corresponds with what it can put in the database
-    const password = req.session.artifactPassword;
+    const password = req.artifactPassword;
     const usersList = req.body.usersList; // people who have default access
-    const userEmail = req.session.userInfo.email
+    const userEmail = req.token_data.userInfo.email
 
     let responseCode = 200;
 
@@ -546,7 +546,7 @@ router.get("/:workspaceID/message/:messageID/replies", async (req, res) => {
 // Submit a reply to a workspace
 router.post("/:workspaceID/message/:messageID/reply", async (req, res) => {
 
-    const userID = req.session.userInfo.user_id;
+    const userID = req.token_data.userInfo.user_id;
 
     const messageID = req.params.messageID
     const { content, actionType, timestamp } = req.body;
