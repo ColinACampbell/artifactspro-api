@@ -71,8 +71,11 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     cookie: {
-        maxAge: (10 * 10 * 399 * 30 * 34 + 3400) - 5
-    }
+        //secure : true, // Remove this when testing locally
+        //maxAge: (10 * 10 * 399 * 30 * 34 + 3400) - 5,
+        sameSite: 'none',
+        //httpOnly : true,
+    },
 }))
 
 app.use(express.json({ limit: '50mb' }));
@@ -101,7 +104,7 @@ app.get("/*", (req, res) => {
 })
 
 const port = process.env.PORT || 3000;
-server.listen(process.env.PORT || 3000, (err) => {
+server.listen(port, (err) => {
     if (err) throw err;
     console.log("Server Started");
 }) 

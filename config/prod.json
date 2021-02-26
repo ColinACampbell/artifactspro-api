@@ -16,6 +16,6 @@
     "jwt" : {
         "secret" : "chicken_no09dles_3lut"
     },
-    "host" : "https://artifactspro.herokuapp.com",
-    "host_" : "https://artifacts-pro.uc.r.appspot.com"
+    "host_" : "https://artifactspro.herokuapp.com",
+    "host" : "https://artifacts-pro.uc.r.appspot.com"
 }
