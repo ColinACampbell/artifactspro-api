@@ -3,8 +3,6 @@ const config = require('./../config/configControl')
 const mailTransporter = require('./../config/mail')
 const jwtUtil = require('../utils/jwtUtil')
 
-// TODO : Test Everything here
-
 exports.auth = (req, res) => {
     
     let status = 401
@@ -14,7 +12,6 @@ exports.auth = (req, res) => {
     res.status(status).json({})
 }
 
-// TODO : Update client
 exports.signup = (req, res) => {
 
     let email = req.body.email;
@@ -180,7 +177,7 @@ exports.verifyUser = (req, res) => {
 }
 
 
-// TODO : Make this redudant
+// TODO : Do Further Tests to remove thisrs
 exports.logout = (req,res)=>{
     req.session.userInfo = null;
     req.session.orgInfo = null;

@@ -1,7 +1,7 @@
 const express = require('express');
 const userController = require('./../controllers/user')
 const router = express.Router();
-const authMiddleware = require("./../middleware/auth")
+const authMiddleware = require("./../middleware/authenticate")
 
 // TODO : Update Client
 router.post('/auth',authMiddleware,userController.auth);

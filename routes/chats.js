@@ -44,7 +44,6 @@ router.post("/send-message", async (req,res)=>{
 })
 
 
-// TODO : Don't forget to check if the chat already exists
 router.post("/create-chat", async (req,res)=>{
 
     const {

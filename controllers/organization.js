@@ -1,18 +1,16 @@
 const crypto = require('crypto');
-const { userInfo } = require('os');
 const db = require('./../config/db')
 const jwtUtil = require('./../utils/jwtUtil');
 
 exports.createOrg = (req,res)=>{
 
     const userID = req.token_data.userInfo.user_id;
-    const userInfo = req.token_data.userInfo.user_id;
+    const userInfo = req.token_data.userInfo;
     const { name : orgName, 
         phone1,
         phone2,
         address1,
         address2, pricePackageID} = req.body;
-    console.log(req.body)
     let accessCode = crypto.randomBytes(30).toString('hex');
  
     // check if the organization key already exists

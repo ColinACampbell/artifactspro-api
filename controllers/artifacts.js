@@ -1,7 +1,6 @@
 const db = require('./../config/db')
 
 exports.getAll = (req,res)=>{
-    console.log(req.token_data)
     let orgID = req.token_data.orgInfo.org_id;
     let userID = req.token_data.userInfo.user_id;
     db.query('SELECT * FROM artifacts where org_id = $1 AND user_id = $2',[orgID,userID],
@@ -12,7 +11,6 @@ exports.getAll = (req,res)=>{
 
 }
 
-// TODO : Implement this end point
 exports.getByWorkspace = async (req,res) =>
 {
     //const userID = req.session.userInfo.user_id;
