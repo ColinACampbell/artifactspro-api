@@ -17,5 +17,6 @@
         "secret" : "chicken_no09dles_3lut"
     },
     "host_" : "https://artifactspro.herokuapp.com",
-    "host" : "https://artifacts-pro.uc.r.appspot.com"
+    "host__" : "https://artifacts-pro.uc.r.appspot.com",
+    "host" : "https://artifactspro.eazley.tech"
 }
