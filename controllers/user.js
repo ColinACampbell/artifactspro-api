@@ -47,14 +47,13 @@ exports.signup = (req, res) => {
                 
                     // TODO : Remove this when finished
                     
-                    /** 
                     mailTransporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
                             console.log('Email sent: ' + info.response);
                         }
-                    }); **/
+                    });
 
                     // fetch user information and store it in the browser using sesssions
                     db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
