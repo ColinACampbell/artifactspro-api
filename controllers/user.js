@@ -129,13 +129,13 @@ exports.info = (req, res) => {
     let email = req.token_data.userInfo.email
     let is_verified = req.token_data.userInfo.is_verified;
     let user_id = req.token_data.userInfo.user_id;
-
+    is_verified = is_verified.trim() // the string is very long with extra spaces
     res.json({
         user_id,
         first_name,
         last_name,
         email,
-        is_verified
+        is_verified,
     });
 }
 
