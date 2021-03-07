@@ -12,6 +12,7 @@ exports.auth = (req, res) => {
     res.status(status).json({})
 }
 
+// TODO : Update this service to use send grid api
 exports.signup = (req, res) => {
 
     let email = req.body.email;
