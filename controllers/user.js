@@ -2,13 +2,14 @@ const db = require('./../config/db')
 const config = require('./../config/configControl')
 const mailTransporter = require('./../config/mail')
 const jwtUtil = require('../utils/jwtUtil')
+const mailUtil = require('../utils/emailUtil')
 
 exports.auth = (req, res) => {
-    
+
     let status = 401
     if (req.token_data.userInfo)
         status = 200
-        
+
     res.status(status).json({})
 }
 
@@ -30,12 +31,12 @@ exports.signup = (req, res) => {
             // insert user
             db.query(`INSERT INTO users
             ("password", last_name, first_name, email, is_verified, access_code,"updatedAt")
-            VALUES($1, '', '', $2, $3,$4,$5);`, [password, email, '0', accessCode,new Date()],
+            VALUES($1, '', '', $2, $3,$4,$5);`, [password, email, '0', accessCode, new Date()],
                 (err, result) => {
                     if (err) throw err;
 
                     // Send of verification mail to user
-                
+
                     var mailOptions = {
                         from: 'app.artifactspro@gmail.com',
                         to: email,
@@ -45,29 +46,33 @@ exports.signup = (req, res) => {
                                 your ArtifactsPro account 
                                 ${config.host}/account/verify/${accessCode}`
                     };
-                
-                    // TODO : Remove this when finished
-                    
+
+                    /**
                     mailTransporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
                             console.log('Email sent: ' + info.response);
                         }
-                    });
-
-                    // fetch user information and store it in the browser using sesssions
-                    db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
-                        if (err) throw err;
-                        // Test this out with organization sign up
-                        const userInfo = result.rows[0];
-                        jwtUtil.createToken(userInfo,{}).then((token)=>{
-                            res.status(201).json({
-                                token
+                    });**/
+                    mailUtil.sendHTML(email, 'Artifacts Pro : Verify Your Account',
+                        `Thanks for signing up on artifacts pro. 
+                        Please click the link to verify 
+                        your ArtifactsPro account <br/>
+                        ${config.host}/account/verify/${accessCode}`)
+                    .then(() => {
+                            // fetch user information and store it in the browser using sesssions
+                            db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
+                                if (err) throw err;
+                                // Test this out with organization sign up
+                                const userInfo = result.rows[0];
+                                jwtUtil.createToken(userInfo, {}).then((token) => {
+                                    res.status(201).json({
+                                        token
+                                    });
+                                })
                             });
                         })
-                    });
-
                 })
         } else {
             response.message = "failure";
@@ -105,18 +110,18 @@ exports.login = (req, res) => {
             WHERE users.email = $1
             `, [email], (err, result) => {
                     if (err) throw err
-                    
+
                     //req.session.orgInfo = result.rows[0];
                     const orgInfo = result.rows[0];
-                    jwtUtil.createToken(userInfo,orgInfo)
-                    .then((token)=>{
-                        res.status(200).json({
-                            token 
+                    jwtUtil.createToken(userInfo, orgInfo)
+                        .then((token) => {
+                            res.status(200).json({
+                                token
+                            })
                         })
-                    })
                 })
             } else {
-               
+
                 res.status(401).json({})
             }
 
@@ -147,12 +152,12 @@ exports.verifyUser = (req, res) => {
     const last_name = req.body.last_name;
 
     let statusCode = ''
-    
+
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
         (err, result) => {
 
             if (err) throw err;
-                
+
             if (result.rowCount === 0)
                 statusCode = 409
             else
@@ -178,9 +183,9 @@ exports.verifyUser = (req, res) => {
 
 
 // TODO : Do Further Tests to remove thisrs
-exports.logout = (req,res)=>{
+exports.logout = (req, res) => {
     req.session.userInfo = null;
     req.session.orgInfo = null;
-    
+
     res.status(200).json({})
 }
