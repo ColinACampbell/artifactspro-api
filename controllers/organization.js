@@ -79,12 +79,20 @@ exports.inviteFromAccessCode = (req,res)=>
 
         // TODO : Make this work for user
         //req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
-        const orgID = result.rows[0].org_id;
-
+        const orgInfo = result.rows[0];
+        const orgID = orgInfo.org_id;
         // store user as a member of that organization
         db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'member', new Date(), new Date()],(err,result)=>{
             if (err) throw err;
-            res.status(201).json({});
+
+            jwtUtil.createToken(req.token_data.userInfo,orgInfo)
+            .then((token)=>{
+                console.log(token)
+                res.status(201).json({
+                    token
+                });
+            })
+
         });
         
     })
