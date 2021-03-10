@@ -181,6 +181,19 @@ exports.verifyUser = (req, res) => {
         })
 }
 
+exports.updateBasicInfo = (req,res) =>
+{
+    const userID = req.token_data.userInfo.user_id;
+    const { newFirstName, newLastName } = req.body;
+   
+    db.query(`UPDATE users
+        SET last_name=$1, first_name=$2
+        WHERE user_id=$3`,[newLastName,newFirstName,userID])
+        .then((result,error)=>{
+            if (error) throw error
+            res.status(200).json({})
+        })
+}
 
 // TODO : Do Further Tests to remove thisrs
 exports.logout = (req, res) => {

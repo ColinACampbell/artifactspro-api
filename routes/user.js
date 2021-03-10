@@ -21,4 +21,6 @@ router.post('/verify/:accesscode', userController.verifyUser);
 // TODO : Update Client ( make the client remove the token from storage)
 router.post('/logout',userController.logout)
 
+router.put('/update-base-info',authMiddleware,userController.updateBasicInfo)
+
 module.exports = router;

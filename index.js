@@ -101,6 +101,8 @@ app.use('/api/workspace/',workspaceRoute);
 app.use('/api/billing/',billingRoute)
 app.use('/api/chats/',chatsRoute) 
 
+
+
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");
 })
