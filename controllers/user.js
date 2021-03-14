@@ -55,12 +55,11 @@ exports.signup = (req, res) => {
                             console.log('Email sent: ' + info.response);
                         }
                     });**/
-                    mailUtil.sendHTML(email, 'Artifacts Pro : Verify Your Account',
-                        `Thanks for signing up on artifacts pro. 
-                        Please click the link to verify 
-                        your ArtifactsPro account <br/>
-                        ${config.host}/account/verify/${accessCode}`)
-                    .then(() => {
+
+                    const verificationLink = `${config.host}/account/verify/${accessCode}`
+                    mailUtil.sendVerificationEmail(email,verificationLink)
+                    .then((val) => {
+                            console.log(val)
                             // fetch user information and store it in the browser using sesssions
                             db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
                                 if (err) throw err;

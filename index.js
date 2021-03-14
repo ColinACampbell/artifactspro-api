@@ -1,4 +1,5 @@
 const config = require('./config/configControl')
+const ejs = require('ejs')
 const express = require('express')
 const app = express();
 const http = require('http');
@@ -101,11 +102,17 @@ app.use('/api/workspace/',workspaceRoute);
 app.use('/api/billing/',billingRoute)
 app.use('/api/chats/',chatsRoute) 
 
-
+app.get("/foo/test-email",(req,res)=>{
+    ejs.renderFile(__dirname+'/templates/email/verify-account.ejs',{verificationLink:"https://www.google.com", firstName : "Colin" },(err,data)=>{
+        res.send(data)
+    })
+})
 
 app.get("/*", (req, res) => {
     res.sendFile(staticPath + "/index.html");
 })
+
+
 
 const port = process.env.PORT || 3000;
 server.listen(port, (err) => {
