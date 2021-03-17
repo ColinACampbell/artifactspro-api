@@ -16,4 +16,6 @@ router.get('/preview/:artID/:docName', documentController.preview)
 
 router.delete('/delete/:docID',documentController.deleteDocument)
 
+router.get('/download',documentController.download)
+
 module.exports = router;

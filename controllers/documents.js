@@ -3,13 +3,14 @@ const fs = require('fs');
 const path = require('path')
 const config = require('./../config/configControl')
 const encryptionUtil = require('./../utils/encryptionUtil');
+const stream = require('stream');
 
 const fileTypes = {
     'application/msword': 'doc',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
     'image/jpeg': 'jpg',
-    'image/png' : 'png',
-    'application/pdf' : 'pdf'
+    'image/png': 'png',
+    'application/pdf': 'pdf'
 };
 
 exports.docFromArtFromID = (req, res) => {
@@ -25,7 +26,7 @@ exports.docFromArtFromID = (req, res) => {
         })
 }
 
-exports.search = (req,res) => {
+exports.search = (req, res) => {
 
     let { documentName, documentComments } = req.query;
     const { artID } = req.params;
@@ -37,27 +38,24 @@ exports.search = (req,res) => {
     if (documentComments === 'undefined')
         documentComments = undefined
 
-    if (documentName !== undefined && documentComments !== undefined)
-    {
+    if (documentName !== undefined && documentComments !== undefined) {
         const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
                         WHERE "version" like '%' || $1 || '%' and "comment" like '%' || $2 || '%' and art_id = ${artID}`
-        db.query(query,[documentName,documentComments],(err,results)=>{
+        db.query(query, [documentName, documentComments], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
         })
-    } else if (documentName !== undefined)
-    {
+    } else if (documentName !== undefined) {
         const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
                         WHERE "version" like '%' || $1 || '%' and art_id = ${artID}`
-        db.query(query,[documentName],(err,results)=>{
+        db.query(query, [documentName], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
         })
-    } else if (documentComments !== undefined)
-    {
+    } else if (documentComments !== undefined) {
         const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
                         WHERE "comment" like '%' || $1 || '%' and art_id = ${artID}`
-        db.query(query,[documentComments],(err,results)=>{
+        db.query(query, [documentComments], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
         })
@@ -86,7 +84,7 @@ exports.upload = (req, res) => {
     db.query(`INSERT INTO documents
     ("version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type","file_size","createdAt","updatedAt")
     VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);
-    `, [version, comment, userID, buffer, dateUploaded, dateModified, artID, fileType, fileSize,new Date(), new Date()],
+    `, [version, comment, userID, buffer, dateUploaded, dateModified, artID, fileType, fileSize, new Date(), new Date()],
         (err, result) => {
             if (err) throw err;
 
@@ -129,8 +127,8 @@ exports.getLink = (req, res, next) => {
 
             // TODO Change this value whenever pushing to production
             // TODO make this more automated
-            let serverhost = config.dev ? 'http://localhost:3000': config.host
-            
+            let serverhost = config.dev ? 'http://localhost:3000' : config.host
+
             res.status(200).json({
                 download: `${serverhost}/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`
             });
@@ -138,10 +136,34 @@ exports.getLink = (req, res, next) => {
         })
 }
 
-exports.deleteDocument = (req,res)=>{
+
+exports.download = (req, res) => {
+    const artID = req.query.art; // aka artID
+    const docID = req.query.id;
+
+    db.query('SELECT * FROM documents WHERE doc_id = $1', [docID],
+        (err, results) => {
+
+            if (err) throw err;
+
+            let doc = results.rows[0];
+
+            const fileExtension = `.${fileTypes[doc.type]}`
+            const fileName = `${doc.version}${fileExtension}`
+            const fileType = doc.type
+
+            res.writeHead(200, {
+                'Content-Disposition': `attachment; filename="${fileName}"`,
+                'Content-Type': fileType,
+            })
+            res.end(doc.data)
+        })
+}
+
+exports.deleteDocument = (req, res) => {
     const docID = req.params.docID;
-    db.query('DELETE FROM documents WHERE doc_id = $1',[docID],(err,result)=>{
+    db.query('DELETE FROM documents WHERE doc_id = $1', [docID], (err, result) => {
         if (err) throw err;
-        res.json({message:'done'})
+        res.json({ message: 'done' })
     })
 }
