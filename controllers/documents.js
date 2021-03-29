@@ -39,22 +39,25 @@ exports.search = (req, res) => {
         documentComments = undefined
 
     if (documentName !== undefined && documentComments !== undefined) {
-        const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
-                        WHERE "version" like '%' || $1 || '%' and "comment" like '%' || $2 || '%' and art_id = ${artID}`
+        const query = `SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
+            inner join users u2 on u2.user_id = documents.user_id 
+            WHERE "version" like '%' || $1 || '%' and "comment" like '%' || $2 || '%' and art_id = ${artID}`
         db.query(query, [documentName, documentComments], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
         })
     } else if (documentName !== undefined) {
-        const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
-                        WHERE "version" like '%' || $1 || '%' and art_id = ${artID}`
+        const query = `SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
+            inner join users u2 on u2.user_id = documents.user_id 
+            WHERE "version" like '%' || $1 || '%' and art_id = ${artID}`
         db.query(query, [documentName], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
         })
     } else if (documentComments !== undefined) {
-        const query = `SELECT doc_id, "version", "comment", user_id, "data", date_uploaded, date_modified, art_id, "type" FROM public.documents 
-                        WHERE "comment" like '%' || $1 || '%' and art_id = ${artID}`
+        const query = `SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
+            inner join users u2 on u2.user_id = documents.user_id 
+            WHERE "comment" like '%' || $1 || '%' and art_id = ${artID}`
         db.query(query, [documentComments], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
