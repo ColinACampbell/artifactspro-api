@@ -50,9 +50,50 @@ router.post('/create', async (req, res) => {
 
 router.delete("/:workspaceID/delete",async (req,res)=>{
     const { workspaceID } = req.params
-    await db.query(`ALTER TABLE work_spaces DISABLE TRIGGER ALL;`);
+
+    // Delete workspace artifact access users first
+    await db.query(`delete from workspace_art_access_users waau 
+    using work_space_artifacts wsa
+    where wsa.work_space_artifacts_id = waau.work_space_artifacts_id  and wsa.work_space_id = $1`,[workspaceID])
+
+    // Delete Workspace reference message items
+    await db.query(`delete from work_space_ref_items wsri 
+    using 
+        work_space_references wsr,
+        work_space_messages wsm
+    where 
+        wsr.work_space_ref_id = wsri.work_space_ref_id and
+        wsm.work_space_msg_id = wsr.work_space_msg_id and
+        wsm.work_space_id = $1`,[workspaceID])
+
+    // Delete Workspace references (they point to the items)
+    await db.query(`delete from  work_space_references wsr
+	using 
+		work_space_messages wsm
+	where 
+		wsm.work_space_msg_id  = wsr.work_space_msg_id and 
+		wsm.work_space_id = $1`,[workspaceID])
+
+    // Delete Work space message replies
+    await db.query(`delete from work_space_message_replies wsmr 
+    using 
+        work_space_messages wsm
+    where 
+        wsm.work_space_msg_id = wsmr.work_space_msg_id and
+        wsm.work_space_id = $1`,[workspaceID])
+
+    // Remove workspace artifacts
+    await db.query(`delete from work_space_artifacts wsa where wsa.work_space_id = $1`,[workspaceID])
+
+    // Delete workspace messages
+    await db.query(`delete from work_space_messages wsm where wsm.work_space_id = $1`,[workspaceID])
+
+    // Remove the members
+    await db.query(`DELETE FROM public.work_space_members
+    WHERE work_space_id = $1`,[workspaceID])
+
+    // Finally remove the workspace
     await db.query(`DELETE FROM work_spaces WHERE work_space_id = $1`,[workspaceID]);
-    await db.query(`ALTER TABLE work_spaces ENABLE TRIGGER ALL;`);
     res.status(200).json({})
 })
 

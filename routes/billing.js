@@ -40,7 +40,6 @@ router.get('/verify/workspaces', async (req, res) => {
                     res.status(401).json({})
                 else
                 {
-                    console.log("Runs")
                     res.status(200).json({})
                 }
             })
