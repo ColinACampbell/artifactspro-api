@@ -184,25 +184,16 @@ exports.getFromID = async (req,res)=>{
     }    
 }
 
-exports.deleteArtifactFromID =  async function(req,res){
+exports.deleteArtifactFromID =  async (req,res)=>{
     const artifactID = req.params.artID;
     // delete all documents first, this is to prevent constraint error
-    db.query(`ALTER TABLE artifacts DISABLE TRIGGER ALL;`,(err,results)=>{
-        if (err) throw err;
 
-        db.query('DELETE FROM documents WHERE art_id = $1',[artifactID],(err,result)=>{
-            if (err) throw err;
-            db.query('DELETE FROM artifacts WHERE art_id = $1',[artifactID],(err,result)=>{
-                if (err) throw err;
-                db.query(`ALTER TABLE artifacts ENABLE TRIGGER ALL;`,(err,results)=>{
-                    if (err) throw err;
-                    res.status(200).json({message:'done'})
-                });
-            })
-        })
-    });
+    await db.query('DELETE FROM work_space_ref_items WHERE art_id = $1',[artifactID])
+    await db.query('delete from work_space_artifacts where art_id = $1',[artifactID])
+    await db.query('DELETE FROM documents WHERE art_id = $1',[artifactID])
+    await db.query('DELETE FROM artifacts WHERE art_id = $1',[artifactID])
+    res.status(200).json({})
 
-    
 }
 
 exports.search = async (req,res) => {
