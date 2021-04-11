@@ -3,6 +3,7 @@ const config = require('./../config/configControl')
 const mailTransporter = require('./../config/mail')
 const jwtUtil = require('../utils/jwtUtil')
 const mailUtil = require('../utils/emailUtil')
+const encryptionUtil = require('../utils/encryptionUtil')
 
 exports.auth = (req, res) => {
 
@@ -192,6 +193,37 @@ exports.updateBasicInfo = (req,res) =>
             if (error) throw error
             res.status(200).json({})
         })
+}
+
+// TODO Scrutinize this!
+exports.requestPasswordRecovery = async (req,res) => {
+    const { email } = req.body
+    // Check if the email exists
+    const userCount = (await db.query(`select user_id from users where email = $1`,[email])).rowCount;
+
+    const userExists = 1;
+    if (userCount !== userExists)
+        return res.status(404).json({userCount})
+
+    const recoveryCode =  encryptionUtil.createTempPassword(email);
+
+    // Update the recovery code for the user
+    await db.query(`UPDATE public.users
+        SET "recovery_code" = $1 where email = $2`,[recoveryCode,email])
+
+    const recoveryLink = `${config.host}/action/recovery/${recoveryCode}`
+    
+    await mailUtil.sendRecoveryEmail(email,recoveryLink)
+    // Send an email to the user with the code
+    res.status(200).json({})
+}
+
+exports.recoverPassword = async (req,res) => {
+    const {password,recoveryCode} = req.body;
+    // Check if recovery code is valid
+    const isCodeValid = (await db.query(`select user_id from users where recovery_code = $1`,[recoveryCode])).rowCount === 1 ? true : false;
+    console.log(isCodeValid);
+    res.status(200).json({})
 }
 
 // TODO : Do Further Tests to remove thisrs

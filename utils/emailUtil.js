@@ -2,12 +2,12 @@ const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
 const path = require('path')
 
-require('dotenv').config({path: __dirname + '/.env'})
-console.log(process.env.SEND_GRID_API_KEY);
+require('dotenv').config({ path: __dirname + '/.env' })
+//console.log(process.env.SEND_GRID_API_KEY);
 
-exports.sendHTML = (emailTo,subject,html) =>{
+exports.sendHTML = (emailTo, subject, html) => {
     sgMail.setApiKey(process.env.SEND_GRID_API_KEY)
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject) => {
         const msg = {
             to: emailTo, // Change to your recipient
             from: 'app.artifactspro@gmail.com', // Change to your verified sender
@@ -15,7 +15,7 @@ exports.sendHTML = (emailTo,subject,html) =>{
             html
             //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
         }
-    
+
         sgMail
             .send(msg)
             .then(() => {
@@ -28,13 +28,12 @@ exports.sendHTML = (emailTo,subject,html) =>{
     })
 }
 
-exports.sendVerificationEmail = (emailTo,verificationLink) => {
-    return new Promise((resolve,reject)=>{
-        
-        ejs.renderFile(path.resolve(__dirname,'../templates/email/verify-account.ejs'),{verificationLink },(err,html)=>{
-            
-            if (err)
-            {
+exports.sendVerificationEmail = (emailTo, verificationLink) => {
+    return new Promise((resolve, reject) => {
+
+        ejs.renderFile(path.resolve(__dirname, '../templates/email/verify-account.ejs'), { verificationLink }, (err, html) => {
+
+            if (err) {
                 console.log(err)
                 reject(err)
                 throw err
@@ -45,20 +44,50 @@ exports.sendVerificationEmail = (emailTo,verificationLink) => {
             const msg = {
                 to: emailTo, // Change to your recipient
                 from: 'app.artifactspro@gmail.com', // Change to your verified sender
-                subject : "ArtifactsPro: Complete Your Registration (NoReply)",
-                html 
+                subject: "ArtifactsPro: Complete Your Registration (NoReply)",
+                html
                 //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
             }
 
             sgMail
-            .send(msg)
-            .then(() => {
-                console.log('Email sent XD')
-                resolve(true)
-            })
-            .catch((error) => {
-                reject(error)
-            })
+                .send(msg)
+                .then(() => {
+                    console.log('Email sent XD')
+                    resolve(true)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
         })
     })
+}
+
+exports.sendRecoveryEmail = (emailTo, recoveryLink) => {
+
+    return new Promise((resolve, reject) => {
+        ejs.renderFile(path.resolve(__dirname, '../templates/password/recover-email.ejs'), { recoveryLink },
+            (err, html) => {
+
+                if (err) reject(err)
+
+                const msg = {
+                    to: emailTo,
+                    from: 'app.artifactspro@gmail.com',
+                    subject: "ArtifactsPro: Password Recovery (NoReply)",
+                    html
+                }
+                
+                sgMail.setApiKey(process.env.SEND_GRID_API_KEY)
+                sgMail
+                    .send(msg)
+                    .then(() => {
+                        console.log('Email sent For Recovery XD')
+                        resolve(true)
+                    })
+                    .catch((error) => {
+                        reject(error)
+                    })
+            })
+    })
+
 }

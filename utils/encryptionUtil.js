@@ -13,6 +13,15 @@ exports.decryptBuffer = (buffer) => {
   var dec = Buffer.concat([decipher.update(buffer) , decipher.final()]);
   return dec;
 }
+
+exports.createTempPassword = (text) => {
+  let tempPassword = crypto.createHash("sha256")
+    .update(text)
+    .digest("hex");
+  
+  const addition = crypto.randomBytes(4).toString('hex');
+  return tempPassword + addition
+}
  
 //var hw = encrypt(new Buffer("hello world", "utf8"))
 // outputs hello world
