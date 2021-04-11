@@ -219,10 +219,29 @@ exports.requestPasswordRecovery = async (req,res) => {
 }
 
 exports.recoverPassword = async (req,res) => {
-    const {password,recoveryCode} = req.body;
+
+    const {recoveryCode} = req.body;
+    const {password} = req.user // from the password middleware
     // Check if recovery code is valid
-    const isCodeValid = (await db.query(`select user_id from users where recovery_code = $1`,[recoveryCode])).rowCount === 1 ? true : false;
-    console.log(isCodeValid);
+    const results = await db.query(`select user_id from users where recovery_code = $1`,[recoveryCode])
+    const isCodeValid = results.rowCount === 1 ? true : false;
+
+    if (!isCodeValid)
+        return res.status(404).json({})
+
+
+    // Check is the password already exsists
+    const passwordExists = (await db.query('select user_id from users where password = $1 and recovery_code = $2',[password,recoveryCode])).rowCount === 1 ? true : false
+
+    if (passwordExists)
+        return res.status(409).json({}) // there is a 'conflict'
+
+    const userID = results.rows[0].user_id;
+
+    await db.query(`UPDATE public.users
+        SET "password"=$1, recovery_code=$2
+        WHERE user_id = $3`,[password,null,userID])
+    
     res.status(200).json({})
 }
 

@@ -11,7 +11,9 @@ router.post('/login', userController.login);
 
 router.get('/info',authMiddleware,userController.info);
 
-router.post('/request-password-recovery',userController.requestPasswordRecovery)
+router.post('/request-password-recovery',userController.requestPasswordRecovery);
+
+router.put('/recover-password',userController.recoverPassword);
 
 router.post('/verify/:accesscode', userController.verifyUser);
 

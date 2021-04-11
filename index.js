@@ -92,6 +92,7 @@ app.use('/api/docs/',authMiddleware)
 //app.use('/api/user/',userMiddleware.userInformation) // TODO : Test end points that use this middleware
 app.use('/api/user/signup/process-1', userMiddleware.password); // middleware to hash password on user routes
 app.use('/api/user/login', userMiddleware.password); // middleware to hash password on user routes
+app.use('/api/user/recover-password',userMiddleware.password) // middleware to hash password on user routes
 app.use('/api/misc/',miscRoute)
 app.use('/api/user/', userRoute);
 app.use('/api/org/', organizationRoute);
