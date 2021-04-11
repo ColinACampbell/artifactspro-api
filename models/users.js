@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    recovery_code : {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     last_name: {
       type: DataTypes.TEXT,
       allowNull: true

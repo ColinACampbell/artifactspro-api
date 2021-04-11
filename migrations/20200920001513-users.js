@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
+      recovery_code : {
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
       last_name: {
         type: Sequelize.TEXT,
         allowNull: true
