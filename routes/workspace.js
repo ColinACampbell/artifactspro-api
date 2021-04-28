@@ -231,6 +231,21 @@ router.post('/:workspaceID/add-member', async (req, res) => {
     }
 });
 
+// Remove member
+router.delete('/:workspaceID/remove-member',(req,res)=>{
+    const { id } = req.query; // id = member id
+    db.query(`DELETE FROM public.work_space_members
+    WHERE work_space_member_id = $1;`,[id],(err,_)=>{
+        if (err) 
+        {
+            console.log(err)
+            res.status(500).json({})
+        } 
+
+        res.status(200).json({})
+    })
+});
+
 // Get Workspace
 router.get('/:workspaceID', (req, res) => {
     // TODO : Verify that user has access to resource
