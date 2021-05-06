@@ -18,10 +18,11 @@ router.get("/names", async (req, res) => {
 // Gets workspaces from user 
 router.get('/all', (req, res) => {
     const userID = req.token_data.userInfo.user_id;
+    const orgID = req.token_data.orgInfo.org_id
     db.query(`select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
     inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
     inner join users on users.user_id = work_space_members.user_id 
-    where users.user_id = $1`, [userID], (err, result) => {
+    where users.user_id = $1 and work_spaces.org_id = $2`, [userID,orgID], (err, result) => {
         if (err) throw err;
         let rows = result.rows;
         res.json(rows);

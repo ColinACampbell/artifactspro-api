@@ -104,3 +104,36 @@ exports.inviteFromAccessCode = (req,res)=>
         
     })
 }
+
+exports.getAll = (req,res) => {
+    const {user_id : userID} = req.token_data.userInfo
+    db.query(`select o."name", 
+    o.org_id, 
+    o."type",  
+    o.org_code,
+    om."role" 
+    from organizations o 
+    inner join organization_members om on o.org_id  = om.org_id 
+    inner join users on users.user_id  = om.user_id 
+    where users.user_id = $1`,[userID],(err,result)=>{
+        if (err) throw err;
+        res.status(200).json(result.rows)
+    })
+}
+
+// Switches tokens used for the new organization
+exports.switchOrganization = (req,res) => {
+    const userInfo = req.token_data.userInfo;
+    const {newOrgID} = req.body;
+    db.query('SELECT * FROM organizations WHERE org_id = $1',[newOrgID],
+    (err,result)=>{
+        if (err) throw err;
+        const orgInfo = result.rows[0]
+        jwtUtil.createToken(userInfo,orgInfo)
+        .then((token)=>{
+            res.status(200).json({
+                token
+            });
+        })
+    })
+}
