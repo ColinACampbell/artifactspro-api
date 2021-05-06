@@ -60,3 +60,14 @@ exports.changeMemberRole = async (req,res) => {
     
     res.status(200).json({})
 }
+
+exports.removeFromOrg = async (req,res) => {
+    const orgID = req.token_data.orgInfo.org_id;
+    const { userID } = req.params;
+
+    db.query(`DELETE FROM public.organization_members
+    WHERE user_id = $1 and org_id = $2`,[userID,orgID])
+
+    res.status(200).json({})
+
+}

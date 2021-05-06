@@ -53,11 +53,18 @@ exports.createOrg = (req,res)=>{
 }
 
 exports.info = (req,res)=>{
-    let org_id = req.token_data.orgInfo.org_id
-    db.query('SELECT org_id, name, "createdAt", "type", user_id FROM organizations WHERE org_id = $1',[org_id],
-    (err,result)=>{
-        res.json(result.rows[0])
-    })
+
+    const orgInfo = req.token_data.orgInfo
+    // check if the user belongs to an organization
+    if ( orgInfo == null || orgInfo == undefined)
+        res.status(422).json({})
+    else {
+        let org_id = req.token_data.orgInfo.org_id
+        db.query('SELECT org_id, name, "createdAt", "type", user_id FROM organizations WHERE org_id = $1',[org_id],
+        (err,result)=>{
+            res.json(result.rows[0])
+        })
+    }
 }
 
 exports.infoFromAccessCode = (req,res)=>{

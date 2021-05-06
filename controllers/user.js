@@ -82,7 +82,7 @@ exports.signup = (req, res) => {
     })
 }
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
     let email = req.body.email;
     let password = req.user.password;
 
@@ -97,28 +97,38 @@ exports.login = (req, res) => {
                 //req.session.userInfo = result.rows[0];
                 userInfo = result.rows[0]
 
+                //db.query(``)
 
                 db.query(`
             SELECT 
             organizations.name, 
             organizations.org_id, 
             organizations.type,  
-            organizations.org_code
+            organizations.org_code,
+            organization_members.role
             FROM users 
             INNER JOIN organization_members ON organization_members.user_id = users.user_id
             INNER JOIN organizations ON organizations.org_id = organization_members.org_id
             WHERE users.email = $1
             `, [email], (err, result) => {
-                    if (err) throw err
-
-                    //req.session.orgInfo = result.rows[0];
+                    if (err) 
+                    {
+                        res.status(500).json({})
+                        throw err
+                    }
+                        
                     const orgInfo = result.rows[0];
-                    jwtUtil.createToken(userInfo, orgInfo)
-                        .then((token) => {
-                            res.status(200).json({
-                                token
+
+                    //if (orgInfo == null || orgInfo == undefined)
+                        //res.status(422).json({})
+                    //else 
+                        jwtUtil.createToken(userInfo, orgInfo)
+                            .then((token) => {
+                                console.log(token)
+                                res.status(200).json({
+                                    token
+                                })
                             })
-                        })
                 })
             } else {
 

@@ -9,11 +9,12 @@ console.log(env)
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
+const logging = false;
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], {...config,operatorsAliases: false});
+  sequelize = new Sequelize(process.env[config.use_env_variable], {...config,operatorsAliases: false,loggin});
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, {...config,operatorsAliases: 1});
+  sequelize = new Sequelize(config.database, config.username, config.password, {...config,operatorsAliases: 1,logging});
 }
 
 fs
