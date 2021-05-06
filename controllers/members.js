@@ -61,6 +61,7 @@ exports.changeMemberRole = async (req,res) => {
     res.status(200).json({})
 }
 
+// TODO Implement this
 exports.removeFromOrg = async (req,res) => {
     const orgID = req.token_data.orgInfo.org_id;
     const { userID } = req.params;

@@ -58,8 +58,8 @@ exports.signup = (req, res) => {
                     });**/
 
                     const verificationLink = `${config.host}/account/verify/${accessCode}`
-                    mailUtil.sendVerificationEmail(email,verificationLink)
-                    .then((val) => {
+                    mailUtil.sendVerificationEmail(email, verificationLink)
+                        .then((val) => {
                             console.log(val)
                             // fetch user information and store it in the browser using sesssions
                             db.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
@@ -83,9 +83,21 @@ exports.signup = (req, res) => {
 }
 
 exports.login = async (req, res) => {
-    let email = req.body.email;
+
+    const sendOffResponseWithToken = (res,userInfo,result) => {
+        const orgInfo = result.rows[0];
+
+        jwtUtil.createToken(userInfo, orgInfo)
+            .then((token) => {
+                console.log(token)
+                res.status(200).json({ token })
+            })
+    }
+
+    const { email, chosenOrgID } = req.body;
     let password = req.user.password;
 
+    
     db.query('SELECT first_name, last_name, email, is_verified, user_id FROM users WHERE email = $1 AND password = $2', [email, password],
         (err, result) => {
             if (err) throw err;
@@ -97,41 +109,46 @@ exports.login = async (req, res) => {
                 //req.session.userInfo = result.rows[0];
                 userInfo = result.rows[0]
 
-                //db.query(``)
+                if (chosenOrgID == null || chosenOrgID == undefined) {
+                    db.query(`
+                    SELECT 
+                    organizations.name, 
+                    organizations.org_id, 
+                    organizations.type,  
+                    organizations.org_code,
+                    organization_members.role
+                    FROM users 
+                    INNER JOIN organization_members ON organization_members.user_id = users.user_id
+                    INNER JOIN organizations ON organizations.org_id = organization_members.org_id
+                    WHERE users.email = $1`, [email], (err, result) => {
 
-                db.query(`
-            SELECT 
-            organizations.name, 
-            organizations.org_id, 
-            organizations.type,  
-            organizations.org_code,
-            organization_members.role
-            FROM users 
-            INNER JOIN organization_members ON organization_members.user_id = users.user_id
-            INNER JOIN organizations ON organizations.org_id = organization_members.org_id
-            WHERE users.email = $1
-            `, [email], (err, result) => {
-                    if (err) 
-                    {
-                        res.status(500).json({})
-                        throw err
-                    }
-                        
-                    const orgInfo = result.rows[0];
+                        if (err) {
+                            res.status(500).json({})
+                            throw err
+                        }
 
-                    //if (orgInfo == null || orgInfo == undefined)
-                        //res.status(422).json({})
-                    //else 
-                        jwtUtil.createToken(userInfo, orgInfo)
-                            .then((token) => {
-                                console.log(token)
-                                res.status(200).json({
-                                    token
-                                })
-                            })
-                })
+                        sendOffResponseWithToken(res,userInfo,result)
+                    })
+                } else { // login in the user with the chosen organization id
+                    db.query(`SELECT 
+                    organizations.name, 
+                    organizations.org_id, 
+                    organizations.type,  
+                    organizations.org_code,
+                    organization_members.role
+                    FROM users 
+                    INNER JOIN organization_members ON organization_members.user_id = users.user_id
+                    INNER JOIN organizations ON organizations.org_id = organization_members.org_id
+                    WHERE users.email = $1 and organizations.org_id = $2`, [email, chosenOrgID],
+                        (err, result) => {
+                            if (err) throw err;
+                            
+                            sendOffResponseWithToken(res,userInfo,result)
+
+                        })
+                }
+
             } else {
-
                 res.status(401).json({})
             }
 
@@ -155,13 +172,12 @@ exports.info = (req, res) => {
     });
 }
 
-// TODO : Test this with jwt and update client
 exports.verifyUser = (req, res) => {
     const accessCode = req.params.accesscode;
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
 
-    let statusCode = ''
+    let statusCode = 0
 
     db.query('SELECT * FROM users WHERE access_code = $1', [accessCode],
         (err, result) => {
@@ -191,49 +207,48 @@ exports.verifyUser = (req, res) => {
         })
 }
 
-exports.updateBasicInfo = (req,res) =>
-{
+exports.updateBasicInfo = (req, res) => {
     const userID = req.token_data.userInfo.user_id;
     const { newFirstName, newLastName } = req.body;
-   
+
     db.query(`UPDATE users
         SET last_name=$1, first_name=$2
-        WHERE user_id=$3`,[newLastName,newFirstName,userID])
-        .then((result,error)=>{
+        WHERE user_id=$3`, [newLastName, newFirstName, userID])
+        .then((result, error) => {
             if (error) throw error
             res.status(200).json({})
         })
 }
 
 // TODO Scrutinize this!
-exports.requestPasswordRecovery = async (req,res) => {
+exports.requestPasswordRecovery = async (req, res) => {
     const { email } = req.body
     // Check if the email exists
-    const userCount = (await db.query(`select user_id from users where email = $1`,[email])).rowCount;
+    const userCount = (await db.query(`select user_id from users where email = $1`, [email])).rowCount;
 
     const userExists = 1;
     if (userCount !== userExists)
-        return res.status(404).json({userCount})
+        return res.status(404).json({ userCount })
 
-    const recoveryCode =  encryptionUtil.createTempPassword(email);
+    const recoveryCode = encryptionUtil.createTempPassword(email);
 
     // Update the recovery code for the user
     await db.query(`UPDATE public.users
-        SET "recovery_code" = $1 where email = $2`,[recoveryCode,email])
+        SET "recovery_code" = $1 where email = $2`, [recoveryCode, email])
 
     const recoveryLink = `${config.host}/action/recovery/${recoveryCode}`
-    
-    await mailUtil.sendRecoveryEmail(email,recoveryLink)
+
+    await mailUtil.sendRecoveryEmail(email, recoveryLink)
     // Send an email to the user with the code
     res.status(200).json({})
 }
 
-exports.recoverPassword = async (req,res) => {
+exports.recoverPassword = async (req, res) => {
 
-    const {recoveryCode} = req.body;
-    const {password} = req.user // from the password middleware
+    const { recoveryCode } = req.body;
+    const { password } = req.user // from the password middleware
     // Check if recovery code is valid
-    const results = await db.query(`select user_id from users where recovery_code = $1`,[recoveryCode])
+    const results = await db.query(`select user_id from users where recovery_code = $1`, [recoveryCode])
     const isCodeValid = results.rowCount === 1 ? true : false;
 
     if (!isCodeValid)
@@ -241,7 +256,7 @@ exports.recoverPassword = async (req,res) => {
 
 
     // Check is the password already exsists
-    const passwordExists = (await db.query('select user_id from users where password = $1 and recovery_code = $2',[password,recoveryCode])).rowCount === 1 ? true : false
+    const passwordExists = (await db.query('select user_id from users where password = $1 and recovery_code = $2', [password, recoveryCode])).rowCount === 1 ? true : false
 
     if (passwordExists)
         return res.status(409).json({}) // there is a 'conflict'
@@ -250,8 +265,8 @@ exports.recoverPassword = async (req,res) => {
 
     await db.query(`UPDATE public.users
         SET "password"=$1, recovery_code=$2
-        WHERE user_id = $3`,[password,null,userID])
-    
+        WHERE user_id = $3`, [password, null, userID])
+
     res.status(200).json({})
 }
 
