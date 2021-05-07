@@ -102,21 +102,22 @@ router.delete("/:workspaceID/delete",async (req,res)=>{
 router.get("/search", async (req, res) => {
     const { key } = req.query;
     const userID = req.token_data.userInfo.user_id;
+    const orgID = req.token_data.orgInfo.org_id;
 
     let query = `select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
     inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
     inner join users on users.user_id = work_space_members.user_id 
-    where users.user_id = $1 and work_spaces.work_space_name like '%' || $2 || '%'`
+    where users.user_id = $1 and work_spaces.work_space_name like '%' || $2 || '%' and work_spaces.org_id = $3`
 
     let results = []
     if (key.length === 0) {
         query = `select work_spaces.work_space_id, work_space_name, date_created, org_id from work_spaces 
         inner join work_space_members  on work_space_members.work_space_id  = work_spaces.work_space_id 
         inner join users on users.user_id = work_space_members.user_id 
-        where users.user_id = $1`
-        results = await db.query(query, [userID])
+        where users.user_id = $1 and work_spaces.org_id = $2`
+        results = await db.query(query, [userID,orgID])
     } else {
-        results = await db.query(query, [userID, key])
+        results = await db.query(query, [userID, key, orgID])
     }
     res.status(200).json(results.rows)
 })
@@ -319,7 +320,7 @@ router.get("/:workspaceID/suggestion/artifacts", async (req, res) => {
     inner join work_spaces on work_spaces.work_space_id = work_space_members.work_space_id 
     inner join organizations on organizations.org_id = work_spaces.org_id 
     where users.user_id = $1 and work_spaces.work_space_id = $2
-    and artifacts."name" like '%' || $3 || '%' and organizations.org_id = $4`
+    and artifacts."name" like '%' || $3 || '%' and organizations.org_id = $4 and artifacts.org_id = $4`
 
     let results = await db.query(query, [userID, workspaceID, artifactName, orgID])
     res.status(200).json(results.rows)
