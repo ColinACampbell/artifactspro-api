@@ -79,29 +79,41 @@ exports.infoFromAccessCode = (req,res)=>{
 // Update client : Status Code
 exports.inviteFromAccessCode = (req,res)=>
 {
-    let code = req.params.code; 
-    let userID = req.token_data.userInfo.user_id; // this session was set from the signup process
+    const code = req.params.code; 
+    const userID = req.token_data.userInfo.user_id; // this session was set from the signup process
     db.query("SELECT * FROM organizations WHERE org_code = $1",[code],(err,result)=>{
         if (err) throw err;
 
-        // TODO : Make this work for user
-        //req.session.orgInfo = result.rows[0]; // store information about the organization so it can be used later
         const orgInfo = result.rows[0];
+
+        if (orgInfo === null || orgInfo === undefined)
+            return res.status(404).json({})
+
         const orgID = orgInfo.org_id;
-        // store user as a member of that organization
-        db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'member', new Date(), new Date()],(err,result)=>{
+        
+        // Check if the user is already a member of the organization
+        db.query(`select * from organization_members om 
+        inner join users u ON om.user_id = u.user_id 
+        where u.user_id = $1 and om.org_id = $2`,[userID,orgID],
+        (err,results)=>{
             if (err) throw err;
 
-            jwtUtil.createToken(req.token_data.userInfo,orgInfo)
-            .then((token)=>{
-                console.log(token)
-                res.status(201).json({
-                    token
-                });
-            })
-
-        });
+            const resultsCount = results.rowCount;
+            if (resultsCount == 1) // they already exists, so I can't add them
+                return res.status(409).json({})
+            else // store user as a member of that organization
+                db.query('INSERT INTO public.organization_members (user_id, org_id,role,"createdAt","updatedAt") VALUES($1, $2, $3, $4, $5);',[userID,orgID,'member', new Date(), new Date()],(err,result)=>{
+                    if (err) throw err;
         
+                    jwtUtil.createToken(req.token_data.userInfo,orgInfo)
+                    .then((token)=>{
+                        console.log(token)
+                        res.status(201).json({
+                            token
+                        });
+                    })
+                });
+        })
     })
 }
 
@@ -129,6 +141,7 @@ exports.switchOrganization = (req,res) => {
     (err,result)=>{
         if (err) throw err;
         const orgInfo = result.rows[0]
+        // generate new token with organization info
         jwtUtil.createToken(userInfo,orgInfo)
         .then((token)=>{
             res.status(200).json({
