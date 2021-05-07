@@ -98,6 +98,7 @@ exports.inviteFromAccessCode = (req,res)=>
         (err,results)=>{
             if (err) throw err;
 
+            // TODO Implement front end to check for bad errors
             const resultsCount = results.rowCount;
             if (resultsCount == 1) // they already exists, so I can't add them
                 return res.status(409).json({})
