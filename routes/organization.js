@@ -8,6 +8,8 @@ router.post('/create',authMiddleware,orgController.createOrg);
 // TODO : Update client
 router.get('/info',authMiddleware,orgController.info)
 
+router.put('/info',authMiddleware,orgController.changeOrgInfo)
+
 router.get('/info-from/access-code/:accessCode',orgController.infoFromAccessCode)
 
 // TODO : Update client
