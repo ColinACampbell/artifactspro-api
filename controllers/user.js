@@ -89,7 +89,6 @@ exports.login = async (req, res) => {
 
         jwtUtil.createToken(userInfo, orgInfo)
             .then((token) => {
-                console.log(token)
                 res.status(200).json({ token })
             })
     }

@@ -108,7 +108,6 @@ exports.inviteFromAccessCode = (req,res)=>
         
                     jwtUtil.createToken(req.token_data.userInfo,orgInfo)
                     .then((token)=>{
-                        console.log(token)
                         res.status(201).json({
                             token
                         });
