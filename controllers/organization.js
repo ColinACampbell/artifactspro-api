@@ -144,8 +144,6 @@ exports.updateInviteCode = (req,res) =>{
         WHERE org_id=$2`,[accessCode,orgID],
         (error,result)=>{
             if (error) throw error
-            console.log(result)
-            console.log(orgID)
             res.status(200).json({})
         })
 }

@@ -5,20 +5,21 @@ const authMiddleware = require("./../middleware/authenticate")
 
 router.post('/auth',authMiddleware,userController.auth);
 
-router.post('/signup/process-1',userController.signup);
+router.post('/sign-up',userController.signup);
 
 router.post('/login', userController.login);
 
-router.get('/info',authMiddleware,userController.info);
+router.get('/',authMiddleware,userController.info);
 
-router.post('/request-password-recovery',userController.requestPasswordRecovery);
+router.put('/',authMiddleware,userController.updateBasicInfo)
 
-router.put('/recover-password',userController.recoverPassword);
+router.post('/password/recovery',userController.requestPasswordRecovery);
+
+router.put('/password/recovery',userController.recoverPassword);
 
 router.post('/verify/:accesscode', userController.verifyUser);
 
 router.post('/logout',userController.logout)
 
-router.put('/update-base-info',authMiddleware,userController.updateBasicInfo)
 
 module.exports = router;
