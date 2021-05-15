@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const db = require('./../config/db')
 const jwtUtil = require('./../utils/jwtUtil');
+const encryptUtil = require('./../utils/encryptionUtil');
+const { STATUS_CODES } = require('http');
 
 exports.createOrg = (req, res) => {
 
@@ -11,7 +13,7 @@ exports.createOrg = (req, res) => {
         phone2,
         address1,
         address2, pricePackageID } = req.body;
-    let accessCode = crypto.randomBytes(30).toString('hex');
+    const accessCode = encryptUtil.createOrgAccessCode();
 
     // check if the organization key already exists
     db.query("SELECT * FROM organizations WHERE name = $1", [orgName], (err, result) => {
@@ -131,6 +133,21 @@ exports.inviteFromAccessCode = (req, res) => {
                     });
             })
     })
+}
+
+exports.updateInviteCode = (req,res) =>{
+    const accessCode = encryptUtil.createOrgAccessCode();
+    console.log(accessCode)
+    const { orgID } = req.body;
+    db.query(`UPDATE public.organizations
+        SET org_code=$1
+        WHERE org_id=$2`,[accessCode,orgID],
+        (error,result)=>{
+            if (error) throw error
+            console.log(result)
+            console.log(orgID)
+            res.status(200).json({})
+        })
 }
 
 exports.getAll = (req, res) => {

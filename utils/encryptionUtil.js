@@ -23,6 +23,9 @@ exports.createTempPassword = (text) => {
   return tempPassword + addition
 }
  
+exports.createOrgAccessCode = () => {
+  return crypto.randomBytes(30).toString('hex');
+}
 //var hw = encrypt(new Buffer("hello world", "utf8"))
 // outputs hello world
 //console.log(decrypt(hw).toString('utf8'));

@@ -5,17 +5,20 @@ const authMiddleware = require("./../middleware/authenticate")
 
 router.post('/create',authMiddleware,orgController.createOrg);
 
-// TODO : Update client
 router.get('/info',authMiddleware,orgController.info)
 
+// Updates orgInfo
 router.put('/info',authMiddleware,orgController.changeOrgInfo)
 
 router.get('/info-from/access-code/:accessCode',orgController.infoFromAccessCode)
 
-// TODO : Update client
+// Update the access code
+router.put('/access-code',authMiddleware,orgController.updateInviteCode)
+
 // Adds user to a group based on the code provided
 router.post('/invite-from-code/:code',authMiddleware,orgController.inviteFromAccessCode)
 
+// Get All the organizations that the user belong to
 router.get('/',authMiddleware,orgController.getAll)
 
 router.post('/switch',authMiddleware,orgController.switchOrganization)
