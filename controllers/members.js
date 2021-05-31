@@ -64,7 +64,7 @@ exports.changeMemberRole = async (req,res) => {
 // TODO Implement this
 exports.removeFromOrg = async (req,res) => {
     const orgID = req.token_data.orgInfo.org_id;
-    const { userID } = req.params;
+    const { id:userID } = req.params;
 
     db.query(`DELETE FROM public.organization_members
     WHERE user_id = $1 and org_id = $2`,[userID,orgID])

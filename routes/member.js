@@ -12,4 +12,6 @@ router.get('/member-from-id',memberController.getMemberFromID);
 
 router.put('/change-member-role',memberController.changeMemberRole);
 
+router.delete('/user/:id',memberController.removeFromOrg);
+
 module.exports = router;

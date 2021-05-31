@@ -18,6 +18,8 @@ exports.auth = (req, res) => {
 exports.signup = (req, res) => {
 
     let email = req.body.email;
+    console.log(req.user)
+
     let password = req.user.password;
     let accessCode = req.user.accessCode;
 

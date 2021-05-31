@@ -23,4 +23,7 @@ router.get('/',authMiddleware,orgController.getAll)
 
 router.post('/switch',authMiddleware,orgController.switchOrganization)
 
+// Implement code to remove user from org
+//router.delete('/user/:id',authMiddleware,orgController.removeOrgMember)
+
 module.exports = router;
