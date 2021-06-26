@@ -13,12 +13,14 @@ const fileTypes = {
     'application/pdf': 'pdf'
 };
 
+const documentOrderByQuerySection = 'order by documents.doc_id DESC'
+
 exports.docFromArtFromID = (req, res) => {
     let artifactID = req.params.artID;
     // write code to check on the user id, prevent any other user from getting access to the resource purposefully or accidentally
     db.query(`SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
     inner join users u2 on u2.user_id = documents.user_id 
-    WHERE art_id = $1`, [artifactID],
+    WHERE art_id = $1 ${documentOrderByQuerySection}`, [artifactID],
         (err, result) => {
             if (err) throw err;
             let docs = result.rows;
@@ -41,7 +43,7 @@ exports.search = (req, res) => {
     if (documentName !== undefined && documentComments !== undefined) {
         const query = `SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
             inner join users u2 on u2.user_id = documents.user_id 
-            WHERE "version" like '%' || $1 || '%' and "comment" like '%' || $2 || '%' and art_id = ${artID}`
+            WHERE "version" like '%' || $1 || '%' and "comment" like '%' || $2 || '%' and art_id = ${artID} ${documentOrderByQuerySection}`
         db.query(query, [documentName, documentComments], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
@@ -49,7 +51,7 @@ exports.search = (req, res) => {
     } else if (documentName !== undefined) {
         const query = `SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
             inner join users u2 on u2.user_id = documents.user_id 
-            WHERE "version" like '%' || $1 || '%' and art_id = ${artID}`
+            WHERE "version" like '%' || $1 || '%' and art_id = ${artID} ${documentOrderByQuerySection}`
         db.query(query, [documentName], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
@@ -57,7 +59,7 @@ exports.search = (req, res) => {
     } else if (documentComments !== undefined) {
         const query = `SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
             inner join users u2 on u2.user_id = documents.user_id 
-            WHERE "comment" like '%' || $1 || '%' and art_id = ${artID}`
+            WHERE "comment" like '%' || $1 || '%' and art_id = ${artID} ${documentOrderByQuerySection}`
         db.query(query, [documentComments], (err, results) => {
             if (err) throw err;
             res.status(200).json(results.rows)
