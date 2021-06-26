@@ -3,7 +3,7 @@ const router = express.Router();
 const documentController = require('./../controllers/documents')
 
 // Get documents from artifact
-router.get('/from-art/:artID',documentController.docFromArtFromID);
+router.get('/:artID',documentController.docFromArtFromID);
 
 router.get("/search/:artID",documentController.search)
 
