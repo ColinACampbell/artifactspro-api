@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const documentController = require('./../controllers/documents')
 
+router.get('/download',documentController.download)
+
 // Get documents from artifact
 router.get('/:artID',documentController.docFromArtFromID);
 
@@ -16,6 +18,5 @@ router.get('/preview/:artID/:docName', documentController.preview)
 
 router.delete('/delete/:docID',documentController.deleteDocument)
 
-router.get('/download',documentController.download)
 
 module.exports = router;

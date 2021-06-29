@@ -61,13 +61,15 @@ socketIO.on('connect',(socket)=>{
 
 const staticPath = __dirname + '/static';
 
+console.log(config.host)
 app.use(cors(
     {
         origin: config.host,
-        credentials: true
+        credentials: true,
     }
 ))
 
+/** 
 app.use(session({
     secret: "Ohhh no no no no and no",
     resave: true,
@@ -79,6 +81,7 @@ app.use(session({
         //httpOnly : true,
     },
 }))
+**/
 
 app.use(express.json({ limit: '50mb' }));
 app.use('/', express.static(staticPath))

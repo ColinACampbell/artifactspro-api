@@ -15,7 +15,7 @@ const fileTypes = {
 
 const documentOrderByQuerySection = 'order by documents.doc_id DESC'
 
-exports.docFromArtFromID = (req, res) => {
+exports.docFromArtFromID = (req, res) => { 
     let artifactID = req.params.artID;
     // write code to check on the user id, prevent any other user from getting access to the resource purposefully or accidentally
     db.query(`SELECT doc_id, version, comment, documents.user_id, u2.email as user_email, concat(u2.first_name,' ',u2.last_name) as user_full_name , date_uploaded, date_modified, art_id, type, file_size FROM documents 
