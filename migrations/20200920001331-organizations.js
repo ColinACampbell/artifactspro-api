@@ -42,6 +42,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
+      is_valid: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
       org_code: {
         type: Sequelize.TEXT,
         allowNull: false

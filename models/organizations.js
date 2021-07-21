@@ -52,6 +52,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    is_valid: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     org_code: {
       type: DataTypes.TEXT,
       allowNull: false
