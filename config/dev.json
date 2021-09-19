@@ -2,8 +2,8 @@
     "postgres" : {
         "host_" : "host.docker.internal",
         "host" : "localhost",
-        "user" : "postgres",
-        "password" : "wedered.200",
+        "user" : "root",
+        "password" : "root",
         "database" : "artifactspro"
     },
     "mail" : {

@@ -20,6 +20,7 @@ async function setUpModels()
     await db.chat_messages.sync({alter:true})
     await db.work_space_references.sync({alter:true})
     await db.work_space_ref_items.sync({alter:true})
+    await db.document_tags.sync({alter:true})
     
 }
 
