@@ -11,6 +11,7 @@ const session = require('express-session');
 const userRoute = require('./routes/user');
 const organizationRoute = require('./routes/organization');
 const artifactsRoute = require('./routes/artifacts');
+const workflowRoute = require('./routes/workflow');
 const documentsRoute = require('./routes/documents')
 const membersRoute = require('./routes/member');
 const workspaceRoute = require('./routes/workspace');
@@ -61,7 +62,6 @@ socketIO.on('connect',(socket)=>{
 
 const staticPath = __dirname + '/static';
 
-console.log(config.host)
 app.use(cors(
     {
         origin: config.host,
@@ -91,12 +91,14 @@ app.use('/api/members/',authMiddleware);
 app.use('/api/workspace/',authMiddleware);
 app.use('/api/chats/',authMiddleware)
 app.use('/api/docs/',authMiddleware)
+app.use('/api/workflow/',authMiddleware)
 
 app.use('/api/user/sign-up',userMiddleware.password) // TODO : Test end points that use this middleware
 app.use('/api/user/signup/process-1', userMiddleware.password); // middleware to hash password on user routes
 app.use('/api/user/login', userMiddleware.password); // middleware to hash password on user routes
 app.use('/api/user/recover-password',userMiddleware.password) // middleware to hash password on user routes
 app.use('/api/misc/',miscRoute)
+app.use('/api/workflow/',workflowRoute)
 app.use('/api/user/', userRoute);
 app.use('/api/org/', organizationRoute);
 app.use('/api/art/', artifactsRoute);
