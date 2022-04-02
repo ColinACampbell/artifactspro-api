@@ -4,7 +4,9 @@ const config = require('./configControl')
 const client = new Client(config.postgres)
 
 client.connect((err)=>{
-    if (err) throw err;
+    console.log(err)
+    if (err !== null);
+        console.log(err)
 });
 
 module.exports = client;

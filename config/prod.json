@@ -1,9 +1,9 @@
 {
     "postgres" : {
-        "host" : "ec2-54-80-184-43.compute-1.amazonaws.com",
-        "user" : "qbozdznigjuoer",
-        "password" : "536b43af4a51d398362df48f73ad2009ef86621d2690d6990e7f596374b3066c",
-        "database" : "dd1he6kq3plh",
+        "host" : "ec2-54-144-165-97.compute-1.amazonaws.com",
+        "user" : "kcfktjueepvtco",
+        "password" : "808b6ed69c29ea02ba762471a33f731491b6608a96ea87197d12e2632452296f",
+        "database" : "d4ut70g57usbd2",
         "ssl" : {
             "rejectUnauthorized" : false
         }

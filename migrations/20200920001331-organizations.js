@@ -23,19 +23,19 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },address_line_1: {
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: true
       },
       address_line_2: {
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: true
       },
       phone_line_1 : {
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: true
       },
       phone_line_2 : {
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: true
       },
       type: {

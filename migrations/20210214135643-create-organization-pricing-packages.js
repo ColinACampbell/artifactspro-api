@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       user_limit : {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       workspace_limit: {
