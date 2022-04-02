@@ -1,3 +1,4 @@
+require('dotenv').config()
 const ejs = require('ejs')
 const express = require('express')
 const app = express();
@@ -20,6 +21,7 @@ const miscRoute = require('./routes/misc')
 // Middlewares
 const userMiddleware = require('./middleware/user');
 const authMiddleware = require('./middleware/authenticate');
+const { Console } = require('console');
 
 //require('./config/mail')
 

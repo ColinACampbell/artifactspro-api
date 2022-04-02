@@ -1,4 +1,5 @@
 const db = require('./../models');
+require('dotenv').config()
 const { use } = require('../routes/member');
 
 exports.getUserAsMember = async (req,res) => {

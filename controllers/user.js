@@ -1,3 +1,4 @@
+require('dotenv').config()
 const db = require('./../models')
 const mailTransporter = require('./../config/mail')
 const jwtUtil = require('../utils/jwtUtil')
