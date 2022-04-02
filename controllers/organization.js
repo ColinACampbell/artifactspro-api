@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const db = require('./../config/db')
+const db = require('./../models')
 const jwtUtil = require('./../utils/jwtUtil');
 const encryptUtil = require('./../utils/encryptionUtil');
 const { STATUS_CODES } = require('http');

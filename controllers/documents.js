@@ -1,7 +1,6 @@
-const db = require('./../config/db');
+const db = require('./../models');
 const fs = require('fs');
 const path = require('path')
-const config = require('./../config/configControl')
 const encryptionUtil = require('./../utils/encryptionUtil');
 const stream = require('stream');
 
@@ -132,7 +131,7 @@ exports.getLink = (req, res, next) => {
 
             // TODO Change this value whenever pushing to production
             // TODO make this more automated
-            let serverhost = config.dev ? 'http://localhost:3000' : config.host
+            let serverhost = process.env.HOST
 
             res.status(200).json({
                 download: `${serverhost}/api/docs/preview/${artID}/${docID}.${fileTypes[doc.type]}`

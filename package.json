@@ -19,7 +19,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dot-env": "0.0.1",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
@@ -28,7 +28,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.4.6",
     "pg": "^7.18.2",
-    "sequelize": "^6.4.0",
+    "sequelize": "^6.17.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

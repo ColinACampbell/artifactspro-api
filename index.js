@@ -1,4 +1,3 @@
-const config = require('./config/configControl')
 const ejs = require('ejs')
 const express = require('express')
 const app = express();
@@ -64,7 +63,7 @@ const staticPath = __dirname + '/static';
 
 app.use(cors(
     {
-        origin: config.host,
+        origin: process.env.HOST,
         credentials: true,
     }
 ))
@@ -126,4 +125,4 @@ server.listen(port, (err) => {
     console.log("Server Started");
 }) 
 
-require('./config/sequelize')
+//require('./config/sequelize')

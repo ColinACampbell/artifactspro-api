@@ -1,24 +1,17 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('document_tags', {
-      doc_tag_id: {
+    await queryInterface.createTable('Users', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      org_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: {
-            tableName: 'organizations',
-          },
-          key: 'org_id'
-        }
+      email: {
+        type: Sequelize.STRING
       },
-      name: {
+      password: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -32,6 +25,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('document_tags');
+    await queryInterface.dropTable('Users');
   }
 };

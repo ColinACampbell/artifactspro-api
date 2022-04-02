@@ -1,5 +1,4 @@
-const db = require('./../config/db');
-const config = require('./../config/configControl');
+const db = require('./../models');
 const { use } = require('../routes/member');
 
 exports.getUserAsMember = async (req,res) => {
@@ -29,7 +28,7 @@ exports.getInviteCode = (req,res)=>{
     let orgID = req.token_data.orgInfo.org_id;
     db.query('SELECT * FROM organizations WHERE org_id = $1',[orgID],(err,result)=>{
         let orgCode = result.rows[0].org_code;
-        let serverhost = config.dev ? 'http://localhost:4200': config.host
+        let serverhost = process.env.HOST;
         let invite_url = `${serverhost}/team/invite/${orgCode}`
         res.json({invite_url}); 
     })

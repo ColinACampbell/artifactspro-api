@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require("./../config/db")
+const db = require("./../models")
 
 router.get("/active-chats", async (req,res)=>{
     const userID = req.token_data.userInfo.user_id;

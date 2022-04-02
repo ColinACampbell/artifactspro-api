@@ -1,11 +1,10 @@
 const nodemailer = require('nodemailer')
-const mail = require('./../config/configControl').mail;
 
 const transporter = nodemailer.createTransport({
-    service: mail.service,
+    service: process.env.MAIL_SERVICE,
     auth: {
-        user: mail.user,
-        pass: mail.password
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD
     }
 })
 

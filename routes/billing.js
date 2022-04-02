@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../config/db');
+const db = require('./../models');
 const router = express.Router();
 const PricingPackages = require('../models/index').organization_pricing_packages
 const Organizations = require('../models/index').organizations

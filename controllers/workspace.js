@@ -1,5 +1,4 @@
-const { user } = require('./../config/db');
-const db = require('./../config/db');
+const db = require('./../models');
 
 exports.getNames = async (req, res) => {
     const userID = req.token_data.userInfo.user_id;

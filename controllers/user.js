@@ -1,5 +1,4 @@
-const db = require('./../config/db')
-const config = require('./../config/configControl')
+const db = require('./../models')
 const mailTransporter = require('./../config/mail')
 const jwtUtil = require('../utils/jwtUtil')
 const mailUtil = require('../utils/emailUtil')
@@ -46,7 +45,7 @@ exports.signup = (req, res) => {
                         text: `Thanks for signing up on artifacts pro. 
                                 Please click on the link to verify 
                                 your ArtifactsPro account 
-                                ${config.host}/account/verify/${accessCode}`
+                                ${process.env.HOST}/account/verify/${accessCode}`
                     };
 
                     /**
@@ -58,7 +57,7 @@ exports.signup = (req, res) => {
                         }
                     });**/
 
-                    const verificationLink = `${config.host}/account/verify/${accessCode}`
+                    const verificationLink = `${process.env.HOST}/account/verify/${accessCode}`
                     mailUtil.sendVerificationEmail(email, verificationLink)
                         .then((val) => {
                             console.log(val)
@@ -236,7 +235,7 @@ exports.requestPasswordRecovery = async (req, res) => {
     await db.query(`UPDATE public.users
         SET "recovery_code" = $1 where email = $2`, [recoveryCode, email])
 
-    const recoveryLink = `${config.host}/action/recovery/${recoveryCode}`
+    const recoveryLink = `${process.env.HOST}/action/recovery/${recoveryCode}`
 
     await mailUtil.sendRecoveryEmail(email, recoveryLink)
     // Send an email to the user with the code

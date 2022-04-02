@@ -1,4 +1,4 @@
-const db = require('./../config/db')
+const db = require('./../models')
 
 exports.getAll = (req,res)=>{
     let orgID = req.token_data.orgInfo.org_id;

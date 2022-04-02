@@ -1,7 +1,6 @@
 const express = require('express');
-const { user } = require('./../config/db');
 const router = express.Router();
-const db = require('./../config/db');
+const db = require('./../models');
 const workspaceMiddleware = require('./../middleware/workspace-middleware')
 const worksapceController = require('./../controllers/workspace')
 
